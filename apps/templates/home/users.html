@@ -72,56 +72,45 @@
 <script>
   document.addEventListener('click', function (event) {
     if (event.target.classList.contains('edit-button')) {
-
-      if (event.target.classList.contains('edit-button')) {
-        const editButton = event.target;
-        const row = editButton.closest('tr');
+      const editButton = event.target;
+      const row = editButton.closest('tr');
     
-        row.querySelectorAll('[contenteditable="false"]').forEach(cell => {
-          cell.contentEditable = 'true';
-        });
-      }
-      
-      // Обработка нажатия на кнопку "Изменить"
-      const username = event.target.getAttribute('data-username');
-      const row = event.target.closest('tr');
-  
-      // Получите данные из ряда (например, с использованием cell.innerText)
-      const usernameValue = row.querySelector('[data-name="username"]').innerText;
-      const roleValue = row.querySelector('[data-name="role"]').innerText;
-  
-      // Здесь вы можете отобразить модальное окно с данными для редактирования и отправить измененные данные на сервер
-      // Пример: modal.show(usernameValue, roleValue);
-  
+      row.querySelectorAll('[contenteditable="false"]').forEach(cell => {
+        cell.contentEditable = 'true';
+      });
     } else if (event.target.classList.contains('delete-button')) {
-      // Обработка нажатия на кнопку "Удалить"
       const username = event.target.getAttribute('data-username');
       const row = event.target.closest('tr');
   
-      // Здесь вы можете отправить запрос на удаление записи на сервер
-      // Пример: deleteRecord(username);
-  
-      // После успешного удаления строки, удалите строку из таблицы
-      row.remove();
+      fetch(`/delete_user/${username}`, {
+        method: 'POST',
+      })
+      .then(response => {
+        if (response.status === 200) {
+          // Успешно удалено
+          row.remove(); // Удалить строку из таблицы
+          alert('Пользователь успешно удален');
+        } else {
+          // Обработка ошибок
+          alert('Произошла ошибка при удалении пользователя');
+        }
+      });
     }
   });
+
   document.querySelector('#save-changes-button').addEventListener('click', function () {
-    // Соберите данные из таблицы
     const updatedData = [];
 
     document.querySelectorAll('tr').forEach(function (row) {
-        const id = row.querySelector('.user-id').innerText;
-        const username = row.querySelector('.user-username').textContent;
-        const role = row.querySelector('.user-role').textContent;
+        const username = row.querySelector('[data-name="username"]').textContent;
+        const role = row.querySelector('[data-name="role"]').textContent;
 
         updatedData.push({
-            id: id,
             username: username,
             role: role
         });
     });
 
-    // Отправьте данные на сервер
     fetch('/update_users', {
         method: 'POST',
         headers: {
@@ -138,8 +127,7 @@
             alert('Произошла ошибка при обновлении данных пользователей');
         }
     });
-});
+  });
 </script>
-
-
 {% endblock javascripts %}
+

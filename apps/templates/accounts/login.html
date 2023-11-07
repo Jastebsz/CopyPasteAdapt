@@ -24,6 +24,13 @@
               <h4 class="text-black font-weight-bolder mt-2 mb-0">
                 Авторизация
               </h4>
+              <div class="row mt-3">
+                <p class="mb-0 text-center" id="msgContainer" style="color: {% if msg %}red{% else %}black{% endif %}">
+                  {% if msg %}
+                      {{ msg | safe }}
+                  {% endif %}
+              </p>              
+            </div>                       
             </div>            
             <div class="card-body">
               <form role="form" method="post" action="" class="text-start">

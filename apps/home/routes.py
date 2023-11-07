@@ -11,30 +11,61 @@ from apps.home.models import Worker,Users,Full_tasks,Schedule,Scheduler
 
 from flask import request, jsonify
 
-
-
 @blueprint.route('/update_users', methods=['POST'])
 def update_users():
     try:
         data = request.json  # Получите данные, отправленные с фронтенда
 
-        # Пройдитесь по данным и обновите каждого пользователя в базе данных
+        # Пройдитесь по данным и обновите соответствующих пользователей в базе данных
         for item in data:
-            user_id = item['id']
-            username = item['username']
-            role = item['role']
-
-            user = Users.query.get(user_id)
+            user = Users.query.filter_by(username=item['username']).first()
             if user:
-                user.username = username
-                user.role = role
-            print('Hello')
+                user.role = item['role']
         db.session.commit()  # Сохраните изменения в базе данных
 
         return jsonify({'message': 'Данные пользователей успешно обновлены'})
     except Exception as e:
-            return jsonify({'error': 'Произошла ошибка при обновлении данных пользователей'}), 500
+        return jsonify({'error': 'Произошла ошибка при обновлении данных пользователей'}), 500
+@blueprint.route('/delete_user/<username>', methods=['POST'])
+def delete_user(username):
+    try:
+        user = Users.query.filter_by(username=username).first()
+        if user:
+            db.session.merge(user)  # Объединить объект с текущей сессией
+            db.session.delete(user)  # Удалить пользователя из базы данных
+            db.session.commit()  # Сохранить изменения
+            return jsonify({'message': 'Пользователь успешно удален'})
+        else:
+            return jsonify({'error': 'Пользователь не найден'}), 404
+    except Exception as e:
+        print(f"Произошла ошибка: {str(e)}")
+        return jsonify({'error': 'Произошла ошибка при удалении пользователя'}), 500
 
+
+
+
+
+
+
+
+
+
+@blueprint.route('/update_worker/<int:worker_id>', methods=['POST'])
+def update_worker(worker_id):
+    try:
+        data = request.json  # Получите данные, отправленные с фронтенда
+        # Пройдитесь по данным и обновите соответствующего работника в базе данных
+        user = Users.query.get(worker_id)
+        if user:
+            for key, value in data.items():
+                setattr(user, key, value)
+        db.session.commit()  # Сохраните изменения в базе данных
+
+        return jsonify({'message': 'Данные работника успешно обновлены'})
+    except Exception as e:
+        return jsonify({'error': 'Произошла ошибка при обновлении данных работника'}), 500
+    
+    
 def role():
     username = session.get('username')
     role = session.get('role')

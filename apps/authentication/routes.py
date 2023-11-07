@@ -13,6 +13,12 @@ from apps.authentication.models import Users
 from flask import session
 from apps.authentication.util import verify_pass
 
+def role1():
+    username = session.get('username')
+    role = session.get('role')
+    return username, role
+
+
 
 @blueprint.route('/')
 def route_default():
@@ -25,64 +31,83 @@ def route_default():
 def login():
     login_form = LoginForm(request.form)
     if 'login' in request.form:
-
-        # read form data
+        # Read form data
         username = request.form['username']
         password = request.form['password']
 
         # Locate user
         user = Users.query.filter_by(username=username).first()
 
-        # Check the password
-        if user and verify_pass(password, user.password):
-            session['username'] = user.username  # Сохраните имя пользователя в сессии
-            session['role'] = user.role
-            login_user(user)
-            return redirect(url_for('authentication_blueprint.route_default'))
+        # Check if the user exists in the database
+        if user:
+            # Check the password
+            if verify_pass(password, user.password):
+                session['username'] = user.username  # Save the username in the session
+                session['role'] = user.role
+                login_user(user)
 
-        # Something (user or pass) is not ok
+                # Check if the user is an admin
+                if user.role == 'admin' and user is not None:
+                    return redirect(url_for('authentication_blueprint.route_default'))
+                elif user.role != 'admin':
+                    # User is not an admin, show a message
+                    return render_template('accounts/login.html',
+                                           msg='У вас недостаточно прав для доступа',
+                                            form=login_form)
+                else:    
+                    # В случае, когда пользователь не существует
+                    return render_template('accounts/login.html',
+                                        msg='Обратитесь к администратору для создания аккаунта',
+                                        form=LoginForm())  # Передайте пустую форму
+            # Password is incorrect
+            return render_template('accounts/login.html',
+                                   msg='Неверное имя пользователя или пароль',
+                                   form=login_form)
+
+        # User doesn't exist in the database
         return render_template('accounts/login.html',
-                               msg='Неверное имя пользователя или пароль',
+                               msg='Обратитесь к администратору для создания аккаунта',
                                form=login_form)
 
     if not current_user.is_authenticated:
         return render_template('accounts/login.html',
                                form=login_form)
-        
+
     return redirect(url_for('home_blueprint.index'))
+
 
 
 @blueprint.route('/register', methods=['GET', 'POST'])
 def register():
+    username = session.get('username')
+    user_role = session.get('role')
     create_account_form = CreateAccountForm(request.form)
+    
     if 'register' in request.form:
-
-        username = request.form['username']
+        new_username = request.form['username']
         role = request.form['role']
 
-        # Check usename exists
-        user = Users.query.filter_by(username=username).first()
+        # Check if the new username exists
+        user = Users.query.filter_by(username=new_username).first()
         if user:
             return render_template('accounts/register.html',
                                    msg='Имя пользователя уже существует',
                                    success=False,
-                                   form=create_account_form)
+                                   form=create_account_form, username=username, role=user_role)
 
-        # else we can create the user
+        # Create the user with the new username
         user = Users(**request.form)
         db.session.add(user)
         db.session.commit()
 
-        # Delete user from session
-        logout_user()
-        
         return render_template('accounts/register.html',
                                msg='Аккаунт успешно создан',
                                success=True,
-                               form=create_account_form)
+                               form=create_account_form, username=username, role=user_role)
 
     else:
-        return render_template('accounts/register.html', form=create_account_form)
+        return render_template('accounts/register.html', form=create_account_form, username=username, role=user_role)
+
 
 
 @blueprint.route('/logout')
