@@ -10,8 +10,7 @@
 
 
 
-  <!-- Users table -->
-<div class="container-fluid py-4">
+ <div class="container-fluid py-4">
   <div class="row">
     <div class="col-12">
       <div class="card my-4">
@@ -35,18 +34,23 @@
             <tbody>
               {% for worker in workers %}
                   <tr>
-                    <td contenteditable="true"  style="text-align: left; padding-left: 23px;">{{ worker.FIO }}</td>
-                    <td contenteditable="true">{{ worker.location }}</td>
-                    <td contenteditable="true">{{ worker.grade }}</td>                      
+                    <td   style="text-align: left; padding-left: 23px;">{{ worker.FIO }}</td>
+                    <td >{{ worker.location }}</td>
+                    <td >{{ worker.grade }}</td>                      
                   </tr>
               {% endfor %}
           </tbody>                            
+      
             </table>
-            <div id="message"></div>
+            <a href="{{ url_for('home_blueprint.route_template', template='users.html') }}" class="btn btn-primary"
+   style="background-color: #ff4b5f; color: white; margin-top:20px; margin-right: 170px; float: right;">
+   Перейти к таблице
+</a>
+<div id="message"></div>
             
           </div>
           
-       
+      
     </div>
     
   </div>

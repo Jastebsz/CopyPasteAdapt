@@ -1,9 +1,7 @@
 {% extends "layouts/base-fullscreen.html" %}
 {% block title %} Регистрация {% endblock %} 
-<!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}
 <style>
-  /* Изменяем цвет фона на #ff4b5f */
   .bg-gradient-primary {
       background: #ff4b5f !important;
   }
@@ -34,7 +32,7 @@
                     {% if msg %}
                       <span class="text-danger">{{ msg | safe }}</span>
                     {% else %}
-                      Введите свою роль и пароль для регистрации
+                      Введите роль и пароль для регистрации нового пользователя
                     {% endif %}                    
                   </p>
                 </div>
@@ -42,7 +40,7 @@
                   <div class="card-footer text-center pt-0 px-lg-2 px-1">
                     <p class="mb-2 text-sm mx-auto text-center">
                       <a  href="{{ url_for('authentication_blueprint.login') }}"
-                          class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0">Войти</a>
+                          class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0">Вернуться на главную страницу</a>
                     </p>
                   </div>
                 {% else %}
@@ -64,12 +62,6 @@
                       </div>
                     </form>
                   </div>
-                  <div class="card-footer text-center pt-0 px-lg-2 px-1">
-                    <p class="mb-2 text-sm mx-auto">
-                      У вас уже есть аккаунт?
-                      <a href="{{ url_for('authentication_blueprint.login') }}" style="color: #ff4b5f !important; font-weight: bold;">Войти</a>
-                    </p>
-                  </div>
                 {% endif %}
               </div>
             </div>
@@ -78,5 +70,5 @@
       </div>
     </section>
 {% endblock content %}
-<!-- Specific Page JS goes HERE  -->
+
 {% block javascripts %}{% endblock javascripts %}
