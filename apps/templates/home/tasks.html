@@ -1,0 +1,117 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Tables {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+
+{% block content %}
+
+
+
+
+ <div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="card my-4">
+        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+          <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+            <h6 class="text-white text-capitalize ps-3">Сотрудники</h6>
+          </div>
+        </div>
+        <div class="card-body px-0 pb-2">
+          <div class="table-responsive p-0">
+            <table class="table align-items-center mb-0">
+              <thead>
+                <tr>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="text-align: left;">ФИО</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Местоположение</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Уровень</th>
+                    <th class="text-secondary opacity-7"></th>
+                    <th class="text-secondary opacity-7"></th>
+                </tr>
+            </thead>
+            <tbody>
+              {% for worker in workers %}
+                  <tr>
+                    <td contenteditable="true" data-name="FIO">{{ worker.FIO }}</td>
+                    <td contenteditable="true" data-name="location">{{ worker.location }}</td>
+                    <td contenteditable="true" data-name="grade">{{ worker.grade }}</td>
+                    <td><button class="save-button" style="display: none;">Сохранить изменения</button></td>                    
+                  </tr>
+              {% endfor %}
+          </tbody>                            
+      
+            </table>
+            <a href="{{ url_for('home_blueprint.route_template', template='users.html') }}" class="btn btn-primary"
+   style="background-color: #ff4b5f; color: white; margin-top:20px; margin-right: 170px; float: right;">
+   Перейти к таблице
+</a>
+<div id="message"></div>
+            
+          </div>
+          
+      
+    </div>
+    
+  </div>
+  
+</div>
+
+
+
+
+
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+document.addEventListener('click', function (event) {
+  if (event.target.classList.contains('save-button')) {
+    const saveButton = event.target;
+    const editButton = saveButton.previousElementSibling;
+    const row = saveButton.closest('tr');
+
+    // Переключите contenteditable обратно на false
+    row.querySelectorAll('[contenteditable="true"]').forEach(cell => {
+      cell.contentEditable = 'false';
+    });
+
+    // Здесь вы можете получить новые значения из ячеек с contenteditable="true" и отправить их на сервер
+    const updatedData = {};
+    row.querySelectorAll('[contenteditable="true"]').forEach(cell => {
+      const fieldName = cell.dataset.name;
+      const value = cell.innerText;
+      updatedData[fieldName] = value;
+    });
+
+    // Отправьте данные на сервер
+    fetch('/update_worker/' + workerId, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updatedData),
+    })
+    .then(response => response.json())
+    .then(data => {
+      // Обработка успешного обновления данных
+      console.log('Данные успешно обновлены:', data);
+
+      // Добавьте `console.log` с выводом "1"
+      console.log('1');
+    })
+    .catch(error => {
+      // Обработка ошибок
+      console.error('Ошибка при обновлении данных:', error);
+    });
+  }
+});
+</script>
+
+
+{% endblock javascripts %}

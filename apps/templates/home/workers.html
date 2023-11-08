@@ -1,0 +1,175 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Tables {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+
+{% block content %}
+
+
+
+
+ <div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="card my-4">
+        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+          <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+            <h6 class="text-white text-capitalize ps-3">Сотрудники</h6>
+          </div>
+        </div>
+        <div class="card-body px-0 pb-2">
+          <div class="table-responsive p-0">
+            <table class="table align-items-center mb-0">
+              <thead>
+                <tr>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="text-align: left;">№</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="text-align: left;">ФИО</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Местоположение</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Уровень</th>
+                    <th class="text-secondary opacity-7"></th>
+                    <th class="text-secondary opacity-7"></th>
+                </tr>
+            </thead>
+            <tbody>
+              {% for worker in workers %}
+                  <tr>
+                    <td contenteditable="true" data-name="id" style="text-align: left; padding-left: 23px;">{{ worker.id }}</td>
+                    <td contenteditable="true" data-name="FIO">{{ worker.FIO }}</td>
+                    <td contenteditable="true" data-name="location">{{ worker.location }}</td>
+                    <td contenteditable="true" data-name="grade">{{ worker.grade }}</td>
+                    <td class="align-middle">
+                      <a href="javascript:;" class="text-warning font-weight-bold text-xs bg-button edit-button" data-username="{{ worker.FIO }}" data-toggle="tooltip" data-original-title="Изменить">
+                        Изменить
+                      </a>
+                      <a href="javascript:;" class="text-danger font-weight-bold text-xs bg-button delete-button "style="text-align: left; padding-left: 23px;" data-username="{{ worker.location }}" data-toggle="tooltip" data-original-title="Удалить">
+                        Удалить
+                      </a>
+                      <a href="javascript:;" class="text-success font-weight-bold text-xs bg-button save-button ms-4" data-username="{{ worker.grade }}" data-toggle="tooltip" data-original-title="Сохранить">
+                        Сохранить
+                    </a>
+                    </td>                   
+                  </tr>
+              {% endfor %}
+          </tbody>                            
+      
+            </table>
+            <a href="#" id="add-row-button" class="btn btn-primary" style="background-color: #ff4b5f; color: white; margin-top: 20px; margin-right: 170px; float: right;">
+              Добавить строку
+           </a>
+                   
+          </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+  document.addEventListener('click', function (event) {
+    if (event.target.classList.contains('edit-button')) {
+      const editButton = event.target;
+      const row = editButton.closest('tr');
+    
+      row.querySelectorAll('[contenteditable="false"]').forEach(cell => {
+        cell.contentEditable = 'true';
+      });
+    } else if (event.target.classList.contains('delete-button')) {
+      const
+      const username = event.target.getAttribute('data-username');
+      const row = event.target.closest('tr');
+  
+      fetch(`/delete_user/${username}`, {
+        method: 'POST',
+      })
+      .then(response => {
+        if (response.status === 200) {
+          // Успешно удалено
+          row.remove(); // Удалить строку из таблицы
+          alert('Пользователь успешно удален');
+        } else {
+          // Обработка ошибок
+          alert('Произошла ошибка при удалении пользователя');
+        }
+      });
+    }
+  });
+
+
+  document.addEventListener('click', function (event) {
+        if (event.target.classList.contains('save-button')) {
+        // Код для сохранения
+        const username = event.target.getAttribute('data-username');
+        const row = event.target.closest('tr');
+
+        // Получите данные, которые нужно сохранить, из ряда
+        const id = row.querySelector('[data-name="id"]').textContent;
+        const updatedUsername = row.querySelector('[data-name="username"]').textContent;
+        const updatedRole = row.querySelector('[data-name="role"]').textContent;
+
+        const data = {
+            id: id,
+            username: updatedUsername,
+            role: updatedRole
+        };
+        console.log(data)
+        // Отправьте данные на сервер для сохранения
+        fetch(`/update_user/${id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (response.status === 200) {
+                // Успешно сохранено
+                alert('Данные успешно сохранены');
+            } else {
+                // Обработка ошибок
+                alert('Произошла ошибка при сохранении данных, такой пользователь уже сущестует');
+            }
+        });
+    }
+});
+
+
+  document.addEventListener('click', function (event) {
+    console.log('Henhbg1234')
+    if (event.target.id === 'add-row-button') {
+        console.log('Henhbg')
+        const table = document.querySelector('table');
+        const tbody = table.querySelector('tbody');
+        const newRow = document.createElement('tr');
+
+        newRow.innerHTML = `
+            <td contenteditable="true" data-name="id" style="text-align: left; padding-left: 23px;"></td>
+            <td contenteditable="true" data-name="FIO"></td>
+            <td contenteditable="true" data-name="location"></td>
+            <td contenteditable="true" data-name="grade"></td>
+            <td class="align-middle">
+                <a href="#" class="text-warning font-weight-bold text-xs bg-button edit-button" data-username="" data-toggle="tooltip" data-original-title="Изменить">
+                    Изменить
+                </a>
+                <a href="#" class="text-danger font-weight-bold text-xs bg-button delete-button" style="text-align: left; padding-left: 23px;" data-username="" data-toggle="tooltip" data-original-title="Удалить">
+                    Удалить
+                </a>
+                <a href="#" class="text-success font-weight-bold text-xs bg-button save-button ms-4" data-username="" data-toggle="tooltip" data-original-title="Сохранить">
+                    Сохранить
+                </a>
+            </td>
+        `;
+
+        tbody.appendChild(newRow);
+    }
+  });
+
+
+</script>
+
+
+{% endblock javascripts %}
