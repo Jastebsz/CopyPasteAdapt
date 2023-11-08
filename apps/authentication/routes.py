@@ -49,13 +49,13 @@ def login():
                 login_user(user)
 
                 # Check if the user is an admin
-                if user.role == 'admin' and user is not None:
+                if user.role == 'Администратор' and user is not None:
                     return redirect(url_for('authentication_blueprint.route_default'))
-                elif user.role != 'admin':
-                    # User is not an admin, show a message
-                    return render_template('accounts/login.html',
-                                           msg='У вас недостаточно прав для доступа',
-                                            form=login_form)
+                # elif user.role != 'admin':
+                #     # User is not an admin, show a message
+                #     return render_template('accounts/login.html',
+                #                            msg='У вас недостаточно прав для доступа',
+                #                             form=login_form)
                 else:    
                     # В случае, когда пользователь не существует
                     redirect(url_for('home_blueprint.index'))
@@ -86,7 +86,6 @@ def register():
     fio_column=[]
     for i in fio_column1:
         fio_column.append(i[0])
-        print(fio_column)
     if 'register' in request.form:
         print(request.form)
         new_username = request.form['username']

@@ -54,7 +54,7 @@ def update_workers(id):
         print(data)
         # Пройдитесь по данным и обновите соответствующих пользователей в базе данных
         print(data['id'])
-        worker = db.session.query(Worker).filter(Worker.id == data['id']).first()
+        worker = db.session.query(Worker).filter(Worker.id == int(data['id'])).first()
         if worker:
             worker.FIO = data['FIO']
             worker.location = data['location']
@@ -68,7 +68,32 @@ def update_workers(id):
     except Exception as e:
         return jsonify({'error': 'Произошла ошибка при обновлении данных сотрудников'}), 500
 
-@blueprint.route('/delete_worker/<username>', methods=['POST'])
+
+@blueprint.route('/add_workers', methods=['GET', 'POST'])
+def add():
+    username = session.get('username')
+    user_role = request.form.get('role')
+    FIO = session.get('FIO')
+    location = request.form.get('location')
+    grade=request.form.get('grade')
+    user = Worker.query.filter_by(FIO=FIO).first()
+    if user:
+        return render_template('accounts/register.html',
+                                   msg='ФИО уже существует',
+                                   success=False,
+                                 username=username, role=user_role)
+    user = Users(**request.form)
+    db.session.add(user)
+    db.session.commit()
+
+    return render_template('home/add_workers.html',
+                               msg='Аккаунт успешно создан',
+                               success=True,
+                                username=username, role=user_role)
+
+
+
+@blueprint.route('/delete_worker/<id>', methods=['POST'])
 def delete_worker(username):
     try:
         row_to_delete = db.session.query(Users).filter(Users.username == username).first()
@@ -90,20 +115,20 @@ def delete_worker(username):
 
 
 
-@blueprint.route('/update_worker/<int:worker_id>', methods=['POST'])
-def update_worker(worker_id):
-    try:
-        data = request.json  # Получите данные, отправленные с фронтенда
-        # Пройдитесь по данным и обновите соответствующего работника в базе данных
-        user = Users.query.get(worker_id)
-        if user:
-            for key, value in data.items():
-                setattr(user, key, value)
-        db.session.commit()  # Сохраните изменения в базе данных
+# @blueprint.route('/update_worker/<int:worker_id>', methods=['POST'])
+# def update_worker(worker_id):
+#     try:
+#         data = request.json  # Получите данные, отправленные с фронтенда
+#         # Пройдитесь по данным и обновите соответствующего работника в базе данных
+#         user = Worker.query.get(worker_id)
+#         if user:
+#             for key, value in data.items():
+#                 setattr(user, key, value)
+#         db.session.commit()  # Сохраните изменения в базе данных
 
-        return jsonify({'message': 'Данные работника успешно обновлены'})
-    except Exception as e:
-        return jsonify({'error': 'Произошла ошибка при обновлении данных работника'}), 500
+#         return jsonify({'message': 'Данные работника успешно обновлены'})
+#     except Exception as e:
+#         return jsonify({'error': 'Произошла ошибка при обновлении данных работника'}), 500
     
     
 def role():

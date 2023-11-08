@@ -6,7 +6,7 @@ db = SQLAlchemy()
 class Worker(db.Model):
     __tablename__ = 'Worker'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True,autoincrement=True)
     FIO = db.Column(db.String(64), unique=True)
     location = db.Column(db.String(64))
     grade = db.Column(db.String(128))  # Store the hashed password as a string
@@ -38,7 +38,7 @@ class Tasks(db.Model):
         return '<Tasks {}>'.format(self.body) 
 class Points(db.Model):
     __tablename__ = 'Points'
-    id = db.Column(db.Integer, primary_key=True)                        # номер точки
+    id = db.Column(db.Integer, primary_key=True,autoincrement=True)                        # номер точки
     address = db.Column(db.String(100), nullable=False)                 # адрес точки
     connected = db.Column(db.String(80), nullable=False)                # когда подключена точка
     delivered = db.Column(db.Boolean, default=False)                    # карты и материалы доставлены
@@ -90,7 +90,7 @@ class Full_tasks(db.Model):
 class Users(db.Model):
 
     __tablename__ = 'Users'
-    id=db.Column(db.Integer, primary_key=True)
+    id=db.Column(db.Integer, primary_key=True,autoincrement=True)
     username = db.Column(db.String(64), unique=True)
     role = db.Column(db.String(64), unique=True)
     worker_FIO = db.Column(db.Integer)
