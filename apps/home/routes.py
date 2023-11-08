@@ -81,6 +81,12 @@ def get_segment(request):
     except:
         return None
 #Обновление строки таблицы users
+from function import line_tasks, distribute_tasks, delete_last_two_schedule
+
+# line_tasks()                          # создание очереди
+# distribute_tasks()                    # распределение задач
+# delete_last_two_schedule()            # удаление лишних расписаний
+
 @blueprint.route('/update_user/<id>', methods=['POST'])
 @login_required
 def update_users(id):
