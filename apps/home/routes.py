@@ -11,6 +11,12 @@ from apps.home.models import Worker,Users,Full_tasks,Schedule,Scheduler
 
 from flask import request, jsonify
 
+from function import line_tasks, distribute_tasks, delete_last_two_schedule
+
+# line_tasks()                          # создание очереди
+# distribute_tasks()                    # распределение задач
+# delete_last_two_schedule()            # удаление лишних расписаний
+
 @blueprint.route('/update_user/<id>', methods=['POST'])
 def update_users(id):
     try:

@@ -1,5 +1,6 @@
+
 from apps import db
-from apps.api.models import Worker, Tasks, Points, Schedule, Undistr_tasks, Full_tasks, Worker_last_location
+from apps.home.models import Worker, Tasks, Points, Schedule, Undistr_tasks, Full_tasks, Worker_last_location
 from datetime import datetime, timedelta, date
 from sqlalchemy import text, case, select, create_engine
 from sqlalchemy.orm import sessionmaker
@@ -7,7 +8,7 @@ from geopy.distance import geodesic
 import json
 import uuid
 
-
+# TODO: обновить home.models (не все модели там есть и убрать лишнее)
 def get_schedule_for_worker_on_day(date, worker_id):
     schedule_record = db.session.query(Schedule).filter_by(date=date).first()
     if schedule_record:
