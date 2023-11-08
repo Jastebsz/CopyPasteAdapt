@@ -75,7 +75,7 @@ def get_schedule_for_worker_on_interval(start_date, end_date, worker_id):
 def save_task_сompleted(idt):
     row_to_update = db.session.query(Full_tasks).filter(Full_tasks.idt == str(idt)).first()
     if row_to_update:
-        row_to_update.status = 'active'
+        row_to_update.status = 'finish'
         db.session.commit()
         return True
     else:
