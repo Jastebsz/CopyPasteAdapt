@@ -26,29 +26,21 @@ def role1():
 def route_default():
     return redirect(url_for('authentication_blueprint.login'))
 
-
-# Login & Registration
+# Авторизация и регистрация
 
 @blueprint.route('/login', methods=['GET', 'POST'])
 def login():
     login_form = LoginForm(request.form)
     if 'login' in request.form:
-        # Read form data
         username = request.form['username']
         password = request.form['password']
 
-        # Locate user
         user = Users.query.filter_by(username=username).first()
-
-        # Check if the user exists in the database
         if user:
-            # Check the password
             if verify_pass(password, user.password):
-                session['username'] = user.username  # Save the username in the session
+                session['username'] = user.username  
                 session['role'] = user.role
                 login_user(user)
-
-                # Check if the user is an admin
                 if user.role == 'Администратор' and user is not None:
                     return redirect(url_for('authentication_blueprint.route_default'))
                 # elif user.role != 'admin':
@@ -57,25 +49,18 @@ def login():
                 #                            msg='У вас недостаточно прав для доступа',
                 #                             form=login_form)
                 else:    
-                    # В случае, когда пользователь не существует
                     redirect(url_for('home_blueprint.index'))
-            # Password is incorrect
             return render_template('accounts/login.html',
                                    msg='Неверное имя пользователя или пароль',
                                    form=login_form)
-
-        # User doesn't exist in the database
         return render_template('accounts/login.html',
                                msg='Обратитесь к администратору для создания аккаунта',
                                form=login_form)
-
     if not current_user.is_authenticated:
         return render_template('accounts/login.html',
                                form=login_form)
 
     return redirect(url_for('home_blueprint.index'))
-
-
 
 @blueprint.route('/register', methods=['GET', 'POST'])
 def register():
@@ -91,7 +76,6 @@ def register():
         new_username = request.form['username']
         role = request.form['role']
         new_worker_FIO=request.form['worker_FIO']
-        # Check if the new username exists
         user = Users.query.filter_by(username=new_username).first()
         if user:
             return render_template('accounts/register.html',
@@ -105,7 +89,6 @@ def register():
                                    success=False,
                                    form=create_account_form, username=username, role=user_role,fio_column=fio_column)
 
-        # Create the user with the new username
         user = Users(**request.form)
         db.session.add(user)
         db.session.commit()
@@ -126,7 +109,7 @@ def logout():
     return redirect(url_for('authentication_blueprint.login'))
 
 
-# Errors
+# Обработчики ошибок
 
 @login_manager.unauthorized_handler
 def unauthorized_handler():

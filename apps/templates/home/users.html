@@ -7,10 +7,6 @@
 
 {% block content %}
 
-
-
-
-  <!-- Users table -->
   <div class="container-fluid py-4">
     <div class="row">
       <div class="col-12">
@@ -116,9 +112,11 @@
         const data = {
             id: id,
             username: updatedUsername,
+            
             role: updatedRole
         };
         console.log(data)
+
         // Отправьте данные на сервер для сохранения
         fetch(`/update_user/${id}`, {
             method: 'POST',

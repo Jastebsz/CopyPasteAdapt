@@ -9,14 +9,14 @@ class Worker(db.Model):
     id = db.Column(db.Integer, primary_key=True,autoincrement=True)
     FIO = db.Column(db.String(64), unique=True)
     location = db.Column(db.String(64))
-    grade = db.Column(db.String(128))  # Store the hashed password as a string
+    grade = db.Column(db.String(128))  
 
-    def __init__(self, FIO, location, grade):
-        self.FIO = FIO
-        self.location = location
-        self.grade = grade
-    def __repr__(self):
-        return '<Worker {}>'.format(self.body)  
+    # def __init__(self, FIO, location, grade):
+    #     self.FIO = FIO
+    #     self.location = location
+    #     self.grade = grade
+    # def __repr__(self):
+    #     return '<Worker {}>'.format(self.body)  
     
 class Tasks(db.Model):
     __tablename__ = 'Tasks'
@@ -59,11 +59,11 @@ class Points(db.Model):
 
 class Full_tasks(db.Model):
     __tablename__ = 'Full_tasks'
-    idt = db.Column(db.String(100), primary_key=True)                      # тип
-    task_type = db.Column(db.Integer, primary_key=True)                   # название
-    task_title = db.Column(db.String(100), nullable=False)                 # приоритет
-    task_priority = db.Column(db.String(30), nullable=False)                     # время
-    task_lead_time = db.Column(db.Float, nullable=False)               # условие
+    idt = db.Column(db.String(100), primary_key=True)                      
+    task_type = db.Column(db.Integer, primary_key=True)                   
+    task_title = db.Column(db.String(100), nullable=False)                
+    task_priority = db.Column(db.String(30), nullable=False)                  
+    task_lead_time = db.Column(db.Float, nullable=False)              
     task_level = db.Column(db.String(30), nullable=False) 
     point_id=db.Column(db.Integer, primary_key=True)
     point_address=db.Column(db.String(100), nullable=False)
@@ -71,18 +71,18 @@ class Full_tasks(db.Model):
     status=db.Column(db.String(10), nullable=False)
     
     
-    def __init__(self,idt, task_type, task_title, task_priority,task_lead_time,task_level,point_id,point_address):
-        self.idt = idt                     
-        self.task_type =task_type         
-        self.task_title =task_title
-        self.task_priority =task_priority                  
-        self.task_lead_time =task_lead_time    
-        self.task_level =task_level 
-        self.point_id=point_id
-        self.point_address=point_address
+    # def __init__(self,idt, task_type, task_title, task_priority,task_lead_time,task_level,point_id,point_address):
+    #     self.idt = idt                     
+    #     self.task_type =task_type         
+    #     self.task_title =task_title
+    #     self.task_priority =task_priority                  
+    #     self.task_lead_time =task_lead_time    
+    #     self.task_level =task_level 
+    #     self.point_id=point_id
+    #     self.point_address=point_address
 
-    def __repr__(self):
-        return '<Full_tasks {}>'.format(self.body) 
+    # def __repr__(self):
+    #     return '<Full_tasks {}>'.format(self.body) 
 
     
     

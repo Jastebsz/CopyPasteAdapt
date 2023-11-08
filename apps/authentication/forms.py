@@ -3,10 +3,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField
 from wtforms.validators import Email, DataRequired
-
-# login and registration
-
-
 class LoginForm(FlaskForm):
     username = StringField('Имя пользователя',
                          id='username_login',
