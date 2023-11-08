@@ -3,7 +3,7 @@
 from flask import Blueprint
 
 blueprint = Blueprint(
-    'home_blueprint',
+    'api_blueprint',
     __name__,
     url_prefix=''
 )
