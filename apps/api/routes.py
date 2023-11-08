@@ -11,7 +11,7 @@ from datetime import datetime
 
 @blueprint.route('/authorization')
 @login_required                                         # Это тут нужно?
-def authorization():                                    # Коля, это к тебе
+def authorization():                                    # Коля, это к тебе, и чекни коммент к последнему обработчику
 
 
     data = {'ТУТ': 'ПОКА', 'НЕ': 'ГОТОВО'}
@@ -81,8 +81,8 @@ def task_notification():                                                        
 
     return jsonify(data)
 
-@blueprint.route('/user_information', methods=['POST'])
-def user_information():
+@blueprint.route('/user_information', methods=['POST'])                         # Скорее всего надо отправлять во время
+def user_information():                                                         # авторизации во время авторизации
 
 
     data = {'ТУТ': 'ПОКА', 'НЕ': 'ГОТОВО'}
