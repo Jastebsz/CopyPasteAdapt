@@ -37,7 +37,7 @@
                   <td contenteditable="false" data-name="id"  style="text-align: left; padding-left: 23px;">{{ user.id }}</td>
                   <td contenteditable="false" data-name="username">{{ user.username }}</td>
                   <td contenteditable="false" data-name="role">{{ user.role }}</td>
-                  <td contenteditable="false" data-name="role">{{ user.worker_FIO }}</td>
+                  <td contenteditable="false" data-name="worker_FIO">{{ user.worker_FIO }}</td>
                   <td data-name="password">{{ user.password }}</td>
                   <td class="align-middle">
                     <td class="align-middle">
@@ -71,31 +71,34 @@
 <script>
   document.addEventListener('click', function (event) {
     if (event.target.classList.contains('edit-button')) {
-      const editButton = event.target;
-      const row = editButton.closest('tr');
-    
-      row.querySelectorAll('[contenteditable="false"]').forEach(cell => {
-        cell.contentEditable = 'true';
-      });
+        const editButton = event.target;
+        const row = editButton.closest('tr');
+
+        row.querySelectorAll('[contenteditable="false"]').forEach(cell => {
+            const dataName = cell.getAttribute('data-name');
+            if (dataName !== 'id' && dataName !== 'worker_FIO') {
+                cell.contentEditable = 'true';
+            }
+        });
     } else if (event.target.classList.contains('delete-button')) {
-      const username = event.target.getAttribute('data-username');
-      const row = event.target.closest('tr');
-  
-      fetch(`/delete_user/${username}`, {
-        method: 'POST',
-      })
-      .then(response => {
-        if (response.status === 200) {
-          // Успешно удалено
-          row.remove(); // Удалить строку из таблицы
-          alert('Пользователь успешно удален');
-        } else {
-          // Обработка ошибок
-          alert('Произошла ошибка при удалении пользователя');
-        }
-      });
+        const username = event.target.getAttribute('data-username');
+        const row = event.target.closest('tr');
+
+        fetch(`/delete_user/${username}`, {
+            method: 'POST',
+        })
+        .then(response => {
+            if (response.status === 200) {
+                // Успешно удалено
+                row.remove(); // Удалить строку из таблицы
+                alert('Пользователь успешно удален');
+            } else {
+                // Обработка ошибок
+                alert('Произошла ошибка при удалении пользователя');
+            }
+        });
     }
-  });
+});
 
 
   document.addEventListener('click', function (event) {
@@ -107,13 +110,14 @@
         // Получите данные, которые нужно сохранить, из ряда
         const id = row.querySelector('[data-name="id"]').textContent;
         const updatedUsername = row.querySelector('[data-name="username"]').textContent;
+        const updatedworker_FIO = row.querySelector('[data-name="worker_FIO"]').textContent;
         const updatedRole = row.querySelector('[data-name="role"]').textContent;
-
+        
         const data = {
             id: id,
             username: updatedUsername,
-            
-            role: updatedRole
+            role: updatedRole,
+            worker_FIO:updatedworker_FIO
         };
         console.log(data)
 
