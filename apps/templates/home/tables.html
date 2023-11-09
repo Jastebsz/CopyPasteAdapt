@@ -99,7 +99,7 @@
       <div class="card">
         <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
           <div class="bg-gradient-primary shadow-success border-radius-lg pt-4 pb-3">
-            <h6 class="text-white text-capitalize ps-3">Агентские точки</h6>
+            <h6 class="text-white ps-3">Агентские точки</h6>
           </div>
         </div>
         <div class="card-body px-0 pb-2">
@@ -121,14 +121,14 @@
                     <td style="text-align: left; padding-left: 23px;">{{ point.address }}</td>
                   <td style="padding-right: 20px;">{{ point.connected }}</td>
                   <td style="padding-right: 20px;">{{ point.delivered }}</td>
-                   <td style="padding-right: 20px;">{{ point.days_last_cardIO }}</td>
+                   <td style="padding-right: 20px;">{{ point.days_last_card }}</td>
                   <td style="padding-right: 20px;">{{ point.num_approved_app }}</td>
                   <td style="padding-right: 20px;">{{ point.num_card }}</td>
                   </tr>
                 {% endfor %}
               </tbody>
             </table>
-            <a href="{{ url_for('home_blueprint.route_template', template='users.html') }}" class="btn btn-primary"
+            <a href="{{ url_for('home_blueprint.route_template', template='points.html') }}" class="btn btn-primary"
                style="background-color: #ff4b5f; color: white; margin-top:20px; margin-right: 20px; float: right;">
                Перейти к таблице
             </a>

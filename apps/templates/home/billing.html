@@ -323,7 +323,287 @@
 
   </div>
 
+
+  <div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="card my-4">
+        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+          <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+            <h6 class="text-white ps-3">Справочник задач</h6>
+          </div>
+        </div>
+        <div class="card-body px-0 pb-2">
+          <div class="table-responsive p-0">
+            <table class="table align-items-center mb-0">
+              <thead>
+                <tr>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="text-align: left;">Тип</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Название</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Приоритет</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Время выполнения</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Условия</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Уровень сотрудника</th>
+                  <th class="text-secondary opacity-7"></th>
+                  <th class="text-secondary opacity-7"></th>
+                  <th class="text-secondary opacity-7"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for task in tasks %}
+                <tr>
+                  <td contenteditable="false" data-name="type" style="text-align: left; padding-left: 23px;">{{ task.type }}</td>
+                  <td contenteditable="false" data-name="title">{{ task.title }}</td>
+                  <td contenteditable="false" data-name="priority">{{ task.priority }}</td>
+                  <td contenteditable="false" data-name="lead_time">{{ task.lead_time }}</td>
+                  <td contenteditable="false" data-name="condition">{{ task.condition }}</td>
+                  <td contenteditable="false" data-name="level">{{ task.level }}</td>
+                  <td class="align-middle">
+                    <!-- Edit button -->
+                    <a href="javascript:;" class="text-warning font-weight-bold text-xs bg-button edit-button" data-username="task_{{ task.type }}" data-toggle="tooltip" data-original-title="Изменить">
+                      Изменить
+                    </a>
+
+                    <!-- Delete button -->
+                    <a href="javascript:;" class="text-danger font-weight-bold text-xs bg-button delete-button" style="text-align: left; padding-left: 23px;" data-username="task_{{ task.type }}" data-toggle="tooltip" data-original-title="Удалить">
+                      Удалить
+                    </a>
+
+                    <!-- Save button -->
+                    <a href="javascript:;" class="text-success font-weight-bold text-xs bg-button save-button ms-4" data-username="task_{{ task.type }}" data-toggle="tooltip" data-original-title="Сохранить">
+                      Сохранить
+                    </a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid py-4">
+    <div class="row">
+      <div class="col-12">
+        <div class="card my-4">
+          <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+            <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+              <h6 class="text-white ps-3">Все задачи</h6>
+            </div>
+          </div>
+          <div class="card-body px-0 pb-2">
+            <div class="table-responsive p-0">
+              <table class="table align-items-center mb-0">
+                <thead>
+                  <tr>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="text-align: left;">ID</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">ФИО</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Приоритет</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Адрес</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Дата</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Статус</th>
+                    <th class="text-secondary opacity-7"></th>
+                    <th class="text-secondary opacity-7"></th>
+                    <th class="text-secondary opacity-7"></th>
+                  </tr>
+                </thead>
+                <!--<tbody>
+                  {% for full_task in full_tasks %}
+                  <tr>
+                    <td contenteditable="false" data-name="id" style="text-align: left; padding-left: 23px;">{{ full_task.id }}</td>
+                    <td contenteditable="false" data-name="FIO">{{ full_task.FIO }}</td>
+                    <td contenteditable="false" data-name="task_priority">{{ full_task.task_priority }}</td>
+                    <td contenteditable="false" data-name="point_adress">{{ full_task.point_adress }}</td>
+                    <td contenteditable="false" data-name="date">{{ full_task.date }}</td>
+                    <td contenteditable="false" data-name="status">{{ full_task.status }}</td>
+                    <td class="align-middle">
+                     <a href="javascript:;" class="text-warning font-weight-bold text-xs bg-button edit-button" data-username="worker_{{ full_task.id }}" data-toggle="tooltip" data-original-title="Изменить">
+  Изменить
+</a>
+<a href="javascript:;" class="text-danger font-weight-bold text-xs bg-button delete-button" style="text-align: left; padding-left: 23px;" data-username="worker_{{ full_task.id }}" data-toggle="tooltip" data-original-title="Удалить">
+  Удалить
+</a>
+<a href="javascript:;" class="text-success font-weight-bold text-xs bg-button save-button ms-4" data-username="worker_{{ full_task.id }}" data-toggle="tooltip" data-original-title="Сохранить">
+  Сохранить
+</a>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>-->
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <div class="position-fixed bottom-1 end-1 z-index-2">
+    <div class="toast fade hide p-2 mt-2 bg-white" role="alert" aria-live="assertive" id="customToast" aria-atomic="true">
+        <div class="toast-header border-0">
+            <i class="material-icons text-danger me-2">campaign</i>
+            <span class="me-auto text-gradient text-danger font-weight-bold">Уведомление</span>
+            <small class="text-body" id="toastTimestamp"></small>
+            <i class="fas fa-times text-md ms-3 cursor-pointer" data-bs-dismiss="toast" aria-label="Close"></i>
+        </div>
+        <hr class="horizontal dark m-0">
+        <div class="toast-body">
+        </div>
+    </div>
+</div>
+
+
+
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
-{% block javascripts %}{% endblock javascripts %}
+{% block javascripts %}
+<script>
+  document.addEventListener('click', function (event) {
+    if (event.target.classList.contains('edit-button')) {
+        // Handle edit button for both tables
+        const editButton = event.target;
+        const row = editButton.closest('tr');
+
+        row.querySelectorAll('[contenteditable="false"]').forEach(cell => {
+            const dataName = cell.getAttribute('data-name');
+            if (dataName !== 'type' && dataName !== 'id') {
+                cell.contentEditable = 'true';
+            }
+        });
+    } else if (event.target.classList.contains('delete-button')) {
+        // Handle delete button for both tables
+        const username = event.target.getAttribute('data-username');
+        const row = event.target.closest('tr');
+
+        // Check the prefix to determine the table
+        if (username.startsWith('task_')) {
+            const type = username.replace('task_', '');
+            // Handle delete button for the first table
+            fetch(`/delete_task/${type}`, {
+                method: 'POST',
+            })
+            .then(response => {
+                if (response.status === 200) {
+                    row.remove(); 
+                    showToast('success', 'Задача успешно удалена');
+                } else {
+                    showToast('danger', 'Произошла ошибка при удалении задачи');
+                }
+            });
+        } else if (username.startsWith('worker_')) {
+            const id = username.replace('worker_', '');
+            // Handle delete button for the second table
+            fetch(`/delete_worker/${id}`, {
+                method: 'POST',
+            })
+            .then(response => {
+                if (response.status === 200) {
+                    row.remove(); 
+                    showToast('success', 'Пользователь успешно удален');
+                } else {
+                    showToast('danger', 'Произошла ошибка при удалении пользователя');
+                }
+            });
+        }
+    } else if (event.target.classList.contains('save-button')) {
+        // Handle save button for both tables
+        const username = event.target.getAttribute('data-username');
+        const row = event.target.closest('tr');
+        
+        // Check the prefix to determine the table
+        if (username.startsWith('task_')) {
+            const type = username.replace('task_', '');
+            const type = username.replace('task_', '');
+
+        // Получаем данные из ячеек ряда
+        const title = row.querySelector('[data-name="title"]').textContent;
+        const priority = row.querySelector('[data-name="priority"]').textContent;
+        // Добавьте остальные поля по необходимости
+
+        const data = {
+            type: type,
+            title: title,
+            priority: priority,
+            // Добавьте остальные поля по необходимости
+        };
+
+        // Отправляем данные на сервер для сохранения
+        fetch(`/update_task/${type}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (response.status === 200) {
+                showToast('success', 'Данные успешно сохранены');
+            } else {
+                showToast('danger','Произошла ошибка при сохранении данных');
+            }
+        });
+            // Rest of the code for the save button in the first table
+        } else if (username.startsWith('worker_')) {
+            const id = username.replace('worker_', '');
+
+            const id = username.replace('worker_', '');
+
+            // Получаем данные из ячеек ряда
+            const FIO = row.querySelector('[data-name="FIO"]').textContent;
+            const task_priority = row.querySelector('[data-name="task_priority"]').textContent;
+            // Добавьте остальные поля по необходимости
+        
+            const data = {
+                id: id,
+                FIO: FIO,
+                task_priority: task_priority,
+                // Добавьте остальные поля по необходимости
+            };
+        
+            // Отправляем данные на сервер для сохранения
+            fetch(`/update_worker/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (response.status === 200) {
+                    showToast('success', 'Данные успешно сохранены');
+                } else {
+                    showToast('danger','Произошла ошибка при сохранении данных');
+                }
+            });
+        }
+            // Rest of the code for the save button in the second table
+        }
+    }
+});
+
+
+
+
+
+
+
+function showToast(type, message) {
+  const toast = document.getElementById('customToast');
+  toast.querySelector('.toast-body').innerHTML = message;
+  const timestamp = new Date().toLocaleTimeString();
+  toast.querySelector('#toastTimestamp').innerText = timestamp;
+  const bsToast = new bootstrap.Toast(toast);
+  bsToast.show();
+}
+const bsToast = new bootstrap.Toast(toast);
+    bsToast.show();
+    setTimeout(() => {
+        bsToast.hide();
+    }, 5000);
+</script>
+
+
+
+
+
+{% endblock javascripts %}

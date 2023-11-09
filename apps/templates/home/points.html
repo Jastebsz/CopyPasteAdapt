@@ -1,17 +1,12 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Tables {% endblock %} 
+{% block title %} Tables {% endblock %}
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
 
-
 {% block content %}
-
-
-
-
- <div class="container-fluid py-4">
+<div class="container-fluid py-4">
   <div class="row">
     <div class="col-12">
       <div class="card my-4">
@@ -25,93 +20,179 @@
             <table class="table align-items-center mb-0">
               <thead>
                 <tr>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="text-align: left;">ФИО</th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Местоположение</th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Уровень</th>
-                    <th class="text-secondary opacity-7"></th>
-                    <th class="text-secondary opacity-7"></th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="text-align: left;">ID</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Адрес</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Когда подключена точка</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Доставлены ли материалы</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">
+                    Кол-во дней после<br>выдачи последней карты
+                  </th>                  
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Кол-во одобренных заявок</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Кол-во выданных карт</th>
+                  <th class="text-secondary opacity-7"></th>
+                  <th class="text-secondary opacity-7"></th>
+                  <th class="text-secondary opacity-7"></th>
                 </tr>
-            </thead>
-            <tbody>
-              {% for worker in workers %}
+              </thead>
+              <tbody>
+                {% for point in points %}
                   <tr>
-                    <td contenteditable="true" data-name="FIO">{{ worker.FIO }}</td>
-                    <td contenteditable="true" data-name="location">{{ worker.location }}</td>
-                    <td contenteditable="true" data-name="grade">{{ worker.grade }}</td>
-                    <td><button class="save-button" style="display: none;">Сохранить изменения</button></td>                    
-                  </tr>
-              {% endfor %}
-          </tbody>                            
-      
+                    <td contenteditable="false" data-name="id" style="text-align: left; padding-left: 23px;">{{ point.id }}</td>
+                  <td contenteditable="false" data-name="address">{{ point.address }}</td>
+                  <td contenteditable="false" data-name="connected">{{ point.connected }}</td>
+                  <td contenteditable="false" data-name="delivered">{{ point.delivered }}</td>
+                  <td contenteditable="false" data-name="days_last_card">{{ point.days_last_card }}</td>
+                  <td contenteditable="false" data-name="num_approved_app">{{ point.num_approved_app }}</td>
+                  <td contenteditable="false" data-name="num_card">{{ point.num_card }}</td>
+                  <td class="align-middle">
+                    <a href="javascript:;" class="text-warning font-weight-bold text-xs bg-button edit-button" data-username="{{ point.id }}" data-toggle="tooltip" data-original-title="Изменить">
+                      Изменить
+                    </a>
+                    <a href="javascript:;" class="text-danger font-weight-bold text-xs bg-button delete-button" style="text-align: left; padding-left: 23px;" data-username="{{ point.id }}" data-toggle="tooltip" data-original-title="Удалить">
+                      Удалить
+                    </a>
+                    <a href="javascript:;" class="text-success font-weight-bold text-xs bg-button save-button ms-4" data-username="{{ point.id }}" data-toggle="tooltip" data-original-title="Сохранить">
+                      Сохранить
+                    </a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
             </table>
-            <a href="{{ url_for('home_blueprint.route_template', template='users.html') }}" class="btn btn-primary"
-   style="background-color: #ff4b5f; color: white; margin-top:20px; margin-right: 170px; float: right;">
-   Перейти к таблице
-</a>
-<div id="message"></div>
-            
           </div>
-          
-      
+        </div>
+      </div>
     </div>
-    
   </div>
-  
+
+  <div class="position-fixed bottom-1 end-1 z-index-2">
+    <div class="toast fade hide p-2 mt-2 bg-white" role="alert" aria-live="assertive" id="customToast" aria-atomic="true">
+        <div class="toast-header border-0">
+            <i class="material-icons text-danger me-2">campaign</i>
+            <span class="me-auto text-gradient text-danger font-weight-bold">Уведомление</span>
+            <small class="text-body" id="toastTimestamp"></small>
+            <i class="fas fa-times text-md ms-3 cursor-pointer" data-bs-dismiss="toast" aria-label="Close"></i>
+        </div>
+        <hr class="horizontal dark m-0">
+        <div class="toast-body">
+        </div>
+    </div>
 </div>
+  <!-- Кнопка для открытия модального окна 
+  <a href="{{ url_for('home_blueprint.route_template', template='workers.html') }}" class="btn btn-primary"
+            style="background-color: #ff4b5f; color: white;margin-top:20px; margin-right: 20px; float: right;">
+    Добавить строку
+  </a>-->
 
-
-
-
-
-
-
+  <!-- Модальное окно для добавления новой строки 
+  <div id="addRowModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeAddRowModal">&times;</span>
+      <form id="addRowForm">
+        <label for="newFIO">ФИО:</label>
+        <input type="text" id="newFIO" name="newFIO"><br>
+        <label for="newLocation">Местоположение:</label>
+        <input type="text" id="newLocation" name="newLocation"><br>
+        <label for="newGrade">Уровень:</label>
+        <input type="text" id="newGrade" name="newGrade"><br>
+        <input type="button" value="Отправить" id="submitNewRow">
+      </form>
+    </div>
+  </div>
+</div>-->
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-sHZ9hq7bI3uH7qZR5EP5MF3Rvx4TZDBiHQXyq1o29gXo1gDSrDg9LBIWCDfSLg6J" crossorigin="anonymous"></script>
 <script>
-document.addEventListener('click', function (event) {
-  if (event.target.classList.contains('save-button')) {
-    const saveButton = event.target;
-    const editButton = saveButton.previousElementSibling;
-    const row = saveButton.closest('tr');
+  document.addEventListener('click', function (event) {
+    if (event.target.classList.contains('edit-button')) {
+        const editButton = event.target;
+        const row = editButton.closest('tr');
 
-    // Переключите contenteditable обратно на false
-    row.querySelectorAll('[contenteditable="true"]').forEach(cell => {
-      cell.contentEditable = 'false';
-    });
+        row.querySelectorAll('[contenteditable="false"]').forEach(cell => {
+            const dataName = cell.getAttribute('data-name');
+            if (dataName !== 'id') {
+                cell.contentEditable = 'true';
+            }
+        });
+    } else if (event.target.classList.contains('delete-button')) {
+        const id = event.target.getAttribute('data-username');
+        const row = event.target.closest('tr');
 
-    // Здесь вы можете получить новые значения из ячеек с contenteditable="true" и отправить их на сервер
-    const updatedData = {};
-    row.querySelectorAll('[contenteditable="true"]').forEach(cell => {
-      const fieldName = cell.dataset.name;
-      const value = cell.innerText;
-      updatedData[fieldName] = value;
-    });
+        fetch(`/delete_points/${id}`, {
+            method: 'POST',
+        })
+        .then(response => {
+          if (response.status === 200) {
 
-    // Отправьте данные на сервер
-    fetch('/update_worker/' + workerId, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(updatedData),
-    })
-    .then(response => response.json())
-    .then(data => {
-      // Обработка успешного обновления данных
-      console.log('Данные успешно обновлены:', data);
-
-      // Добавьте `console.log` с выводом "1"
-      console.log('1');
-    })
-    .catch(error => {
-      // Обработка ошибок
-      console.error('Ошибка при обновлении данных:', error);
-    });
-  }
+            row.remove(); 
+            showToast('success', 'Строка успешно удалена');
+        } else {
+            showToast('danger', 'Произошла ошибка при удалении строки');
+        }
+        });
+    }
 });
-</script>
 
+
+  document.addEventListener('click', function (event) {
+        if (event.target.classList.contains('save-button')) {
+          const username = event.target.getAttribute('data-username');
+          const row = event.target.closest('tr');
+          // Получите данные, которые нужно сохранить, из ряда
+          const id = row.querySelector('[data-name="id"]').textContent;
+          const updatedaddress = row.querySelector('[data-name="address"]').textContent;
+          const updatedconnected = row.querySelector('[data-name="connected"]').textContent;
+          const updateddelivered = row.querySelector('[data-name="delivered"]').textContent;
+          const updateddays_last_card = row.querySelector('[data-name="days_last_card"]').textContent;
+          const updatednum_approved_app = row.querySelector('[data-name="num_approved_app"]').textContent;
+          const updatednum_card = row.querySelector('[data-name="num_card"]').textContent;
+
+          const data = {
+            id: id,
+            address: updatedaddress,
+            connected: updatedconnected,
+            delivered: updateddelivered,
+            days_last_card: updateddays_last_card,
+            num_approved_app: updatednum_approved_app,
+            num_card: updatednum_card
+
+          };
+
+        console.log(data)
+
+        fetch(`/update_points/${id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (response.status === 200) {
+                showToast('success', 'Данные успешно сохранены');
+            } else {
+                showToast('danger','Произошла ошибка при сохранении данных');
+            }
+        });
+    }
+});
+
+function showToast(type, message) {
+  const toast = document.getElementById('customToast');
+  toast.querySelector('.toast-body').innerHTML = message;
+  const timestamp = new Date().toLocaleTimeString();
+  toast.querySelector('#toastTimestamp').innerText = timestamp;
+  const bsToast = new bootstrap.Toast(toast);
+  bsToast.show();
+}
+const bsToast = new bootstrap.Toast(toast);
+    bsToast.show();
+    setTimeout(() => {
+        bsToast.hide();
+    }, 5000);
+</script>
 
 {% endblock javascripts %}

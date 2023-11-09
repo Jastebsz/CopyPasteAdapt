@@ -26,6 +26,7 @@
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Уровень</th>
                   <th class="text-secondary opacity-7"></th>
                   <th class="text-secondary opacity-7"></th>
+                  <th class="text-secondary opacity-7"></th>
                 </tr>
               </thead>
               <tbody>
@@ -147,7 +148,7 @@
 
         console.log(data)
 
-        fetch(`/update_user/${id}`, {
+        fetch(`/update_worker/${id}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
