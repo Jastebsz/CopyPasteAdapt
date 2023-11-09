@@ -53,7 +53,7 @@ def route_template(template):
             return render_template("home/" + template, segment=segment, username=username, role=user_role, points=points)
         if template == 'billing.html':
             tasks=Tasks.query.all()
-            #Здесь необходимо связать таблицы Full_tasks и Worker и подать странице новую БД( строки в html, под них форматировать не обязательно: ID,ФИО,task_title,task_priority,point_address,date,status)
+            # TODO Здесь необходимо связать таблицы Full_tasks и Worker и подать странице новую БД( строки в html, под них форматировать не обязательно: ID,ФИО,task_title,task_priority,point_address,date,status)
             #return render_template("home/" + template, segment=segment, username=username, role=user_role, tasks=tasks,full_tasks=full_tasks)
             return render_template("home/" + template, segment=segment, username=username, role=user_role,tasks=tasks)
         else:

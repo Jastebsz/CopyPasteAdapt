@@ -4,16 +4,89 @@
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="/static/jquery.schedule/dist/css/style.min.css" />
+
 {% endblock stylesheets %}
 
 {% block content %}
 
-
+<div id="schedule"></div>
 
 
 {% endblock content %}
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 
-<script src="https://cdn.jsdelivr.net/npm/gantt-schedule-timeline-calendar/dist/gstc.wasm.umd.min.js"></script>
+<script type="text/javascript" src="/static/jquery.schedule/dist/jq.schedule.min.js"></script>
+<script type="text/javascript">
+    $(function(){
+        var $sc = jQuery("#schedule").timeSchedule($options);
+    });
+    </script>
+<script type="text/javascript">
+    $(function(){
+        var $sc = $("#schedule").timeSchedule({
+            startTime: "07:00", // schedule start time(HH:ii)
+            endTime: "21:00",   // schedule end time(HH:ii)
+            widthTime:60 * 10,  // cell timestamp example 10 minutes
+            timeLineY:60,       // height(px)
+            verticalScrollbar:20,   // scrollbar (px)
+            timeLineBorder:2,   // border(top and bottom)
+            bundleMoveWidth:6,  // width to move all schedules to the right of the clicked time line cell
+            rows : {
+                '0' : {
+                    title : 'Title Area',
+                    subtitle : 'Description',
+                    schedule:[
+                        {
+                            start:'09:00',
+                            end:'12:00',
+                            text:'Text Area',
+                            data:{
+                            }
+                        },
+                        {
+                            start:'11:00',
+                            end:'14:00',
+                            text:'Text Area',
+                            data:{
+                            }
+                        }
+                    ]
+                },
+                '1' : {
+                    title : 'Title Area',
+                    schedule:[
+                        {
+                            start:'16:00',
+                            end:'17:00',
+                            text:'Text Area',
+                            data:{
+                            }
+                        }
+                    ]
+                }
+            },
+            onChange: function(node, data){
+                addLog('onChange', data);
+            },
+            onInitRow: function(node, data){
+                addLog('onInitRow', data);
+            },
+            onClick: function(node, data){
+                addLog('onClick', data);
+            },
+            onAppendRow: function(node, data){
+                addLog('onAppendRow', data);
+            },
+            onAppendSchedule: function(node, data){
+                addLog('onAppendSchedule', data);
+            },
+            onScheduleClick: function(node, time, timeline){
+                addLog('onScheduleClick', time + ' ' + timeline);
+            }
+        });
+    });
+</script>
+
 {% endblock javascripts %}
