@@ -32,9 +32,9 @@
                 {% for worker in workers %}
                 <tr>
                   <td contenteditable="false" data-name="id" style="text-align: left; padding-left: 23px;">{{ worker.id }}</td>
-                  <td contenteditable="true" data-name="FIO">{{ worker.FIO }}</td>
-                  <td contenteditable="true" data-name="location">{{ worker.location }}</td>
-                  <td contenteditable="true" data-name="grade">{{ worker.grade }}</td>
+                  <td contenteditable="false" data-name="FIO">{{ worker.FIO }}</td>
+                  <td contenteditable="false" data-name="location">{{ worker.location }}</td>
+                  <td contenteditable="false" data-name="grade">{{ worker.grade }}</td>
                   <td class="align-middle">
                     <a href="javascript:;" class="text-warning font-weight-bold text-xs bg-button edit-button" data-username="{{ worker.id }}" data-toggle="tooltip" data-original-title="Изменить">
                       Изменить
@@ -102,7 +102,7 @@
       };
 
       // Отправьте данные на сервер для сохранения
-      fetch(`/update_user/${id}`, {
+      fetch(`/update_worker/${id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -121,36 +121,46 @@
     }
   });
 
-  // Обработчик события нажатия кнопки "Изменить"
-  function handleEdit(event) {
-    const editButton = event.target;
-    const row = editButton.closest('tr');
 
-    row.querySelectorAll('[contenteditable="false"]').forEach(cell => {
-      cell.contentEditable = 'true';
-    });
-  }
+  document.addEventListener('click', function (event) {
+    console.log('Clicked:', event.target);
 
-  // Обработчик события нажатия кнопки "Удалить"
-  function handleDelete(event) {
-    const deleteButton = event.target;
-    const id = deleteButton.getAttribute('data-username');
-    const row = deleteButton.closest('tr');
+    if (event.target.classList.contains('edit-button')) {
+        console.log('Edit button clicked');
+        const editButton = event.target;
+        const row = editButton.closest('tr');
 
-    fetch(`/delete_user/${id}`, {
-      method: 'POST',
-    })
-    .then(response => {
-      if (response.status === 200) {
-        // Успешно удалено
-        row.remove(); // Удалить строку из таблицы
-        alert('Пользователь успешно удален');
-      } else {
-        // Обработка ошибок
-        alert('Произошла ошибка при удалении пользователя');
-      }
-    });
-  }
+        row.querySelectorAll('[contenteditable="false"]').forEach(cell => {
+            const dataName = cell.getAttribute('data-name');
+            if (dataName !== 'id' && dataName !== 'FIO') {
+                cell.contentEditable = 'true';
+            }
+        });
+    } else if (event.target.classList.contains('delete-button')) {
+        console.log('Delete button clicked');
+        const username = event.target.getAttribute('data-username');
+        const row = event.target.closest('tr');
+
+        fetch(`/delete_user/${username}`, {
+            method: 'POST',
+        })
+        .then(response => {
+            console.log('Response:', response);
+            
+            if (response.status === 200) {
+                // Успешно удалено
+                row.remove(); // Удалить строку из таблицы
+                alert('Пользователь успешно удален');
+            } else {
+                // Обработка ошибок
+                alert('Произошла ошибка при удалении пользователя');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+});
 
 
 

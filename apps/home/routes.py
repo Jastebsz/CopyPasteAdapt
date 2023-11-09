@@ -27,6 +27,15 @@ from flask import request, jsonify
 #         return jsonify({'message': 'Данные работника успешно обновлены'})
 #     except Exception as e:
 #         return jsonify({'error': 'Произошла ошибка при обновлении данных работника'}), 500
+
+# TODO: для blueprint задач доавить всязь двух таблиц(установление юзера по задачам)
+
+
+
+
+
+
+
     
 #Получение имени пользователя и роли    
 def role():
@@ -167,9 +176,10 @@ def add():
 #Удаление сотрудников из таблицы workers
 @blueprint.route('/delete_worker/<id>', methods=['POST'])
 @login_required
-def delete_worker(username):
+def delete_worker(id):
     try:
-        row_to_delete = db.session.query(Users).filter(Users.username == username).first()
+        row_to_delete = db.session.query(Worker).filter(Worker.id == id).first()
+        print(1)
         print(row_to_delete)
         if  row_to_delete:
             print(row_to_delete)

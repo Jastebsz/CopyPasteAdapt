@@ -5,18 +5,39 @@ from flask import jsonify
 from flask import render_template, request
 from flask_login import login_required
 from jinja2 import TemplateNotFound
-from apps.api.function_api import get_schedule_for_worker_on_day, get_schedule_for_worker_on_interval, save_task_сompleted
+from apps.api.function_api import get_schedule_for_worker_on_day, get_schedule_for_worker_on_interval, save_task_completed, verify_pass
 from datetime import datetime
+from apps.api.models import Users, Worker
 
 
-@blueprint.route('/authorization')
-@login_required                                         # Это тут нужно?
-def authorization():                                    # Коля, это к тебе, и чекни коммент к последнему обработчику
+@blueprint.route('/authorization', methods=['POST'])
+def authorization():    # data = {"login": "user_1", "password": '12345678qwerty'}
+    try:
+        data = request.get_json()
 
+        login = data.get("login")
+        password = data.get("password")
 
-    data = {'ТУТ': 'ПОКА', 'НЕ': 'ГОТОВО'}
+        user = Users.query.filter_by(username=login).first()
 
-    return jsonify(data)
+        data_worker = {}
+
+        if user:
+            if verify_pass(password, user.password):
+                if user.role == 'Администратор':
+                    return jsonify({{'denied': 'Воспользуйтесь веб-интерфейсом администратора'}})
+                worker = Worker.query.filter_by(id=user.id).first()
+                data_worker['worker_id'] = user.id
+                data_worker['worker_FIO'] = worker.FIO
+                data_worker['worker_location'] = worker.location
+                data_worker['worker_grade'] = worker.grade
+                return jsonify({'allowed' : data_worker})
+            else:
+                return jsonify({'denied': 'Неверный логин и пароль'}), 404
+        else:
+            return jsonify({'denied': 'Неверный логин и пароль'}), 404
+    except Exception as e:
+        return jsonify({'denied': 'Произошла ошибка при получении данных авторизации'}), 500
 
 @blueprint.route('/schedule_worker_on_day', methods=['POST'])
 def schedule_on_day():
@@ -65,7 +86,7 @@ def task_сompleted():
     data = request.get_json()   # data = {"task_idt": "305620464419692773492314257386895579457"}
     try:
         idt = data.get("task_idt")
-        if save_task_сompleted(idt):
+        if save_task_completed(idt):
             return jsonify({'message': 'Результат сохранен'})
         else:
             return jsonify({'error': 'Ошибка сохранения результата в БД'}), 404

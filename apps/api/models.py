@@ -1,6 +1,11 @@
 
 from apps import db
-
+class Users(db.Model):
+    id=db.Column(db.Integer, primary_key=True,autoincrement=True)
+    username = db.Column(db.String(64), unique=True)
+    role = db.Column(db.String(64), unique=True)
+    worker_FIO = db.Column(db.Integer)
+    password = db.Column(db.LargeBinary)
 
 class Worker(db.Model):
     id = db.Column(db.Integer, primary_key=True)                        #
