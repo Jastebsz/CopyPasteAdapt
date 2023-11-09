@@ -133,6 +133,24 @@ def update_workers(id):
         print(str(e))  # Добавим вывод ошибки в консоль
         return jsonify({'error': 'Произошла ошибка при обновлении данных сотрудников'}), 500
 
+@blueprint.route('/add_workers', methods=['POST'])
+@login_required
+def add():
+
+    fio = session.get('FIO')
+    location = request.json.get('location')
+    grade = request.json.get('grade')
+
+    user = Worker.query.filter_by(FIO=fio).first()
+
+    if user:
+        return jsonify({'success': False, 'msg': 'ФИО уже существует'})
+
+    new_worker = Worker(FIO=fio, location=location, grade=grade)
+    db.session.add(new_worker)
+    db.session.commit()
+
+    return jsonify({'success': True, 'msg': 'Сотрудник успешно добавлен'})
 
     
     

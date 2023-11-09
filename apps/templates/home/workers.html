@@ -57,6 +57,35 @@
     </div>
   </div>
 
+  <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addRowModal">
+    Добавить сотрудника
+  </a>
+<div id="addRowModal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Добавить сотрудника</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Форма для ввода данных сотрудника -->
+        <form id="addRowForm">
+          <label for="newFIO">ФИО:</label>
+          <input type="text" id="newFIO" name="newFIO" class="form-control" required>
+          <label for="newLocation">Местоположение:</label>
+          <input type="text" id="newLocation" name="newLocation" class="form-control" required>
+          <label for="newGrade">Уровень:</label>
+          <input type="text" id="newGrade" name="newGrade" class="form-control" required>
+          <button type="submit" class="btn btn-primary mt-3">Добавить</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+
+
   <div class="position-fixed bottom-1 end-1 z-index-2">
     <div class="toast fade hide p-2 mt-2 bg-white" role="alert" aria-live="assertive" id="customToast" aria-atomic="true">
         <div class="toast-header border-0">
@@ -129,40 +158,44 @@
 });
 
 
-  document.addEventListener('click', function (event) {
-        if (event.target.classList.contains('save-button')) {
-          const username = event.target.getAttribute('data-username');
-          const row = event.target.closest('tr');
-          // Получите данные, которые нужно сохранить, из ряда
-          const id = row.querySelector('[data-name="id"]').textContent;
-          const updatedFIO = row.querySelector('[data-name="FIO"]').textContent;
-          const updatedLocation = row.querySelector('[data-name="location"]').textContent;
-          const updatedGrade = row.querySelector('[data-name="grade"]').textContent;
-    
-          const data = {
-            id: id,
-            FIO: updatedFIO,
-            location: updatedLocation,
-            grade: updatedGrade
-          };
+document.addEventListener('DOMContentLoaded', function () {
+  const addRowForm = document.getElementById('addRowForm');
 
-        console.log(data)
+  addRowForm.addEventListener('submit', function (event) {
+      event.preventDefault();
 
-        fetch(`/update_worker/${id}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => {
-            if (response.status === 200) {
-                showToast('success', 'Данные успешно сохранены');
-            } else {
-                showToast('danger','Произошла ошибка при сохранении данных, такой пользователь уже сущестует');
-            }
-        });
-    }
+      const newFIO = document.getElementById('newFIO').value;
+      const newLocation = document.getElementById('newLocation').value;
+      const newGrade = document.getElementById('newGrade').value;
+
+      const data = {
+          FIO: newFIO,
+          location: newLocation,
+          grade: newGrade
+      };
+
+      fetch('/add_workers', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(result => {
+          if (result.success) {
+              const addRowModal = new bootstrap.Modal(document.getElementById('addRowModal'));
+              addRowModal.hide();
+              addRowForm.reset();
+
+              // Дополнительные действия по обновлению данных на странице, если необходимо
+
+              showToast('success', 'Сотрудник успешно добавлен');
+          } else {
+              showToast('danger', 'Произошла ошибка при добавлении сотрудника: ' + result.msg);
+          }
+      });
+  });
 });
 
 function showToast(type, message) {
