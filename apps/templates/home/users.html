@@ -103,11 +103,10 @@
         })
         .then(response => {
           if (response.status === 200) {
-            // Successfully deleted
-            row.remove(); // Remove the row from the table
+
+            row.remove(); 
             showToast('success', 'Пользователь успешно удален');
         } else {
-            // Error handling
             showToast('danger', 'Произошла ошибка при удалении пользователя');
         }
         });
@@ -117,11 +116,8 @@
 
   document.addEventListener('click', function (event) {
         if (event.target.classList.contains('save-button')) {
-        // Код для сохранения
         const username = event.target.getAttribute('data-username');
         const row = event.target.closest('tr');
-
-        // Получите данные, которые нужно сохранить, из ряда
         const id = row.querySelector('[data-name="id"]').textContent;
         const updatedUsername = row.querySelector('[data-name="username"]').textContent;
         const updatedworker_FIO = row.querySelector('[data-name="worker_FIO"]').textContent;
@@ -135,7 +131,6 @@
         };
         console.log(data)
 
-        // Отправьте данные на сервер для сохранения
         fetch(`/update_user/${id}`, {
             method: 'POST',
             headers: {
@@ -145,10 +140,8 @@
         })
         .then(response => {
             if (response.status === 200) {
-                // Успешно сохранено
                 showToast('success', 'Данные успешно сохранены');
             } else {
-                // Обработка ошибок
                 showToast('danger','Произошла ошибка при сохранении данных, такой пользователь уже сущестует');
             }
         });
