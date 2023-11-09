@@ -138,10 +138,10 @@
         });
     } else if (event.target.classList.contains('delete-button')) {
         console.log('Delete button clicked');
-        const username = event.target.getAttribute('data-username');
+        const id = event.target.getAttribute('data-username');
         const row = event.target.closest('tr');
 
-        fetch(`/delete_user/${username}`, {
+        fetch(`/delete_user/${id}`, {
             method: 'POST',
         })
         .then(response => {
