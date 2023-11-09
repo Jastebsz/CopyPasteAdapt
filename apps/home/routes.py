@@ -7,8 +7,8 @@ from flask import session,Blueprint
 #from apps.authentication.models import Users
 from geopy.geocoders import Nominatim
 from apps import db
-from apps.home.models import Worker,Users,Full_tasks,Schedule,Scheduler
-from function import line_tasks, distribute_tasks, delete_last_two_schedule
+from apps.home.models import Worker,Users,Full_tasks,Schedule
+from apps.home.function import line_tasks, distribute_tasks, delete_last_two_schedule
 from flask import request, jsonify
 # line_tasks()                          # создание очереди
 # distribute_tasks()                    # распределение задач

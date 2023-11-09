@@ -5,7 +5,7 @@ from flask import jsonify
 from flask import render_template, request
 from flask_login import login_required
 from jinja2 import TemplateNotFound
-from function_api import get_schedule_for_worker_on_day, get_schedule_for_worker_on_interval, save_task_сompleted
+from apps.api.function_api import get_schedule_for_worker_on_day, get_schedule_for_worker_on_interval, save_task_сompleted
 from datetime import datetime
 
 
