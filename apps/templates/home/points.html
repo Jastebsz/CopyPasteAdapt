@@ -1,9 +1,15 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Tables {% endblock %}
+{% block title %} Агентские точки {% endblock %}
 
-<!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block stylesheets %}
+<style>
+  .position-fixed {
+    top: 1rem;
+    right: 1rem;
+  }
+  </style>
+{% endblock stylesheets %}
 
 {% block content %}
 <div class="container-fluid py-4">
@@ -12,7 +18,7 @@
       <div class="card my-4">
         <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
           <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-            <h6 class="text-white text-capitalize ps-3">Сотрудники</h6>
+            <h6 class="text-white text-capitalize ps-3">Агентские точки</h6>
           </div>
         </div>
         <div class="card-body px-0 pb-2">
@@ -64,11 +70,40 @@
       </div>
     </div>
   </div>
+  <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addRowModal">
+    Добавить сотрудника
+  </a>
+  <div id="addRowModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form id="addRowForm">
+                    <label for="newAddress">Адрес:</label>
+                    <input type="text" id="newAddress" name="newAddress" class="form-control" required>
+                    <label for="newConnected">Когда подключена точка:</label>
+                    <input type="text" id="newConnected" name="newConnected" class="form-control" required>
+                    <label for="newDelivered">Доставлены ли материалы:</label>
+                    <select id="newDelivered" name="newDelivered" class="form-control" required>
+                        <option value="true">True</option>
+                        <option value="false">False</option>
+                    </select>
+                    <label for="newDaysLastCard">Кол-во дней после выдачи последней карты:</label>
+                    <input type="text" id="newDaysLastCard" name="newDaysLastCard" class="form-control" required>
+                    <label for="newNumApprovedApp">Кол-во одобренных заявок:</label>
+                    <input type="text" id="newNumApprovedApp" name="newNumApprovedApp" class="form-control" required>
+                    <label for="newNumCard">Кол-во выданных карт:</label>
+                    <input type="text" id="newNumCard" name="newNumCard" class="form-control" required>
 
+                    <button type="submit" class="btn btn-primary mt-3">Добавить</button>
+                  </form>
+                </div>
+            </div>
+        </div>
+      </div>
   <div class="position-fixed bottom-1 end-1 z-index-2">
     <div class="toast fade hide p-2 mt-2 bg-white" role="alert" aria-live="assertive" id="customToast" aria-atomic="true">
         <div class="toast-header border-0">
-            <i class="material-icons text-danger me-2">campaign</i>
+            <i class="material-icons text-danger me-2"></i>
             <span class="me-auto text-gradient text-danger font-weight-bold">Уведомление</span>
             <small class="text-body" id="toastTimestamp"></small>
             <i class="fas fa-times text-md ms-3 cursor-pointer" data-bs-dismiss="toast" aria-label="Close"></i>
@@ -78,34 +113,35 @@
         </div>
     </div>
 </div>
-  <!-- Кнопка для открытия модального окна 
-  <a href="{{ url_for('home_blueprint.route_template', template='workers.html') }}" class="btn btn-primary"
-            style="background-color: #ff4b5f; color: white;margin-top:20px; margin-right: 20px; float: right;">
-    Добавить строку
-  </a>-->
-
-  <!-- Модальное окно для добавления новой строки 
-  <div id="addRowModal" class="modal">
-    <div class="modal-content">
-      <span class="close" id="closeAddRowModal">&times;</span>
-      <form id="addRowForm">
-        <label for="newFIO">ФИО:</label>
-        <input type="text" id="newFIO" name="newFIO"><br>
-        <label for="newLocation">Местоположение:</label>
-        <input type="text" id="newLocation" name="newLocation"><br>
-        <label for="newGrade">Уровень:</label>
-        <input type="text" id="newGrade" name="newGrade"><br>
-        <input type="button" value="Отправить" id="submitNewRow">
-      </form>
-    </div>
-  </div>
-</div>-->
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-sHZ9hq7bI3uH7qZR5EP5MF3Rvx4TZDBiHQXyq1o29gXo1gDSrDg9LBIWCDfSLg6J" crossorigin="anonymous"></script>
+
 <script>
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const numericInputs = document.querySelectorAll('input[type="text"]:not(#newAddress):not(#newConnected):not(#newDaysLastCard)');
+
+    numericInputs.forEach(input => {
+        input.addEventListener('input', function () {
+            const inputValue = input.value.trim();
+            const validationResult = document.getElementById('validationResult');
+
+            if (isNaN(inputValue)) {
+                // Показать сообщение об ошибке, если введенное значение не является числом
+                showToast('danger', 'Введите числовое значение в последние 3 поля');
+            } else {
+                validationResult.innerText = '';
+            }
+        });
+    });
+});
+
+
+
+
+
   document.addEventListener('click', function (event) {
     if (event.target.classList.contains('edit-button')) {
         const editButton = event.target;
@@ -178,6 +214,58 @@
             }
         });
     }
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+  const addRowForm = document.getElementById('addRowForm');
+
+  addRowForm.addEventListener('submit', function (event) {
+      event.preventDefault();
+
+          const updatedaddress =  document.getElementById('newAddress').value;
+          const updatedconnected =  document.getElementById('newConnected').value;
+          const updateddelivered =  document.getElementById('newDelivered').value;
+          const updateddays_last_card =  document.getElementById('newDaysLastCard').value;
+          const updatednum_approved_app =  document.getElementById('newNumApprovedApp').value;
+          const updatednum_card =  document.getElementById('newNumCard').value;
+          
+          const data = {
+            address: updatedaddress,
+            connected: updatedconnected,
+            delivered: updateddelivered,
+            days_last_card: updateddays_last_card,
+            num_approved_app: updatednum_approved_app,
+            num_card: updatednum_card
+          };
+
+      fetch('/add_points', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(result => {
+          if (result.success) {
+              const addRowModal = new bootstrap.Modal(document.getElementById('addRowModal'));
+              addRowModal.hide();
+              addRowForm.reset();
+
+              // Скрыть поле ввода новой строки
+              addRowForm.style.display = 'none';
+
+              // Дополнительные действия по обновлению данных на странице, если необходимо
+
+              showToast('success', 'Сотрудник успешно добавлен');
+
+              location.reload();
+              showToast('success', 'Страница успешно перезагружена');
+          } else {
+              showToast('danger', 'Произошла ошибка при добавлении сотрудника: ' + result.msg);
+          }
+      });
+  });
 });
 
 function showToast(type, message) {

@@ -226,11 +226,13 @@ def update_points(id):
         data = request.json 
         print(data)
         print(data['id'])
+        print(bool(data['delivered']))
+        delivered_value = data['delivered'].lower() == 'true'
         point = db.session.query(Points).filter(Points.id == int(data['id'])).first()
         if point:
             point.address= data['address']
             point.connected= data['connected']
-            point.delivered= bool(data['delivered'])
+            point.delivered= delivered_value
             point.days_last_card= data['days_last_card']
             point.num_approved_app= data['num_approved_app']
             point.num_card= data['num_card']
@@ -243,3 +245,26 @@ def update_points(id):
         print(f"Произошла ошибка: {str(e)}")
         return jsonify({'error': 'Произошла ошибка при обновлении'}), 500
     
+    
+    
+
+@blueprint.route('/add_points', methods=['POST'])
+@login_required
+def add_points():
+    print()
+    # Получение данных из запроса
+    address = request.json.get('address')
+    print(address)
+    connected = request.json.get('connected')
+    delivered = bool(request.json.get('delivered'))
+    days_last_card = request.json.get('days_last_card')
+    num_approved_app = request.json.get('num_approved_app')
+    num_card = request.json.get('num_card')
+
+    # Создание новой точки и добавление в базу данных
+    new_point = Points(address=address, connected=connected, delivered=delivered,
+                      days_last_card=days_last_card, num_approved_app=num_approved_app, num_card=num_card)
+    db.session.add(new_point)
+    db.session.commit()
+
+    return jsonify({'success': True, 'msg': 'Точка успешно добавлена'})
