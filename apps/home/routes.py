@@ -77,7 +77,7 @@ def route_template(template):
             # comment
 
             #return render_template("home/" + template, segment=segment, username=username, role=user_role, tasks=tasks,full_tasks=full_tasks)
-            return render_template("home/" + template, segment=segment, username=username, role=user_role,tasks=tasks)
+            return render_template("home/" + template, segment=segment, username=username, role=user_role,tasks=tasks,full_tasks=full_tasks)
         else:
             return render_template("home/" + template, segment=segment,username=username, role=user_role)
     except TemplateNotFound:
