@@ -48,8 +48,8 @@ class Full_tasks(db.Model):
     point_address = db.Column(db.String(100), nullable=False)           # адрес точки
     date = db.Column(db.String(10), nullable=False)                     # дата создания задачи
     status = db.Column(db.String(10), nullable=False)                   # статус задачи ('finish' - завершена,
-                                                                        # 'active' - в расписании сотрудника,
-                                                                        # 'wait' - в очереди,
+    comment = db.Column(db.String(100))                                 # 'active' - в расписании сотрудника,
+    worker_id = db.Column(db.Integer)                                   # 'wait' - в очереди,
                                                                         # 'problem' - имеются проблемы с задачей)
 class Worker_last_location(db.Model):
     id = db.Column(db.Integer, primary_key=True)                        #
@@ -66,6 +66,8 @@ class Users(db.Model):
     role = db.Column(db.String(64), unique=True)
     worker_FIO = db.Column(db.Integer)
     password = db.Column(db.LargeBinary)
+
+
     
 
 
