@@ -52,18 +52,19 @@ def route_template(template):
             return render_template("home/" + template, segment=segment, username=username, role=user_role, points=points)
         if template == 'billing.html':
             data = []
-            tasks = Full_tasks.query.all()
-            for task in tasks:
-                worker = db.session.query(Worker).filter(Worker.id == task.worker_id).first()
+            tasks=Tasks.query.all()
+            full_tasks = Full_tasks.query.all()
+            for full_task in full_tasks:
+                worker = db.session.query(Worker).filter(Worker.id == full_task.worker_id).first()
                 task_data = {
-                    'idt': task.idt,
+                    'idt': full_task.idt,
                     'fio': worker.FIO,
-                    'task_title': task.task_title,
-                    'task_priority': task.task_priority,
-                    'task_lead_time': task.task_lead_time,
-                    'point_address': task.point_address,
-                    'task_status': task.status,
-                    'task_comment': task.comment,
+                    'task_title': full_task.task_title,
+                    'task_priority': full_task.task_priority,
+                    'task_lead_time': full_task.task_lead_time,
+                    'point_address': full_task.point_address,
+                    'task_status': full_task.status,
+                    'task_comment': full_task.comment,
                 }
                 data.append(task_data)
             # TODO Здесь необходимо связать таблицы Full_tasks и Worker и подать странице новую БД( строки в html, под них форматировать не обязательно: ID,ФИО,task_title,task_priority,point_address,date,status,comment)
@@ -78,7 +79,8 @@ def route_template(template):
             # comment
 
             #return render_template("home/" + template, segment=segment, username=username, role=user_role, tasks=tasks,full_tasks=full_tasks)
-            return render_template("home/" + template, segment=segment, username=username, role=user_role,tasks=tasks,full_tasks=full_tasks)
+            print(data)
+            return render_template("home/" + template, segment=segment, username=username, role=user_role,tasks=tasks,full_tasks=data)
         else:
             return render_template("home/" + template, segment=segment,username=username, role=user_role)
     except TemplateNotFound:

@@ -434,8 +434,7 @@
               <table class="table align-items-center mb-0">
                 <thead>
                   <tr>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="text-align: left;">ID</th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">ФИО</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="text-align: left;">ФИО</th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Название задачи</th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Приоритет</th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Время выполнения</th>
@@ -444,22 +443,20 @@
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Комментарии</th>
                   </tr>
                 </thead>
-                <!--<tbody>
+                <tbody>
                   {% for full_task in full_tasks %}
                   <tr>
-                    <td contenteditable="false" data-name="id" style="text-align: left; padding-left: 23px;">{{ full_task.id }}</td>
-                    <td contenteditable="false" data-name="FIO">{{ full_task.FIO }}</td>
-                    <td contenteditable="false" data-name="task_title">{{ full_task.task_title }}</td>
+                    <td class="limited-text" contenteditable="false" data-name="fio" style="text-align: left; padding-left: 23px;">{{ full_task.fio }}</td>
+                    <td class="limited-text" contenteditable="false" data-name="task_title">{{ full_task.task_title }}</td>
                     <td contenteditable="false" data-name="task_priority">{{ full_task.task_priority }}</td>
                     <td contenteditable="false" data-name="task_lead_time">{{ full_task.task_lead_time }}</td>
-                    <td contenteditable="false" data-name="point_adress">{{ full_task.point_adress }}</td>
-                    <td contenteditable="false" data-name="status">{{ full_task.status }}</td>
-                    <td contenteditable="false" data-name="comments">{{ full_task.comments }}</td>
-                    <td class="align-middle">
+                    <td contenteditable="false" data-name="point_address">{{ full_task.point_address }}</td>
+                    <td contenteditable="false" data-name="task_status">{{ full_task.task_status }}</td>
+                    <td class="limited-text" contenteditable="false" data-name="task_comment">{{ full_task.task_comment }}</td>
                     </td>
                   </tr>
                   {% endfor %}
-                </tbody>-->
+                </tbody>
               </table>
             </div>
           </div>
