@@ -4,7 +4,6 @@ from flask import render_template, request
 from flask_login import login_required
 from jinja2 import TemplateNotFound
 from flask import session,Blueprint
-#from apps.authentication.models import Users
 from geopy.geocoders import Nominatim
 from apps import db
 from apps.home.models import Worker,Users,Full_tasks,Schedule,Points,Tasks
@@ -107,8 +106,7 @@ def delete_user(username):
     except Exception as e:
         print(f"Произошла ошибка: {str(e)}")
         return jsonify({'error': 'Произошла ошибка при удалении пользователя'}), 500
-
-#Добавление/изменение сотрудников в таблице workers
+#изменение сотрудников в таблице workers
 @blueprint.route('/update_worker/<id>', methods=['POST'])
 @login_required
 def update_workers(id):
@@ -132,28 +130,21 @@ def update_workers(id):
     except Exception as e:
         print(str(e))  # Добавим вывод ошибки в консоль
         return jsonify({'error': 'Произошла ошибка при обновлении данных сотрудников'}), 500
-
+#добавление сотрудников
 @blueprint.route('/add_workers', methods=['POST'])
 @login_required
 def add():
-
     fio = request.json.get('fio')
     location = request.json.get('location')
     grade = request.json.get('grade')
-
     user = Worker.query.filter_by(FIO=fio).first()
-
     if user:
         return jsonify({'success': False, 'msg': 'ФИО уже существует'})
-
     new_worker = Worker(FIO=fio, location=location, grade=grade)
     db.session.add(new_worker)
     db.session.commit()
-
     return jsonify({'success': True, 'msg': 'Сотрудник успешно добавлен'})
-
-    
-    
+#удаление сотрудников    
 @blueprint.route('/delete_worker/<id>', methods=['POST'])
 @login_required
 def delete_worker(id):
@@ -172,31 +163,6 @@ def delete_worker(id):
     except Exception as e:
         print(f"Произошла ошибка: {str(e)}")
         return jsonify({'error': 'Произошла ошибка при удалении пользователя'}), 500
-
-# @blueprint.route('/add_workers', methods=['GET', 'POST'])
-# @login_required
-# def add():
-#     username = session.get('username')
-#     user_role = request.form.get('role')
-#     FIO = session.get('FIO')
-#     location = request.form.get('location')
-#     grade=request.form.get('grade')
-#     user = Worker.query.filter_by(FIO=FIO).first()
-#     if user:
-#         return render_template('accounts/register.html',
-#                                    msg='ФИО уже существует',
-#                                    success=False,
-#                                  username=username, role=user_role)
-#     user = Users(**request.form)
-#     db.session.add(user)
-#     db.session.commit()
-
-#     return render_template('home/add_workers.html',
-#                                msg='Аккаунт успешно создан',
-#                                success=True,
-#                                 username=username, role=user_role)
-
-
 #Удаление сотрудников из таблицы points
 @blueprint.route('/delete_points/<id>', methods=['POST'])
 @login_required
@@ -215,18 +181,13 @@ def delete_points(id):
             return jsonify({'error': 'Пользователь не найден'}), 404
     except Exception as e:
         print(f"Произошла ошибка: {str(e)}")
-        return jsonify({'error': 'Произошла ошибка при удалении пользователя'}), 500
-    
-    
-    #Добавление/изменение сотрудников в таблице points
+        return jsonify({'error': 'Произошла ошибка при удалении пользователя'}), 500    
+#Добавление/изменение сотрудников в таблице points
 @blueprint.route('/update_points/<id>', methods=['POST'])
 @login_required
 def update_points(id):
     try:
         data = request.json 
-        print(data)
-        print(data['id'])
-        print(bool(data['delivered']))
         delivered_value = data['delivered'].lower() == 'true'
         point = db.session.query(Points).filter(Points.id == int(data['id'])).first()
         if point:
@@ -244,17 +205,12 @@ def update_points(id):
     except Exception as e:
         print(f"Произошла ошибка: {str(e)}")
         return jsonify({'error': 'Произошла ошибка при обновлении'}), 500
-    
-    
-    
-
+#добавление точки
 @blueprint.route('/add_points', methods=['POST'])
 @login_required
 def add_points():
     print()
-    # Получение данных из запроса
     address = request.json.get('address')
-    print(address)
     connected = request.json.get('connected')
     delivered = bool(request.json.get('delivered'))
     days_last_card = request.json.get('days_last_card')
