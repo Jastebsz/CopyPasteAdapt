@@ -49,7 +49,7 @@ class Full_tasks(db.Model):
     date = db.Column(db.String(10), nullable=False)                     # дата создания задачи
     status = db.Column(db.String(10), nullable=False)                   # статус задачи ('finish' - завершена,
     comment = db.Column(db.String(100))                                 # 'active' - в расписании сотрудника,
-                                                                        # 'wait' - в очереди,
+    worker_id = db.Column(db.Integer)                                   # 'wait' - в очереди,
                                                                         # 'problem' - имеются проблемы с задачей)
 class Worker_last_location(db.Model):
     id = db.Column(db.Integer, primary_key=True)                        #

@@ -7,6 +7,7 @@ from sqlalchemy.orm import sessionmaker
 from geopy.distance import geodesic
 import json
 import uuid
+from sqlalchemy.orm.session import make_transient
 
 # TODO: обновить home.models (не все модели там есть и убрать лишнее)
 
@@ -458,6 +459,9 @@ def assign_task_to_worker(idt, worker_id, date_free, free_interval, task_lead_ti
             row_to_update = db.session.query(Full_tasks).filter(Full_tasks.idt == str(idt)).first()
             row_to_update.status = 'active'
 
+            row_to_update = db.session.query(Full_tasks).filter(Full_tasks.idt == str(idt)).first()
+            row_to_update.worker_id = worker_id
+
             last_location_update = db.session.query(Worker_last_location).filter(Worker_last_location.id == int(worker_id)).first()
             print("Обновление", last_location_update.last_location, 'на', point_address, 'для сотрудника', worker_id)
             last_location_update.last_location = point_address
@@ -550,6 +554,7 @@ def distribute_tasks():
         add_schedule(end_day)
         print('Создал день')
 
+    delete_last_two_schedule()
 def delete_last_two_schedule():
     all_rows = Schedule.query.all()
     all_rows = [(row, datetime.strptime(row.date, '%Y_%m_%d')) for row in all_rows]
@@ -558,6 +563,8 @@ def delete_last_two_schedule():
 
     if len(sorted_rows) >= 2:
         for row, _ in sorted_rows[:2]:
+            row = db.session.query(Schedule).get(row.id)
+            print(row)
             db.session.delete(row)
         db.session.commit()
     else:

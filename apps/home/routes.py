@@ -51,8 +51,31 @@ def route_template(template):
             points=Points.query.all()
             return render_template("home/" + template, segment=segment, username=username, role=user_role, points=points)
         if template == 'billing.html':
-            tasks=Tasks.query.all()
-            # TODO Здесь необходимо связать таблицы Full_tasks и Worker и подать странице новую БД( строки в html, под них форматировать не обязательно: ID,ФИО,task_title,task_priority,point_address,date,status)
+            tasks = Full_tasks.query.all()
+            # idt =
+            workers = Worker.query.all()
+            # for task in tasks:
+            #     task_data = {
+            #         'task_title': task.task_title,
+            #         'task_priority': task.task_priority,
+            #         'task_lead_time': task.task_lead_time,
+            #         'point_address': task.point_address,
+            #         'task_status': task.status,
+            #         'point_id': task.point_id,
+            #         'task_idt': task.idt,
+            #         'task_type': task.task_type
+            #     }
+                #
+                # data[schedule_record.date] = {}
+                # schedule_data[schedule_record.date][interval] = task_data
+            # TODO Здесь необходимо связать таблицы Full_tasks и Worker и подать странице новую БД( строки в html, под них форматировать не обязательно: ID,ФИО,task_title,task_priority,point_address,date,status,comment)
+            # ФИО
+            # task_title
+            # task_priority
+            # point_address
+            # task_lead_time
+            # status
+            # comment
             #return render_template("home/" + template, segment=segment, username=username, role=user_role, tasks=tasks,full_tasks=full_tasks)
             return render_template("home/" + template, segment=segment, username=username, role=user_role,tasks=tasks)
         else:
