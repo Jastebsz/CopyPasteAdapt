@@ -40,6 +40,7 @@ class Undistr_tasks(db.Model):
     point_address = db.Column(db.String(100), nullable=False)           # адрес точки
     date = db.Column(db.String(10), nullable=False)                     # дата создания задачи
 
+
 class Full_tasks(db.Model):
     idt = db.Column(db.String(100), primary_key=True)
     task_type = db.Column(db.Integer, nullable=False)                   # тип задачи
