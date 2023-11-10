@@ -137,7 +137,7 @@ def update_workers(id):
 @login_required
 def add():
 
-    fio = session.get('FIO')
+    fio = request.json.get('fio')
     location = request.json.get('location')
     grade = request.json.get('grade')
 

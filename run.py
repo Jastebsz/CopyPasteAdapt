@@ -8,8 +8,7 @@ from sys import exit
 
 from apps.config import config_dict
 from apps import create_app, db
-from flask_swagger_ui import get_swaggerui_blueprint
-from flasgger import Swagger
+
 # WARNING: Don't run with debug turned on in production!
 
 

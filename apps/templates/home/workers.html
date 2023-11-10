@@ -60,28 +60,25 @@
   <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addRowModal">
     Добавить сотрудника
   </a>
-<div id="addRowModal" class="modal fade">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Добавить сотрудника</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <!-- Форма для ввода данных сотрудника -->
-        <form id="addRowForm">
-          <label for="newFIO">ФИО:</label>
-          <input type="text" id="newFIO" name="newFIO" class="form-control" required>
-          <label for="newLocation">Местоположение:</label>
-          <input type="text" id="newLocation" name="newLocation" class="form-control" required>
-          <label for="newGrade">Уровень:</label>
-          <input type="text" id="newGrade" name="newGrade" class="form-control" required>
-          <button type="submit" class="btn btn-primary mt-3">Добавить</button>
-        </form>
-      </div>
+  <div id="addRowModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <!-- Форма для ввода данных сотрудника -->
+                <form id="addRowForm">
+                    <label for="newFIO">ФИО:</label>
+                    <input type="text" id="newFIO" name="newFIO" class="form-control" required>
+                    <label for="newLocation">Местоположение:</label>
+                    <input type="text" id="newLocation" name="newLocation" class="form-control" required>
+                    <label for="newGrade">Уровень:</label>
+                    <input type="text" id="newGrade" name="newGrade" class="form-control" required>
+                    <button type="submit" class="btn btn-primary mt-3">Добавить</button>
+                </form>
+            </div>
+        </div>
     </div>
   </div>
-</div>
+
   
 
 
@@ -169,7 +166,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const newGrade = document.getElementById('newGrade').value;
 
       const data = {
-          FIO: newFIO,
+          fio: newFIO,
           location: newLocation,
           grade: newGrade
       };
@@ -188,9 +185,17 @@ document.addEventListener('DOMContentLoaded', function () {
               addRowModal.hide();
               addRowForm.reset();
 
+              // Скрыть поле ввода новой строки
+              addRowForm.style.display = 'none';
+
               // Дополнительные действия по обновлению данных на странице, если необходимо
 
               showToast('success', 'Сотрудник успешно добавлен');
+
+              // Обновить страницу через 3 секунды
+              setTimeout(() => {
+                  location.reload();
+              }, 3000);
           } else {
               showToast('danger', 'Произошла ошибка при добавлении сотрудника: ' + result.msg);
           }
