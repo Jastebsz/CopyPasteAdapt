@@ -8,7 +8,14 @@
     top: 1rem;
     right: 1rem;
   }
+  .limited-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 5px; /* Измените это значение на ваше усмотрение */
+    cursor: pointer;
   </style>
+
 {% endblock stylesheets %}
 
 {% block content %}
@@ -358,12 +365,12 @@
               <tbody>
                 {% for task in tasks %}
                 <tr>
-                  <td contenteditable="false" data-name="type" style="text-align: left; padding-left: 23px;">{{ task.type }}</td>
+                  <td  contenteditable="false" data-name="type" style="text-align: left; padding-left: 23px;">{{ task.type }}</td>
                   <td contenteditable="false" data-name="title">{{ task.title }}</td>
                   <td contenteditable="false" data-name="priority">{{ task.priority }}</td>
                   <td contenteditable="false" data-name="lead_time">{{ task.lead_time }}</td>
-                  <td contenteditable="false" data-name="condition">{{ task.condition }}</td>
-                  <td contenteditable="false" data-name="level">{{ task.level }}</td>
+                  <td class="limited-text" contenteditable="false" data-name="condition">{{ task.condition }}</td>
+                  <td class="limited-text" contenteditable="false" data-name="level">{{ task.level }}</td>
                   <td class="align-middle">
                     <a href="javascript:;" class="text-warning font-weight-bold text-xs bg-button edit-button" data-username="{{ task.type }}" data-toggle="tooltip" data-original-title="Изменить">
                       Изменить
@@ -384,6 +391,8 @@
       </div>
     </div>
   </div>
+  <!--
+
   <a href="#" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#addRowModal" style="background-color: #ff4b5f; color: white">
     Добавить строку
   </a>
@@ -410,6 +419,7 @@
         </div>
     </div>
 </div>
+-->
   <div class="container-fluid py-4">
     <div class="row">
       <div class="col-12">
@@ -426,13 +436,11 @@
                   <tr>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="text-align: left;">ID</th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">ФИО</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Название задачи</th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Приоритет</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Время выполнения</th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Адрес</th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Дата</th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Статус</th>
-                    <th class="text-secondary opacity-7"></th>
-                    <th class="text-secondary opacity-7"></th>
-                    <th class="text-secondary opacity-7"></th>
                   </tr>
                 </thead>
                 <!--<tbody>
@@ -440,20 +448,12 @@
                   <tr>
                     <td contenteditable="false" data-name="id" style="text-align: left; padding-left: 23px;">{{ full_task.id }}</td>
                     <td contenteditable="false" data-name="FIO">{{ full_task.FIO }}</td>
+                    <td contenteditable="false" data-name="task_title">{{ full_task.task_title }}</td>
                     <td contenteditable="false" data-name="task_priority">{{ full_task.task_priority }}</td>
+                    <td contenteditable="false" data-name="task_lead_time">{{ full_task.task_lead_time }}</td>
                     <td contenteditable="false" data-name="point_adress">{{ full_task.point_adress }}</td>
-                    <td contenteditable="false" data-name="date">{{ full_task.date }}</td>
                     <td contenteditable="false" data-name="status">{{ full_task.status }}</td>
                     <td class="align-middle">
-                     <a href="javascript:;" class="text-warning font-weight-bold text-xs bg-button edit-button" data-username="worker_{{ full_task.id }}" data-toggle="tooltip" data-original-title="Изменить">
-  Изменить
-</a>
-<a href="javascript:;" class="text-danger font-weight-bold text-xs bg-button delete-button" style="text-align: left; padding-left: 23px;" data-username="worker_{{ full_task.id }}" data-toggle="tooltip" data-original-title="Удалить">
-  Удалить
-</a>
-<a href="javascript:;" class="text-success font-weight-bold text-xs bg-button save-button ms-4" data-username="worker_{{ full_task.id }}" data-toggle="tooltip" data-original-title="Сохранить">
-  Сохранить
-</a>
                     </td>
                   </tr>
                   {% endfor %}
@@ -547,7 +547,7 @@
         });
     }
 });
-
+/*
 document.addEventListener('DOMContentLoaded', function () {
     const addRowForm = document.getElementById('addRowForm');
 
@@ -599,7 +599,25 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+*/
 
+document.addEventListener('DOMContentLoaded', function () {
+  // Обработчик события для отображения полного текста при наведении
+  document.querySelectorAll('.limited-text').forEach(function (cell) {
+    cell.addEventListener('mouseover', function () {
+      this.style.whiteSpace = 'normal';
+      this.style.overflow = 'visible';
+      this.style.maxWidth = 'none';
+    });
+
+    cell.addEventListener('mouseout', function () {
+      this.style.whiteSpace = 'nowrap';
+      this.style.overflow = 'hidden';
+      this.style.textOverflow = 'ellipsis';
+      this.style.maxWidth = '150px'; // Измените это значение на ваше усмотрение
+    });
+  });
+});
 function showToast(type, message) {
   const toast = document.getElementById('customToast');
   toast.querySelector('.toast-body').innerHTML = message;

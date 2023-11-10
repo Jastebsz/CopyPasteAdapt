@@ -272,23 +272,23 @@ def update_task(type):
     except Exception as e:
         return jsonify({'error': 'Произошла ошибка при обновлении данных'}), 500
 
-@blueprint.route('/add_task', methods=['POST'])
-@login_required
-def add_task():
-    try:
-        data = request.json
-        new_type = data['type']
-        new_title = data['title']
-        new_priority = data['priority']
-        new_lead_time = data['lead_time']
-        new_condition = data['condition']
-        new_level = data['level']
+# @blueprint.route('/add_task', methods=['POST'])
+# @login_required
+# def add_task():
+#     try:
+#         data = request.json
+#         new_type = data['type']
+#         new_title = data['title']
+#         new_priority = data['priority']
+#         new_lead_time = data['lead_time']
+#         new_condition = data['condition']
+#         new_level = data['level']
 
-        new_task = Tasks(type=new_type, title=new_title, priority=new_priority,
-                         lead_time=new_lead_time, condition=new_condition, level=new_level)
-        db.session.add(new_task)
-        db.session.commit()
+#         new_task = Tasks(type=new_type, title=new_title, priority=new_priority,
+#                          lead_time=new_lead_time, condition=new_condition, level=new_level)
+#         db.session.add(new_task)
+#         db.session.commit()
 
-        return jsonify({'success': True, 'msg': 'Задача успешно добавлена'})
-    except Exception as e:
-        return jsonify({'error': 'Произошла ошибка при добавлении задачи'}), 500
+#         return jsonify({'success': True, 'msg': 'Задача успешно добавлена'})
+#     except Exception as e:
+#         return jsonify({'error': 'Произошла ошибка при добавлении задачи'}), 500
