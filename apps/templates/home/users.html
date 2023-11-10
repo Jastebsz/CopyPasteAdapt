@@ -61,19 +61,19 @@
               {% endfor %}
             </tbody>                            
               </table>     
-            </div>
-            <a href="{{ url_for('authentication_blueprint.register') }}" class="btn btn-primary"
-            style="background-color: #ff4b5f; color: white;margin-top:20px; margin-right: 20px; float: right;">
-            Добавить нового пользователя
-         </a>      
+            </div>     
       </div>
     </div>
     </div>
   </div>
+  <a href="{{ url_for('authentication_blueprint.register') }}" class="btn btn-primary mb-1"
+            style="background-color: #ff4b5f; color: white">
+            Добавить нового пользователя
+         </a>      
   <div class="position-fixed bottom-1 end-1 z-index-2">
     <div class="toast fade hide p-2 mt-2 bg-white" role="alert" aria-live="assertive" id="customToast" aria-atomic="true">
         <div class="toast-header border-0">
-            <i class="material-icons text-danger me-2">campaign</i>
+            <i class="material-icons text-danger me-2"></i>
             <span class="me-auto text-gradient text-danger font-weight-bold">Уведомление</span>
             <small class="text-body" id="toastTimestamp"></small>
             <i class="fas fa-times text-md ms-3 cursor-pointer" data-bs-dismiss="toast" aria-label="Close"></i>
