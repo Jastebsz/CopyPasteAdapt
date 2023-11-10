@@ -8,6 +8,7 @@ class Worker(db.Model):
     FIO = db.Column(db.String(80), unique=True, nullable=False)         # фио
     location = db.Column(db.String(80), nullable=False)                 # адрес локации
     grade = db.Column(db.String(80), nullable=False)                    # грейд
+    location_text = db.Column(db.String(80), nullable=False)
 
 class Tasks(db.Model):
     type = db.Column(db.Integer, primary_key=True)                      # тип
