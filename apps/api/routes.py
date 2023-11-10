@@ -93,17 +93,20 @@ def task_сompleted():
     except Exception as e:
         return jsonify({'error': 'Произошла ошибка при сохранении результата'}), 500
 
+@blueprint.route('/task_failed', methods=['POST'])
+def task_failed():
+    data = request.get_json()   # data = {"task_idt": "305620464419692773492314257386895579457"}
+    try:
+        idt = data.get("task_idt")
+        if save_task_completed(idt):
+            return jsonify({'message': 'Результат сохранен'})
+        else:
+            return jsonify({'error': 'Ошибка сохранения результата в БД'}), 404
+    except Exception as e:
+        return jsonify({'error': 'Произошла ошибка при сохранении результата'}), 500
 
 @blueprint.route('/task_notification', methods=['POST'])                        # Скорее всего надо реализовать не тут
 def task_notification():                                                        # (или как-то передавать потом на веб)
-
-
-    data = {'ТУТ': 'ПОКА', 'НЕ': 'ГОТОВО'}
-
-    return jsonify(data)
-
-@blueprint.route('/user_information', methods=['POST'])                         # Скорее всего надо отправлять во время
-def user_information():                                                         # авторизации во время авторизации
 
 
     data = {'ТУТ': 'ПОКА', 'НЕ': 'ГОТОВО'}

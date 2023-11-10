@@ -95,3 +95,11 @@ def save_task_completed(idt):
     else:
         return False
 
+def task_failed(idt):
+    row_to_update = db.session.query(Full_tasks).filter(Full_tasks.idt == str(idt)).first()
+    if row_to_update:
+        row_to_update.status = 'problem'
+        db.session.commit()
+        return True
+    else:
+        return False
