@@ -82,13 +82,12 @@
                         <option value="Мидл">Мидл</option>
                         <option value="Джун">Джун</option>
                     </select>
-                    <button type="submit" class="btn btn-primary mt-3">Добавить</button>
+                    <button type="submit" class="btn btn-primary mt-3" style="background-color: #ff4b5f; color: white">Добавить</button>
                 </form>
             </div>
         </div>
     </div>
   </div>
-
   <div class="position-fixed bottom-1 end-1 z-index-2">
     <div class="toast fade hide p-2 mt-2 bg-white" role="alert" aria-live="assertive" id="customToast" aria-atomic="true">
         <div class="toast-header border-0">
@@ -102,10 +101,9 @@
         </div>
     </div>
 </div>
-
 {% endblock content %}
 
-<!-- Specific Page JS goes HERE  -->
+
 {% block javascripts %}
 <script>
   document.addEventListener('click', function (event) {
@@ -143,7 +141,6 @@ document.addEventListener('click', function (event) {
   if (event.target.classList.contains('save-button')) {
     const username = event.target.getAttribute('data-username');
     const row = event.target.closest('tr');
-    // Получите данные, которые нужно сохранить, из ряда
     const id = row.querySelector('[data-name="id"]').textContent;
     const updatedFIO = row.querySelector('[data-name="FIO"]').textContent;
     const updatedLocation = row.querySelector('[data-name="location"]').textContent;
@@ -206,14 +203,8 @@ document.addEventListener('DOMContentLoaded', function () {
               const addRowModal = new bootstrap.Modal(document.getElementById('addRowModal'));
               addRowModal.hide();
               addRowForm.reset();
-
-              // Скрыть поле ввода новой строки
               addRowForm.style.display = 'none';
-
-              // Дополнительные действия по обновлению данных на странице, если необходимо
-
               showToast('success', 'Сотрудник успешно добавлен');
-
               location.reload();
               showToast('success', 'Страница успешно перезагружена');
           } else {

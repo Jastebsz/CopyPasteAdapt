@@ -9,6 +9,51 @@ import json
 import uuid
 
 # TODO: обновить home.models (не все модели там есть и убрать лишнее)
+
+
+# def manual_add(task_type, task_title, task_priority, task_lead_time, task_level, point_id, point_address, date):
+#     new_full_task = Full_tasks(
+#         idt=generate_uuid_as_int(),
+#         task_type=task_type,
+#         task_title=task_title,
+#         task_priority=task_priority,
+#         task_lead_time=task_lead_time,
+#         task_level=task_level,
+#         point_id=point_id,
+#         point_address=point_address,
+#         date=date,
+#         status='active'
+#     )
+#     db.session.add(new_full_task)
+
+#     # TODO: тут еще нужно добавление задачи в расписание сотрудника,
+#     #  мб написать еще функцию удаления ("отмены") задачи из расписания сотрудника!!!!!!!!
+
+#     db.session.commit()
+    
+# def add_holiday_worker(date_start, date_end, worker_id):
+#     # TODO: нужно добавить таблицу отпусков сотрудников (два столбца - worker_id и holiday)
+#     row_to_update = db.session.query(Holiday).filter(Holidays.worker_id == worker_id).first()
+    
+#     holiday = row_to_update.holiday.split(',')
+    
+#     delta = int((date_end - date_start).days)
+
+#     day_hol = date_start
+    
+#     holiday.append(date_start.strftime('%Y_%m_%d'))
+
+#     while delta > 0:
+#         day_hol += timedelta(days=1)
+#         holiday.append(day_hol.strftime('%Y_%m_%d'))
+#         delta -= 1
+
+#     holiday.append(date_end.strftime('%Y_%m_%d'))
+
+#     row_to_update.holiday = ','.join(holiday)
+#     db.session.commit()
+
+
 def get_schedule_for_worker_on_day(date, worker_id):
     schedule_record = db.session.query(Schedule).filter_by(date=date).first()
     if schedule_record:

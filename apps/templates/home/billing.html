@@ -1,9 +1,15 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Billing {% endblock %} 
+{% block title %} Задачи {% endblock %} 
 
-<!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block stylesheets %}
+<style>
+  .position-fixed {
+    top: 1rem;
+    right: 1rem;
+  }
+  </style>
+{% endblock stylesheets %}
 
 {% block content %}
 
@@ -359,18 +365,13 @@
                   <td contenteditable="false" data-name="condition">{{ task.condition }}</td>
                   <td contenteditable="false" data-name="level">{{ task.level }}</td>
                   <td class="align-middle">
-                    <!-- Edit button -->
-                    <a href="javascript:;" class="text-warning font-weight-bold text-xs bg-button edit-button" data-username="task_{{ task.type }}" data-toggle="tooltip" data-original-title="Изменить">
+                    <a href="javascript:;" class="text-warning font-weight-bold text-xs bg-button edit-button" data-username="{{ task.type }}" data-toggle="tooltip" data-original-title="Изменить">
                       Изменить
                     </a>
-
-                    <!-- Delete button -->
-                    <a href="javascript:;" class="text-danger font-weight-bold text-xs bg-button delete-button" style="text-align: left; padding-left: 23px;" data-username="task_{{ task.type }}" data-toggle="tooltip" data-original-title="Удалить">
+                    <a href="javascript:;" class="text-danger font-weight-bold text-xs bg-button delete-button" style="text-align: left; padding-left: 23px;" data-username="{{ task.type }}" data-toggle="tooltip" data-original-title="Удалить">
                       Удалить
                     </a>
-
-                    <!-- Save button -->
-                    <a href="javascript:;" class="text-success font-weight-bold text-xs bg-button save-button ms-4" data-username="task_{{ task.type }}" data-toggle="tooltip" data-original-title="Сохранить">
+                    <a href="javascript:;" class="text-success font-weight-bold text-xs bg-button save-button ms-4" data-username="{{ task.type }}" data-toggle="tooltip" data-original-title="Сохранить">
                       Сохранить
                     </a>
                   </td>
@@ -383,6 +384,32 @@
       </div>
     </div>
   </div>
+  <a href="#" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#addRowModal" style="background-color: #ff4b5f; color: white">
+    Добавить строку
+  </a>
+  <div id="addRowModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form id="addRowForm">
+                    <label for="newType">Тип:</label>
+                    <input type="text" id="newType" name="newType" class="form-control" required>
+                    <label for="newTitle">Название:</label>
+                    <input type="text" id="newTitle" name="newTitle" class="form-control" required>
+                    <label for="newPriority">Приоритет:</label>
+                    <input type="text" id="newPriority" name="newPriority" class="form-control" required>
+                    <label for="newLeadTime">Время выполнения:</label>
+                    <input type="text" id="newLeadTime" name="newLeadTime" class="form-control" required>
+                    <label for="newCondition">Условия:</label>
+                    <input type="text" id="newCondition" name="newCondition" class="form-control" required>
+                    <label for="newLevel">Уровень сотрудника:</label>
+                    <input type="text" id="newLevel" name="newLevel" class="form-control" required>
+                    <button type="submit" class="btn btn-primary mt-3">Добавить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
   <div class="container-fluid py-4">
     <div class="row">
       <div class="col-12">
@@ -440,7 +467,7 @@
   <div class="position-fixed bottom-1 end-1 z-index-2">
     <div class="toast fade hide p-2 mt-2 bg-white" role="alert" aria-live="assertive" id="customToast" aria-atomic="true">
         <div class="toast-header border-0">
-            <i class="material-icons text-danger me-2">campaign</i>
+            <i class="material-icons text-danger me-2"></i>
             <span class="me-auto text-gradient text-danger font-weight-bold">Уведомление</span>
             <small class="text-body" id="toastTimestamp"></small>
             <i class="fas fa-times text-md ms-3 cursor-pointer" data-bs-dismiss="toast" aria-label="Close"></i>
@@ -455,79 +482,55 @@
 
 {% endblock content %}
 
-<!-- Specific Page JS goes HERE  -->
+
 {% block javascripts %}
 <script>
   document.addEventListener('click', function (event) {
     if (event.target.classList.contains('edit-button')) {
-        // Handle edit button for both tables
         const editButton = event.target;
         const row = editButton.closest('tr');
 
         row.querySelectorAll('[contenteditable="false"]').forEach(cell => {
             const dataName = cell.getAttribute('data-name');
-            if (dataName !== 'type' && dataName !== 'id') {
+            if (dataName !== 'type') {
                 cell.contentEditable = 'true';
             }
         });
     } else if (event.target.classList.contains('delete-button')) {
-        // Handle delete button for both tables
-        const username = event.target.getAttribute('data-username');
+        const type = event.target.getAttribute('data-username');
         const row = event.target.closest('tr');
 
-        // Check the prefix to determine the table
-        if (username.startsWith('task_')) {
-            const type = username.replace('task_', '');
-            // Handle delete button for the first table
-            fetch(`/delete_task/${type}`, {
-                method: 'POST',
-            })
-            .then(response => {
-                if (response.status === 200) {
-                    row.remove(); 
-                    showToast('success', 'Задача успешно удалена');
-                } else {
-                    showToast('danger', 'Произошла ошибка при удалении задачи');
-                }
-            });
-        } else if (username.startsWith('worker_')) {
-            const id = username.replace('worker_', '');
-            // Handle delete button for the second table
-            fetch(`/delete_worker/${id}`, {
-                method: 'POST',
-            })
-            .then(response => {
-                if (response.status === 200) {
-                    row.remove(); 
-                    showToast('success', 'Пользователь успешно удален');
-                } else {
-                    showToast('danger', 'Произошла ошибка при удалении пользователя');
-                }
-            });
-        }
+        fetch(`/delete_task/${type}`, {
+            method: 'POST',
+        })
+        .then(response => {
+            if (response.status === 200) {
+                row.remove(); 
+                showToast('success', 'Задача успешно удалена');
+            } else {
+                showToast('danger', 'Произошла ошибка при удалении задачи');
+            }
+        });
     } else if (event.target.classList.contains('save-button')) {
-        // Handle save button for both tables
-        const username = event.target.getAttribute('data-username');
+        const type = event.target.getAttribute('data-username');
         const row = event.target.closest('tr');
         
-        // Check the prefix to determine the table
-        if (username.startsWith('task_')) {
-            const type = username.replace('task_', '');
-            const type = username.replace('task_', '');
-
-        // Получаем данные из ячеек ряда
-        const title = row.querySelector('[data-name="title"]').textContent;
-        const priority = row.querySelector('[data-name="priority"]').textContent;
-        // Добавьте остальные поля по необходимости
+        // Получите данные, которые нужно сохранить, из ряда
+        const updatedTitle = row.querySelector('[data-name="title"]').textContent;
+        const updatedPriority = row.querySelector('[data-name="priority"]').textContent;
+        const updatedLeadTime = row.querySelector('[data-name="lead_time"]').textContent;
+        const updatedCondition = row.querySelector('[data-name="condition"]').textContent;
+        const updatedLevel = row.querySelector('[data-name="level"]').textContent;
 
         const data = {
             type: type,
-            title: title,
-            priority: priority,
-            // Добавьте остальные поля по необходимости
+            title: updatedTitle,
+            priority: updatedPriority,
+            lead_time: updatedLeadTime,
+            condition: updatedCondition,
+            level: updatedLevel
         };
 
-        // Отправляем данные на сервер для сохранения
         fetch(`/update_task/${type}`, {
             method: 'POST',
             headers: {
@@ -539,53 +542,63 @@
             if (response.status === 200) {
                 showToast('success', 'Данные успешно сохранены');
             } else {
-                showToast('danger','Произошла ошибка при сохранении данных');
+                showToast('danger', 'Произошла ошибка при сохранении данных');
             }
         });
-            // Rest of the code for the save button in the first table
-        } else if (username.startsWith('worker_')) {
-            const id = username.replace('worker_', '');
-
-            const id = username.replace('worker_', '');
-
-            // Получаем данные из ячеек ряда
-            const FIO = row.querySelector('[data-name="FIO"]').textContent;
-            const task_priority = row.querySelector('[data-name="task_priority"]').textContent;
-            // Добавьте остальные поля по необходимости
-        
-            const data = {
-                id: id,
-                FIO: FIO,
-                task_priority: task_priority,
-                // Добавьте остальные поля по необходимости
-            };
-        
-            // Отправляем данные на сервер для сохранения
-            fetch(`/update_worker/${id}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => {
-                if (response.status === 200) {
-                    showToast('success', 'Данные успешно сохранены');
-                } else {
-                    showToast('danger','Произошла ошибка при сохранении данных');
-                }
-            });
-        }
-            // Rest of the code for the save button in the second table
-        }
     }
 });
 
+document.addEventListener('DOMContentLoaded', function () {
+    const addRowForm = document.getElementById('addRowForm');
 
+    addRowForm.addEventListener('submit', function (event) {
+        event.preventDefault();
 
+        const newType = document.getElementById('newType').value;
+        const newTitle = document.getElementById('newTitle').value;
+        const newPriority = document.getElementById('newPriority').value;
+        const newLeadTime = document.getElementById('newLeadTime').value;
+        const newCondition = document.getElementById('newCondition').value;
+        const newLevel = document.getElementById('newLevel').value;
 
+        const data = {
+            type: newType,
+            title: newTitle,
+            priority: newPriority,
+            lead_time: newLeadTime,
+            condition: newCondition,
+            level: newLevel
+        };
 
+        fetch('/add_task', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                const addRowModal = new bootstrap.Modal(document.getElementById('addRowModal'));
+                addRowModal.hide();
+                addRowForm.reset();
 
+                // Скрыть поле ввода новой строки
+                addRowForm.style.display = 'none';
+
+                // Дополнительные действия по обновлению данных на странице, если необходимо
+
+                showToast('success', 'Задача успешно добавлена');
+
+                location.reload();
+                showToast('success', 'Страница успешно перезагружена');
+            } else {
+                showToast('danger', 'Произошла ошибка при добавлении задачи: ' + result.msg);
+            }
+        });
+    });
+});
 
 function showToast(type, message) {
   const toast = document.getElementById('customToast');
@@ -595,15 +608,12 @@ function showToast(type, message) {
   const bsToast = new bootstrap.Toast(toast);
   bsToast.show();
 }
+
 const bsToast = new bootstrap.Toast(toast);
     bsToast.show();
     setTimeout(() => {
         bsToast.hide();
     }, 5000);
 </script>
-
-
-
-
 
 {% endblock javascripts %}

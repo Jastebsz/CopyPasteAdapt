@@ -224,3 +224,71 @@ def add_points():
     db.session.commit()
 
     return jsonify({'success': True, 'msg': 'Точка успешно добавлена'})
+
+
+
+#задачи
+
+@blueprint.route('/delete_task/<type>', methods=['POST'])
+@login_required
+def delete_task(type):
+    try:
+        print(type)
+        row_to_delete = db.session.query(Tasks).filter(Tasks.type == int(type)).first()
+        if row_to_delete:
+            db.session.delete(row_to_delete)
+            db.session.commit()
+            return jsonify({'message': 'Задача успешно удалена'})
+        else:
+            return jsonify({'error': 'Задача не найдена'}), 404
+    except Exception as e:
+        return jsonify({'error': 'Произошла ошибка при удалении задачи'}), 500
+
+@blueprint.route('/update_task/<type>', methods=['POST'])
+@login_required
+def update_task(type):
+    try:
+        data = request.json
+        updated_title = data['title']
+        updated_priority = data['priority']
+        updated_lead_time = data['lead_time']
+        updated_condition = data['condition']
+        updated_level = data['level']
+
+        task = db.session.query(Tasks).filter(Tasks.type == int(type)).first()
+        if task:
+            task.title = updated_title
+            task.priority = updated_priority
+            task.lead_time = updated_lead_time
+            task.condition = updated_condition
+            task.level = updated_level
+        else:
+            new_task = Tasks(type=type, title=updated_title, priority=updated_priority,
+                             lead_time=updated_lead_time, condition=updated_condition, level=updated_level)
+            db.session.add(new_task)
+
+        db.session.commit()
+        return jsonify({'message': 'Данные успешно обновлены'})
+    except Exception as e:
+        return jsonify({'error': 'Произошла ошибка при обновлении данных'}), 500
+
+@blueprint.route('/add_task', methods=['POST'])
+@login_required
+def add_task():
+    try:
+        data = request.json
+        new_type = data['type']
+        new_title = data['title']
+        new_priority = data['priority']
+        new_lead_time = data['lead_time']
+        new_condition = data['condition']
+        new_level = data['level']
+
+        new_task = Tasks(type=new_type, title=new_title, priority=new_priority,
+                         lead_time=new_lead_time, condition=new_condition, level=new_level)
+        db.session.add(new_task)
+        db.session.commit()
+
+        return jsonify({'success': True, 'msg': 'Задача успешно добавлена'})
+    except Exception as e:
+        return jsonify({'error': 'Произошла ошибка при добавлении задачи'}), 500
