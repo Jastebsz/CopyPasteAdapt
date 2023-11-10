@@ -198,12 +198,13 @@ def dict_task_points():
         if 'yesterday' in condition:
             condition = condition.replace('yesterday', yesterday)
 
-        condition = text(condition)
-
+        # condition = text(condition)
+        print(condition)
+        print(Points.query.filter(text(condition)).statement)
         # task_results[task.type] = Points.query.filter(condition).all()
-        task_points[task.type] = [point.id for point in Points.query.filter(condition)]
+        task_points[task.type] = [point.id for point in Points.query.filter(text(condition))]
 
-    # print('dict_task_points', task_points)
+    print('dict_task_points', task_points)
 
     return task_points
 
