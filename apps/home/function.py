@@ -1,6 +1,6 @@
 
 from apps import db
-from apps.home.models import Worker, Tasks, Points, Schedule, Full_tasks  # , Undistr_tasks, Worker_last_location
+from apps.home.models import Worker, Tasks, Points, Schedule, Full_tasks, Undistr_tasks, Worker_last_location
 from datetime import datetime, timedelta, date
 from sqlalchemy import text, case, select, create_engine
 from sqlalchemy.orm import sessionmaker
