@@ -8,6 +8,7 @@ class Worker(db.Model):
     FIO = db.Column(db.String(80), unique=True, nullable=False)         # фио
     location = db.Column(db.String(80), nullable=False)                 # адрес локации
     grade = db.Column(db.String(80), nullable=False)                    # грейд
+    location_text = db.Column(db.String(80), nullable=False)
 
 class Tasks(db.Model):
     type = db.Column(db.Integer, primary_key=True)                      # тип
@@ -25,6 +26,9 @@ class Points(db.Model):
     days_last_card = db.Column(db.Integer)                              # кол-во дней после выдачи последней карты
     num_approved_app = db.Column(db.Integer)                            # кол-во одобренных заявок
     num_card = db.Column(db.Integer)                                    # кол-во выданных карт
+    address_text = db.Column(db.String(100), nullable=False)
+    delivered_text = db.Column(db.String(10), nullable=False)
+
 
 class Undistr_tasks(db.Model):
     idt = db.Column(db.String(100), primary_key=True)
@@ -36,6 +40,7 @@ class Undistr_tasks(db.Model):
     point_id = db.Column(db.Integer, nullable=False)                    # номер точки
     point_address = db.Column(db.String(100), nullable=False)           # адрес точки
     date = db.Column(db.String(10), nullable=False)                     # дата создания задачи
+
 
 class Full_tasks(db.Model):
     idt = db.Column(db.String(100), primary_key=True)
