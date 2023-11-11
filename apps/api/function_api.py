@@ -23,21 +23,27 @@ def verify_pass(provided_password, stored_password):
     return pwdhash == stored_password
 
 def get_schedule_for_worker_on_day(date, worker_id):
+    # print(date, worker_id)
     schedule_record = db.session.query(Schedule).filter_by(date=date).first()
+    # print('sched', schedule_record)
     if schedule_record:
         schedule_data = {}
         task_data = {}
         json_data = json.loads(schedule_record.schedule)
-        worker_schedule = json_data[worker_id]['schedule']
+        id_worker = str(worker_id)
+        # print(json_data[id_worker]['schedule'])
+        worker_schedule = json_data[id_worker]['schedule']
         for interval, idt in worker_schedule.items():
             task = db.session.query(Full_tasks).filter_by(idt=idt).first()
+            # print('task', task)
             if task:
                 idt = task.idt
                 task_type = task.task_type
-                task_lead_time = db.session.query(Tasks).filter_by(type=task_type).first()
+                task_lead_time = ((db.session.query(Tasks).filter_by(type=task_type).first())).lead_time
                 task_title = task.task_title
                 task_priority = task.task_priority
                 point_id = task.point_id
+                # print(vars(db.session.query(Points).filter_by(address=task.point_address).first()))
                 point_address = (db.session.query(Points).filter_by(address=task.point_address).first()).address_text
                 status = task.status
             task_data['task_title'] = task_title
@@ -49,6 +55,7 @@ def get_schedule_for_worker_on_day(date, worker_id):
             task_data['task_idt'] = idt
             task_data['task_type'] = task_type
             schedule_data[interval] = task_data
+            print(schedule_data)
         return schedule_data
     else:
         return None
