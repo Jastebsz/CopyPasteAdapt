@@ -570,6 +570,39 @@ def delete_last_two_schedule():
     else:
         print("В базе данных меньше чем 2 строки")
 
+def get_schedule_for_workers_on_day(date):
+    # print("DATE", date)
+    schedule_record = db.session.query(Schedule).filter_by(date=date).first()
+    if schedule_record:
+        schedule_data = {}
+        task_data = {}
+        json_data = json.loads(schedule_record.schedule)
+        for worker_id, worker_schedule in json_data.items():
+            # print("WORKER_ID", worker_id)
+            # print("worker_schedule", worker_schedule)
+            # worker_schedule = json_data[worker_id]['schedule']
+            worker_fio = (db.session.query(Worker).filter_by(id=worker_id).first()).FIO
+            # print("worker_fio", worker_fio)
+            intervals = {}
+            for interval, idt in worker_schedule['schedule'].items():
+                # print("interval", interval)
+                # print("idt", idt)
+                task = db.session.query(Full_tasks).filter_by(idt=idt).first()
+                if task:
+                    task_data['task_title'] = task.task_title
+                    task_data['task_priority'] = task.task_priority
+                    task_data['task_lead_time'] = (db.session.query(Tasks).filter_by(type=task.task_type).first()).lead_time
+                    # print("point_address", type(task.point_address))
+                    task_data['point_address'] = (db.session.query(Points).filter_by(address=task.point_address).first()).address_text
+                intervals[interval] = task_data
+                # print('INTERVAL', intervals)
+            schedule_data[worker_fio] = intervals
+        # print('SCHEDULE', schedule_data)
+
+        return schedule_data
+    else:
+        return None
+
 # -----------------TODO: есть проблема с тем, что цикл назначения настроен неправильно, надо отредачить
 #                   (задача не ищет ближайшее свободное время среди всех сотрудников с удовлетворяющим грейдом, а ищет время
 #                   у более подходящего сотрудника)
