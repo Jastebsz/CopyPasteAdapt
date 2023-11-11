@@ -5,8 +5,8 @@ from flask_login import login_required
 from jinja2 import TemplateNotFound
 from flask import session,Blueprint
 from apps import db
-from apps.home.models import Worker,Users,Full_tasks,Schedule,Points,Tasks
-from apps.home.function import line_tasks, distribute_tasks, delete_last_two_schedule,get_schedule_for_workers_on_day
+from apps.home.models import Worker, Users, Full_tasks, Schedule, Points, Tasks
+from apps.home.function import line_tasks, distribute_tasks, get_schedule_for_workers_on_day, address_to_coordinates
 from flask import request, jsonify
 import json
 from collections import defaultdict
@@ -254,14 +254,15 @@ def update_workers(id):
         data = request.json 
         print(data)
         print(data['id'])
-        worker_id = int(data['id'])  # Преобразуем ID в целое число
+        worker_id = int(data['id'])
         worker = db.session.query(Worker).filter(Worker.id == worker_id).first()
         if worker:
             print(data['id'])
             worker.FIO = data['FIO']
             print(worker.FIO)
-            worker.location = data['location']
+            worker.location_text = data['location']
             worker.grade = data['grade']
+            worker.location = address_to_coordinates(data['location'])
         else:
             new_worker = Worker(**data)
             db.session.add(new_worker)
@@ -278,9 +279,12 @@ def add():
     location = request.json.get('location')
     grade = request.json.get('grade')
     user = Worker.query.filter_by(FIO=fio).first()
+    loc = address_to_coordinates(location)
+    if not loc:
+        loc = "Сервер координат недоступен"
     if user:
         return jsonify({'success': False, 'msg': 'ФИО уже существует'})
-    new_worker = Worker(FIO=fio, location=location, grade=grade)
+    new_worker = Worker(FIO=fio, location=loc, grade=grade, location_text=location)
     db.session.add(new_worker)
     db.session.commit()
     return jsonify({'success': True, 'msg': 'Сотрудник успешно добавлен'})
@@ -331,12 +335,17 @@ def update_points(id):
         delivered_value = data['delivered'].lower() == 'true'
         point = db.session.query(Points).filter(Points.id == int(data['id'])).first()
         if point:
-            point.address= data['address']
-            point.connected= data['connected']
-            point.delivered= delivered_value
-            point.days_last_card= data['days_last_card']
-            point.num_approved_app= data['num_approved_app']
-            point.num_card= data['num_card']
+            loc = address_to_coordinates(data['address'])
+            if not loc:
+                loc = "Сервер координат недоступен"
+            point.address = loc
+            point.connected = data['connected']
+            point.delivered = delivered_value
+            point.days_last_card = data['days_last_card']
+            point.num_approved_app = data['num_approved_app']
+            point.num_card = data['num_card']
+            point.address_text = data['address']
+            point.delivered_text = data['delivered']
         else:
             new_point = Points(**data)
             db.session.add(new_point)
