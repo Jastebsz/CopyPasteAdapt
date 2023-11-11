@@ -203,16 +203,6 @@ def get_data_by_date():
     print(schedule)
     return jsonify(schedule)
 
-    
-    # print(a)
-    if selected_date in a:
-        return jsonify(a[selected_date])
-    else:
-        return jsonify({"error": "No data for the selected date"})
-    # Проверка наличия данных для выбранной даты
-
-
-
 
 def get_segment(request):
     try:
@@ -455,7 +445,6 @@ def get_worker_locations():
 @blueprint.route('/init_task', methods=['POST'])
 @login_required
 def init_task():
-    print('weoifjuoewrsgnvklljdsiofewfsmdc')
     if line_tasks():
         return jsonify({"success": True})
     else:
@@ -464,7 +453,6 @@ def init_task():
 @blueprint.route('/distr_task', methods=['POST'])
 @login_required
 def distr_task():
-    print('weoifjuoewrsgnvewsgerhdfcklljdsiofewfsmdc')
     if distribute_tasks():
         return jsonify({"success": True})
     else:
