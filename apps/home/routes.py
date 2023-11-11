@@ -4,7 +4,6 @@ from flask import render_template, request
 from flask_login import login_required
 from jinja2 import TemplateNotFound
 from flask import session,Blueprint
-from geopy.geocoders import Nominatim
 from apps import db
 from apps.home.models import Worker,Users,Full_tasks,Schedule,Points,Tasks
 from apps.home.function import line_tasks, distribute_tasks, delete_last_two_schedule,get_schedule_for_workers_on_day
