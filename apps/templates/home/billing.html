@@ -236,9 +236,9 @@
                 <div class="small">
                     <label for="prioritySelect">Приоритет:</label>
                     <select id="prioritySelect" name="prioritySelect">
+                        <option value="низкий">Низкий</option>
                         <option value="средний">Средний</option>
                         <option value="высокий">Высокий</option>
-                        <option value="низкий">Низкий</option>
                     </select>
                 </div>
                 <div class="small">
@@ -437,8 +437,13 @@
 document.addEventListener('DOMContentLoaded', function () {
     const addValueButton = document.getElementById('addValueButton');
     const addValueButton1 = document.getElementById('addValueButton1');
+    const addValueButton2 = document.getElementById('addValueButton2');
     const outputValues = document.getElementById('outputValues');
     const enteredValues = new Set(); // Множество для хранения введенных значений
+
+    console.log(addValueButton); // Проверка наличия кнопки "Логическое &" в консоли
+    console.log(addValueButton1);
+    console.log(addValueButton2);
 
     var resArr = []; // Создаем пустой массив для сохранения результатов
     var schetchik_ebla = 0
@@ -466,6 +471,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const InputedData = document.getElementById('InputedData').value;
         const Operators = document.getElementById('Operators').value;
         const curvalue = document.getElementById('curvalue').value;
+        console.log(checkOper)
 
         // Проверка, что все значения не пусты
         if (InputedData.trim() === '' || Operators.trim() === '' || curvalue.trim() === '') {
