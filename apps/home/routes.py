@@ -147,7 +147,7 @@ def route_template(template):
             if request.method == 'POST':
                 priority = request.form.get('prioritySelect')
                 task_name = request.form.get('taskname')
-                # lvl_select = request.form.get('LvlSelect')
+                dlit = request.form.get('dlit')
                 resArr = request.form.get('resArr')
                 selected_levels = request.form.getlist('levels')
                 
@@ -155,7 +155,7 @@ def route_template(template):
                     resArr = json.loads(resArr)
                 else:
                     resArr = []
-                entered_values.extend([task_name, priority, res_arr_form_maker(resArr),  selected_levels])
+                entered_values.extend([task_name, priority, res_arr_form_maker(resArr), dlit, selected_levels])
                 print(entered_values)
             # TODO Здесь необходимо связать таблицы Full_tasks и Worker и подать странице новую БД( строки в html, под них форматировать не обязательно: ID,ФИО,task_title,task_priority,point_address,date,status,comment)
 
