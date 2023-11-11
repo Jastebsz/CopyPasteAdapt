@@ -125,6 +125,43 @@
     max-width: 5px; /* Измените это значение на ваше усмотрение */
     cursor: pointer;
   }
+
+  
+  .small.levels-container {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+}
+
+.small.levels-container label {
+    font-size: 1rem; /* Adjust font size as needed */
+    margin-bottom: 8px;
+    width: 100px; /* Set a fixed width for consistent spacing */
+}
+
+.small.levels-container div {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px; /* Reduced margin between checkbox and label */
+}
+
+.small.levels-container input[type="checkbox"] {
+    margin-right: 5px; /* Reduced margin between checkbox and label */
+}
+
+/* Use Materialize classes for styling checkboxes and labels */
+.small.levels-container input[type="checkbox"]:checked+label:after,
+.small.levels-container input[type="checkbox"].filled-in:checked+label:after {
+    border: 2px solid #2196F3; /* Adjust the color as needed */
+    background-color: #2196F3; /* Adjust the color as needed */
+}
+
+.small.levels-container input[type="checkbox"]:checked+label:after,
+.small.levels-container input[type="checkbox"].filled-in:checked+label:after {
+    border-radius: 3px; /* Ensure rounded corners for checked state */
+}
+
+  
     </style>
 
 {% endblock stylesheets %}
@@ -139,13 +176,25 @@
 
   <div class="col-md-6 col-6 mx-auto" style="width: 96%;">
     <div class="card">
-                  <div class="card-header mx-4 p-3 text-center">
-                    <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg" style="width: 100%;">
-                      <h6 class="text-white ps-3" style="text-align: left;">Конструктор задач</h6>
-                    </div>
-                  </div>
+    <div class="card-header mx-4 p-3 text-center">
+    <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg" style="width: 100%;">
+      <div class="bg-gradient-primary shadow-success border-radius-lg pt-4 pb-3">
+        <h6 class="text-white ps-3">Конструктор задач</h6>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="col-md-12">
+    <div class="card my-4">
+      <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+    
+      </div>
+
+
+
         <form action="/billing.html" method="POST">
-        <div class="container">
+          <div class="container">
             <div class="row">
                 <div class="small">
                     <label for="taskname">Наименование задачи:</label>
@@ -283,35 +332,6 @@
       </div>
     </div>
   </div>
-  <!--
-
-  <a href="#" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#addRowModal" style="background-color: #ff4b5f; color: white">
-    Добавить строку
-  </a>
-  <div id="addRowModal" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <form id="addRowForm">
-                    <label for="newType">Тип:</label>
-                    <input type="text" id="newType" name="newType" class="form-control" required>
-                    <label for="newTitle">Название:</label>
-                    <input type="text" id="newTitle" name="newTitle" class="form-control" required>
-                    <label for="newPriority">Приоритет:</label>
-                    <input type="text" id="newPriority" name="newPriority" class="form-control" required>
-                    <label for="newLeadTime">Время выполнения:</label>
-                    <input type="text" id="newLeadTime" name="newLeadTime" class="form-control" required>
-                    <label for="newCondition">Условия:</label>
-                    <input type="text" id="newCondition" name="newCondition" class="form-control" required>
-                    <label for="newLevel">Уровень сотрудника:</label>
-                    <input type="text" id="newLevel" name="newLevel" class="form-control" required>
-                    <button type="submit" class="btn btn-primary mt-3">Добавить</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
--->
   <div class="container-fluid py-4">
     <div class="row">
       <div class="col-12">
