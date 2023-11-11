@@ -124,25 +124,25 @@ def get_data_by_date():
     schedule_data = get_schedule_for_workers_on_day(selected_date)
 
 
-    # Вывод расписания в Jinja2
-    for worker, intervals in schedule_data.items():
-        print(f"Имя работника: {worker}")
-        print("Данные:")
-        for interval, task_data in intervals.items():
-            print(f" - Интервал времени: {interval}")
-            print(f"   - Название задачи: {task_data['task_title']}")
-            print(f"   - Приоритет: {task_data['task_priority']}")
-            print(f"   - Длительность выполнения: {task_data['task_lead_time']}")
-            print(f"   - Адрес: {task_data['point_address']}")
-        print("=" * 30)
+    # # Вывод расписания в Jinja2
+    # for worker, intervals in schedule_data.items():
+    #     print(f"Имя работника: {worker}")
+    #     print("Данные:")
+    #     for interval, task_data in intervals.items():
+    #         print(f" - Интервал времени: {interval}")
+    #         print(f"   - Название задачи: {task_data['task_title']}")
+    #         print(f"   - Приоритет: {task_data['task_priority']}")
+    #         print(f"   - Длительность выполнения: {task_data['task_lead_time']}")
+    #         print(f"   - Адрес: {task_data['point_address']}")
+    #     print("=" * 30)
 
     # Форматирование данных для передачи в шаблон
     schedule = [{'worker': worker, 'intervals': intervals} for worker, intervals in schedule_data.items()]
-    print (schedule)
+    print(schedule)
     return jsonify(schedule)
 
     
-    print(a)
+    # print(a)
     if selected_date in a:
         return jsonify(a[selected_date])
     else:

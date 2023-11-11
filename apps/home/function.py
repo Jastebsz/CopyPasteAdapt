@@ -579,7 +579,6 @@ def get_schedule_for_workers_on_day(date):
     schedule_record = db.session.query(Schedule).filter_by(date=date).first()
     if schedule_record:
         schedule_data = {}
-        task_data = {}
         json_data = json.loads(schedule_record.schedule)
         for worker_id, worker_schedule in json_data.items():
             # print("WORKER_ID", worker_id)
@@ -589,6 +588,7 @@ def get_schedule_for_workers_on_day(date):
             # print("worker_fio", worker_fio)
             intervals = {}
             for interval, idt in worker_schedule['schedule'].items():
+                task_data = {}
                 # print("interval", interval)
                 # print("idt", idt)
                 task = db.session.query(Full_tasks).filter_by(idt=idt).first()
@@ -596,13 +596,17 @@ def get_schedule_for_workers_on_day(date):
                     task_data['task_title'] = task.task_title
                     task_data['task_priority'] = task.task_priority
                     task_data['task_lead_time'] = (db.session.query(Tasks).filter_by(type=task.task_type).first()).lead_time
-                    # print("point_address", type(task.point_address))
+                    # print("point_address", (db.session.query(Points).filter_by(address=task.point_address).first()).address_text)
                     task_data['point_address'] = (db.session.query(Points).filter_by(address=task.point_address).first()).address_text
-                intervals[interval] = task_data
-                # print('INTERVAL', intervals)
+                    # print(task_data['point_address'])
+                    intervals[interval] = task_data
             schedule_data[worker_fio] = intervals
-        # print('SCHEDULE', schedule_data)
+            print(intervals)
 
+                # print('INTERVAL', intervals)
+            # schedule_data[worker_fio] = intervals
+        # print('SCHEDULE', schedule_data)
+        print('!'*100, schedule_data, '!'*100)
         return schedule_data
     else:
         return None
