@@ -7,6 +7,7 @@ from sqlalchemy.orm import sessionmaker
 from geopy.distance import geodesic
 import json
 import uuid
+from geopy.geocoders import Nominatim
 from sqlalchemy.orm.session import make_transient
 
 # TODO: обновить home.models (не все модели там есть и убрать лишнее)
@@ -54,7 +55,16 @@ from sqlalchemy.orm.session import make_transient
 #     row_to_update.holiday = ','.join(holiday)
 #     db.session.commit()
 
+def address_to_coordinates(address):
+    geolocator = Nominatim(user_agent="my_geocoder")
+    location = geolocator.geocode(address)
 
+    if location:
+        latitude = location.latitude
+        longitude = location.longitude
+        return latitude, longitude
+    else:
+        return None
 def get_schedule_for_worker_on_day(date, worker_id):
     schedule_record = db.session.query(Schedule).filter_by(date=date).first()
     if schedule_record:
