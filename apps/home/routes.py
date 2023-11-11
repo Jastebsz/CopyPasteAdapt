@@ -9,6 +9,7 @@ from apps import db
 from apps.home.models import Worker,Users,Full_tasks,Schedule,Points,Tasks
 from apps.home.function import line_tasks, distribute_tasks, delete_last_two_schedule
 from flask import request, jsonify
+from sqlalchemy import func
 # line_tasks()                          # создание очереди
 # distribute_tasks()                    # распределение задач
 # delete_last_two_schedule()            # удаление лишних расписаний
@@ -23,8 +24,14 @@ def role():
 @login_required
 def index():
     username, user_role = role()
-    workers = Worker.query.all()[:5]
-    return render_template('home/index.html', segment='index', username=username, role=user_role,workers=workers)
+    users=Users.query.all()
+    user_count = Users.query.with_entities(Users.username).count()
+    worker_count = Users.query.with_entities(Worker.FIO).count()
+    tasks_count = Users.query.with_entities(Tasks.title).count()
+    full_tasks_count = Users.query.with_entities(Full_tasks.idt).count()
+    tasks_per_day = db.session.query(Points.connected, func.count()).group_by(Points.connected).all()
+    print(tasks_per_day)
+    return render_template('home/index.html', segment='index', username=username, role=user_role,users=users,user_count=user_count,worker_count=worker_count,tasks_count=tasks_count,full_tasks_count = full_tasks_count,tasks_per_day=tasks_per_day)
 
 @blueprint.route('/<template>', methods=['GET', 'POST'])
 @login_required
