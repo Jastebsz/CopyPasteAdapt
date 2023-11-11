@@ -9,6 +9,8 @@ from apps import db
 from apps.home.models import Worker,Users,Full_tasks,Schedule,Points,Tasks
 from apps.home.function import line_tasks, distribute_tasks, delete_last_two_schedule
 from flask import request, jsonify
+import json
+from collections import defaultdict
 from sqlalchemy import func
 # line_tasks()                          # создание очереди
 # distribute_tasks()                    # распределение задач
@@ -29,7 +31,24 @@ def index():
     worker_count = Users.query.with_entities(Worker.FIO).count()
     tasks_count = Users.query.with_entities(Tasks.title).count()
     full_tasks_count = Users.query.with_entities(Full_tasks.idt).count()
-    tasks_per_day = db.session.query(Points.connected, func.count()).group_by(Points.connected).all()
+    schedules = Schedule.query.all()
+
+    # Создаем словарь для хранения количества id для каждой даты
+    count_by_date = defaultdict(int)
+
+    # Проходим по каждой записи
+    for schedule in schedules:
+        date = schedule.date
+        schedule_data = json.loads(schedule.schedule)
+
+        # Проходим по каждому id в расписании и увеличиваем счетчик
+        for _, data in schedule_data.items():
+            for _, id_value in data['schedule'].items():
+                count_by_date[date] += 1
+
+    # Преобразуем словарь в массив кортежей
+    result_array = list(count_by_date.items())
+    tasks_per_day = result_array
     print(tasks_per_day)
     return render_template('home/index.html', segment='index', username=username, role=user_role,users=users,user_count=user_count,worker_count=worker_count,tasks_count=tasks_count,full_tasks_count = full_tasks_count,tasks_per_day=tasks_per_day)
 
