@@ -1,89 +1,51 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Календарь</title>
-  <!-- Подключение необходимых библиотек и стилей -->
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/jquery.schedule/dist/css/style.min.css">
-  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery.schedule/dist/js/jq.schedule.min.js"></script>
+    <!-- Ваши метатеги и стили -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyScheduler Example</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <!-- Ваши стили и скрипты -->
 </head>
 <body>
+    <h1>EasyScheduler</h1>
+    <script type="text/javascript" src="itembox.js"></script>
+    <div id="itembox" class="itembox"></div>
+    <br>
+    <div class="container">
+        <!-- Добавленные строки с именами людей и днями недели -->
+        <div id="peopleAndDays" class="people-and-days">
+            <div class="day"></div>
+            <div class="day">Monday</div>
+            <div class="day">Tuesday</div>
+            <div class="day">Wednesday</div>
+            <div class="day">Thursday</div>
+            <div class="day">Friday</div>
+            <div class="day">Saturday</div>
+            <div class="day">Sunday</div>
 
-<!-- Разметка для календаря -->
-<div id="schedule"></div>
+            <div class="person">Person 1</div>
+            <div class="hour"></div>
+            <div class="hour"></div>
+            <!-- Добавьте другие часы для каждого дня и человека -->
+            <!-- Например, <div class="hour"></div> для каждого часа -->
+        </div>
+        <!-- Конец добавленных строк -->
 
-<!-- Скрипт для инициализации календаря -->
-<script>
-  $(function() {
-    // Инициализация календаря
-    var $sc = $("#schedule").timeSchedule({
-      startTime: "08:00",
-      endTime: "18:00",
-      widthTime: 60 * 10,
-      timeLineY: 60,
-      verticalScrollbar: 20,
-      timeLineBorder: 2,
-      bundleMoveWidth: 6,
-      rows: {
-        '0': {
-          title: 'Title Area',
-          subtitle: 'Description',
-          schedule: [
-            {
-              start: '08:00',
-              end: '12:00',
-              text: 'Text Area 1',
-              data: {}
-            },
-            {
-              start: '10:00',
-              end: '14:00',
-              text: 'Text Area 2',
-              data: {}
-            }
-          ]
-        },
-        '1': {
-          title: 'Title Area',
-          schedule: [
-            {
-              start: '14:00',
-              end: '17:00',
-              text: 'Text Area 3',
-              data: {}
-            }
-          ]
-        }
-      },
-      onChange: function(node, data) {
-        addLog('onChange', data);
-      },
-      onInitRow: function(node, data) {
-        addLog('onInitRow', data);
-      },
-      onClick: function(node, data) {
-        addLog('onClick', data);
-      },
-      onAppendRow: function(node, data) {
-        addLog('onAppendRow', data);
-      },
-      onAppendSchedule: function(node, data) {
-        addLog('onAppendSchedule', data);
-      },
-      onScheduleClick: function(node, time, timeline) {
-        addLog('onScheduleClick', time + ' ' + timeline);
-      }
-    });
+        <!-- Остальные элементы вашего расписания -->
+        <div id="scheduler" class="Scheduler"></div>
+    </div>
+    
+    <script type="text/javascript" src="./tools/jsontools.js"></script>
+    <script type="text/javascript" src="./tools/savetask.js"></script>
+    <script type="text/javascript" src="./tools/tabledesign.js"></script>
+    <script src="main.js"></script>
 
-    // Функция для логирования событий
-    function addLog(eventName, data) {
-      console.log(eventName, data);
-    }
-  });
-</script>
-
+    <div class="tooltiptext">Example made by Matthew Bromley (milpan)</div>
+    <div id="edititem" class="edititem">
+        <!-- Остальные элементы формы редактирования задачи -->
+    </div>
 </body>
 </html>
