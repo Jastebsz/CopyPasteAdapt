@@ -6,7 +6,7 @@
 
 <h1 align="center">CopyPasteAdapt</h1>
 <h1 align="center"><a href="http://188.242.135.131:5000/">Live Demo</a></h21>
-<h2 align="center">Решение команды RA1NF0RCE по задаче №2</h2>
+<h2 align="center">Решение команды CopyPasteAdapt по задаче №4</h2>
 
 
 [![Описание](https://readme-typing-svg.herokuapp.com?font=Fira+Code&pause=1000&color=008BFF&background=2DFFDA00&width=435&lines=%D0%9E%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D0%B8%D0%B5)](https://git.io/typing-svg)
