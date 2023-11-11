@@ -19,20 +19,27 @@
                     zoom: 10
                 });
 
-                // Загрузка координат из Flask-маршрута
-                fetch('/get_worker_locations')
-                    .then(response => response.json())
-                    .then(locations => {
-                        locations.forEach(location => {
-                            var coordinates = location.location;
-                            var placemark = new ymaps.Placemark(coordinates, {
-                                hintContent: location.FIO,
-                                balloonContent: 'Это ' + location.FIO
-                            });
+                // Coordinates and labels
+                var locations = [
+                    { coordinates: [45.044960, 38.977047], label: 'Дерягин Никита Владимирович' },
+                    { coordinates: [45.044960, 38.977047], label: 'Петрошев Валерий Павлович' },
+                    { coordinates: [45.044960, 38.977047], label: 'Евдокимов Давид Тихонович' },
+                    { coordinates: [45.012835, 39.071711], label: 'Андреев Гордий Данилович' },
+                    { coordinates: [45.012835, 39.071711], label: 'Иванов Адам Федорович' },
+                    { coordinates: [45.012835, 39.071711], label: 'Бобылёв Ипполит Альбертович' },
+                    { coordinates: [45.053773, 38.941986], label: 'Беляева Евгения Антоновна' },
+                    { coordinates: [45.053773, 38.941986], label: 'Николаев Азарий Платонович' }
+                ];
 
-                            myMap.geoObjects.add(placemark);
-                        });
+                locations.forEach(location => {
+                    var coordinates = location.coordinates;
+                    var placemark = new ymaps.Placemark(coordinates, {
+                        hintContent: location.label,
+                        balloonContent: 'Это ' + location.label
                     });
+
+                    myMap.geoObjects.add(placemark);
+                });
             }
         </script>
     </body>

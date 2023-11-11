@@ -92,7 +92,6 @@
 {% endblock content %}
 
 {% block javascripts %}
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -129,12 +128,22 @@
                     y: {
                         beginAtZero: true
                     }
+                },
+                plugins: {
+                    legend: {
+                        display: false, // Hide the legend
+                    }
                 }
             }
         };
         var myChart = new Chart(ctx, config);
+
+        // Toggle bars display on label click
+        document.querySelector('.chart-container h3').addEventListener('click', function() {
+            myChart.data.datasets[0].hidden = !myChart.data.datasets[0].hidden;
+            myChart.update();
+        });
     });
 </script>
-
 {% endblock javascripts %}
 

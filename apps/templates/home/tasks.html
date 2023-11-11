@@ -2,7 +2,7 @@
 
 {% block title %} Tables {% endblock %} 
 
-<!-- Specific Page CSS goes HERE  -->
+
 {% block stylesheets %}{% endblock stylesheets %}
 
 
@@ -67,7 +67,6 @@
 
 {% endblock content %}
 
-<!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 <script>
 document.addEventListener('click', function (event) {
@@ -76,12 +75,11 @@ document.addEventListener('click', function (event) {
     const editButton = saveButton.previousElementSibling;
     const row = saveButton.closest('tr');
 
-    // Переключите contenteditable обратно на false
     row.querySelectorAll('[contenteditable="true"]').forEach(cell => {
       cell.contentEditable = 'false';
     });
 
-    // Здесь вы можете получить новые значения из ячеек с contenteditable="true" и отправить их на сервер
+  
     const updatedData = {};
     row.querySelectorAll('[contenteditable="true"]').forEach(cell => {
       const fieldName = cell.dataset.name;
@@ -112,7 +110,7 @@ document.addEventListener('click', function (event) {
   }
 });
 document.addEventListener('DOMContentLoaded', function () {
-  // Обработчик события для отображения полного текста при наведении
+
   document.querySelectorAll('.limited-text').forEach(function (cell) {
     cell.addEventListener('mouseover', function () {
       this.style.whiteSpace = 'normal';
@@ -124,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function () {
       this.style.whiteSpace = 'nowrap';
       this.style.overflow = 'hidden';
       this.style.textOverflow = 'ellipsis';
-      this.style.maxWidth = '150px'; // Измените это значение на ваше усмотрение
+      this.style.maxWidth = '150px';
     });
   });
 });

@@ -168,10 +168,29 @@
 
 {% block content %}
 
-<div style="text-align: right; margin-right: 10%;">
-    <button type="button" class="btn btn-info mt-3" style="background-color: #133d7e; color: white" onclick="checkTasks()">Проверить задачи для пунктов</button>
-    <button type="button" class="btn btn-success mt-3" style="background-color: #217e1e; color: white" onclick="distributeTasks()">Распределить задачи</button>
+<div style="text-align: right; margin-right: 23px">
+    <button type="submit_check" class="btn btn-info mt-3" style="background-color: #133d7e; color: white">Проверить задачи для пунктов</button>
+    <button type="submit_add" class="btn btn-success mt-3" style="background-color: #217e1e; color: white">Распределить задачи</button>
+    <a href="#" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#addRowModal" style="background-color: #ff4b5f; color: white">
+      Добавить задачу
+    </a>
 </div>
+    <div id="addRowModal" class="modal fade">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-body">
+                  <form id="addRowForm">
+                      <label for="newbilling">Название задачи:</label>
+                      <input type="text" id="newbilling" name="newbilling" class="form-control" required>
+                      <label for="newdata">Дата выполнения:</label>
+                      <input type="text" id="newdata" name="newdata" class="form-control" required>
+                      <button type="submit" class="btn btn-primary mt-3" style="background-color: #ff4b5f; color: white">Добавить</button>
+                  </form>
+              </div>
+          </div>
+      </div>
+    </div>
+    
 
 
   <div class="col-md-6 col-6 mx-auto" style="width: 96%;">
@@ -212,7 +231,7 @@
                     <label>Уровень:</label>
                     <div>
                         <input type="checkbox" id="senior" name="levels" value="Сеньёр">
-                        <label for="senior">Сеньёр</label>
+                        <label for="senior">Синьор</label>
                     </div>
                     <div>
                         <input type="checkbox" id="middle" name="levels" value="Мидл">
@@ -570,30 +589,23 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
-/*
+
 document.addEventListener('DOMContentLoaded', function () {
     const addRowForm = document.getElementById('addRowForm');
 
     addRowForm.addEventListener('submit', function (event) {
         event.preventDefault();
 
-        const newType = document.getElementById('newType').value;
-        const newTitle = document.getElementById('newTitle').value;
-        const newPriority = document.getElementById('newPriority').value;
-        const newLeadTime = document.getElementById('newLeadTime').value;
-        const newCondition = document.getElementById('newCondition').value;
-        const newLevel = document.getElementById('newLevel').value;
+        const newbilling = document.getElementById('newbilling').value;
+        const newdata= document.getElementById('newdata').value;
+
 
         const data = {
-            type: newType,
-            title: newTitle,
-            priority: newPriority,
-            lead_time: newLeadTime,
-            condition: newCondition,
-            level: newLevel
+            billing: newbilling,
+            data: newdata,
         };
 
-        fetch('/add_task', {
+        fetch('/add_billing', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
