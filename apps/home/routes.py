@@ -183,20 +183,6 @@ def route_template(template):
 def get_data_by_date():
     selected_date = request.args.get('date')
     schedule_data = get_schedule_for_workers_on_day(selected_date)
-
-
-    # # Вывод расписания в Jinja2
-    # for worker, intervals in schedule_data.items():
-    #     print(f"Имя работника: {worker}")
-    #     print("Данные:")
-    #     for interval, task_data in intervals.items():
-    #         print(f" - Интервал времени: {interval}")
-    #         print(f"   - Название задачи: {task_data['task_title']}")
-    #         print(f"   - Приоритет: {task_data['task_priority']}")
-    #         print(f"   - Длительность выполнения: {task_data['task_lead_time']}")
-    #         print(f"   - Адрес: {task_data['point_address']}")
-    #     print("=" * 30)
-
     # Форматирование данных для передачи в шаблон
     schedule = [{'worker': worker, 'intervals': intervals} for worker, intervals in schedule_data.items()]
     print(schedule)
@@ -330,6 +316,10 @@ def update_points(id):
         data = request.json 
         delivered_value = data['delivered'].lower() == 'true'
         point = db.session.query(Points).filter(Points.id == int(data['id'])).first()
+        if delivered_value is True:
+            delivered_text = 'да'
+        else:
+            delivered_text = 'нет'
         if point:
             point.address= data['address']
             point.connected= data['connected']
@@ -337,6 +327,8 @@ def update_points(id):
             point.days_last_card= data['days_last_card']
             point.num_approved_app= data['num_approved_app']
             point.num_card= data['num_card']
+            point.address_text=data['address']
+            point.delivered_text=delivered_value
         else:
             new_point = Points(**data)
             db.session.add(new_point)
@@ -349,17 +341,23 @@ def update_points(id):
 @blueprint.route('/add_points', methods=['POST'])
 @login_required
 def add_points():
-    print()
+    delivered_value = request.json.get('delivered') == 'True'
+    if delivered_value=='True':
+        delivered_text = 'да'
+    else:
+         delivered_text = 'нет'
+    print(delivered_text)
     address = request.json.get('address')
     connected = request.json.get('connected')
     delivered = bool(request.json.get('delivered'))
     days_last_card = request.json.get('days_last_card')
     num_approved_app = request.json.get('num_approved_app')
     num_card = request.json.get('num_card')
-
+    address_text = address
+    delivered_text = delivered
     # Создание новой точки и добавление в базу данных
     new_point = Points(address=address, connected=connected, delivered=delivered,
-                      days_last_card=days_last_card, num_approved_app=num_approved_app, num_card=num_card)
+                      days_last_card=days_last_card, num_approved_app=num_approved_app, num_card=num_card,address_text=address_text,delivered_text=delivered_text)
     db.session.add(new_point)
     db.session.commit()
 

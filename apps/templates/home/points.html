@@ -191,7 +191,8 @@
           const updateddays_last_card = row.querySelector('[data-name="days_last_card"]').textContent;
           const updatednum_approved_app = row.querySelector('[data-name="num_approved_app"]').textContent;
           const updatednum_card = row.querySelector('[data-name="num_card"]').textContent;
-
+          const updatedaddress_text = row.querySelector('[data-name="address"]').textContent;
+          const updatedconnected_r = row.querySelector('[data-name="connected"]').textContent;
           const data = {
             id: id,
             address: updatedaddress,
@@ -199,8 +200,9 @@
             delivered: updateddelivered,
             days_last_card: updateddays_last_card,
             num_approved_app: updatednum_approved_app,
-            num_card: updatednum_card
-
+            num_card: updatednum_card,
+            address_text:updatedaddress_text,
+            delivered_text:updateddelivered_r
           };
 
         console.log(data)
