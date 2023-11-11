@@ -230,10 +230,10 @@
                         <span class="add-button" id="addValueButton2">Объединение</span>
                     </div>
                     <div class="left-small">
-                        <span class="add-button" id="addValueButton">Логическое |</span>
+                        <span class="add-button" id="addValueButton">Логическое &</span>
                     </div>
                     <div class="left-small">
-                        <span class="add-button" id="addValueButton1">Логическое & </span>
+                        <span class="add-button" id="addValueButton1">Логическое | </span>
                     </div>
                     <div class="small">
                         <label for="InputedData">Вводимые данные:</label>
@@ -243,8 +243,8 @@
                             <option value="Points.connected">Когда подключена точка?</option>
                             <option value="Points.delivered">Карты и материалы доставлены?</option>
                             <option value="Points.days_last_card">Количество дней после выдачи последней карты</option>
-                            <option value="Points.num_approved_app">Количество одобренных заявок</option>
-                            <option value="Points.num_card">Количество выданных карт</option>
+                            <option value="Points.num_approved_app AS FLOAT">Количество одобренных заявок</option>
+                            <option value="Points.num_card AS FLOAT">Количество выданных карт</option>
                         </select>
                     </div>
                     <div class="small">
@@ -435,7 +435,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        const inputValue = `${InputedData} ${Operators} ${curvalue} ${checkOper}`;
+        const inputValue = `(${InputedData} ${Operators} ${curvalue} ${checkOper})`;
 
         if (!enteredValues.has(inputValue)) {
             enteredValues.add(inputValue);
@@ -468,7 +468,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        const inputValue = `${InputedData} ${Operators} ${curvalue} ${checkOper}`;
+        const inputValue = `(${InputedData} ${Operators} ${curvalue} ${checkOper})`;
 
         if (!enteredValues.has(inputValue)) {
             enteredValues.add(inputValue);
