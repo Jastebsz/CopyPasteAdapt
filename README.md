@@ -5,7 +5,7 @@
 ![LOGO](https://storage.blackterminal.com/source/img/emitents/background_img_logo/1/2VNzTGsSAtMWkjd1czBI5JXSmv0S-So8.jpg)
 
 <h1 align="center">CopyPasteAdapt</h1>
-<h1 align="center"><a href="http://188.242.135.131:5000/">Live Demo</a></h21>
+<h1 align="center"><a href="https://14f7-2a00-1370-817a-44b1-94b-486c-f2a4-9a89.ngrok-free.app">Live Demo</a></h21>
 <h2 align="center">Решение команды CopyPasteAdapt</h2>
 
 
@@ -31,7 +31,7 @@
 
 > Для аутентификации используйте стандартное имя пользователя и пароль ***admin / 1234***  
 
--  [Страница авторизации](https://www.creative-tim.com/live/material-dashboard-flask)
+-  [Страница авторизации](https://14f7-2a00-1370-817a-44b1-94b-486c-f2a4-9a89.ngrok-free.app)
 
 <br />
 
@@ -41,8 +41,6 @@
 
 ```bash
 $ # Клонируйте репозиторий
-$ git clone https://github.com/creativetimofficial/material-dashboard-flask.git
-$ cd material-dashboard-flask
 $
 $ # Активируйте виртуальное окружение
 $ virtualenv env
