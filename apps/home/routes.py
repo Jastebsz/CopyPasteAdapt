@@ -455,6 +455,7 @@ def get_worker_locations():
 @blueprint.route('/init_task', methods=['POST'])
 @login_required
 def init_task():
+    print('weoifjuoewrsgnvklljdsiofewfsmdc')
     if line_tasks():
         return jsonify({"success": True})
     else:
@@ -463,6 +464,7 @@ def init_task():
 @blueprint.route('/distr_task', methods=['POST'])
 @login_required
 def distr_task():
+    print('weoifjuoewrsgnvewsgerhdfcklljdsiofewfsmdc')
     if distribute_tasks():
         return jsonify({"success": True})
     else:
