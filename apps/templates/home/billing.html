@@ -634,7 +634,52 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+*/
 
+async function checkTasks() {
+    try {
+        const response = await fetch('/init_task', {
+            method: 'POST',
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+
+            if (data.success) {
+                showToast('success', 'Задачи сформированы и готовы к распределению');
+            } else {
+                showToast('danger', 'Нет задач для агентских точек');
+            }
+        } else {
+            showToast('danger', 'Произошла ошибка при обращении к серверу');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showToast('danger', 'Произошла ошибка при обращении к серверу');
+    }
+}
+async function distributeTasks() {
+    try {
+        const response = await fetch('/distr_task', {
+            method: 'POST',
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+
+            if (data.success) {
+                showToast('success', 'Задачи распределены между сотрудниками');
+            } else {
+                showToast('danger', 'Нет задач для распределения');
+            }
+        } else {
+            showToast('danger', 'Произошла ошибка при обращении к серверу');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showToast('danger', 'Произошла ошибка при обращении к серверу');
+    }
+}
 
 document.addEventListener('DOMContentLoaded', function () {
   // Обработчик события для отображения полного текста при наведении
