@@ -7,7 +7,7 @@ from flask import session,Blueprint
 from geopy.geocoders import Nominatim
 from apps import db
 from apps.home.models import Worker,Users,Full_tasks,Schedule,Points,Tasks
-from apps.home.function import line_tasks, distribute_tasks, delete_last_two_schedule
+from apps.home.function import line_tasks, distribute_tasks, delete_last_two_schedule,get_schedule_for_workers_on_day
 from flask import request, jsonify
 import json
 from collections import defaultdict
@@ -79,7 +79,6 @@ def route_template(template):
         if template == 'calendar.html':
             schedules = Schedule.query.all()
             dates = [schedule.date for schedule in schedules]
-            
             return render_template("home/" + template, segment=segment, username=username, role=user_role, schedule=dates)
         if template == 'billing.html':
             data = []
@@ -118,6 +117,41 @@ def route_template(template):
 
     except:
         return render_template('home/page-500.html'), 500
+from flask import render_template
+
+@blueprint.route('/endpoint', methods=['GET'])
+def get_data_by_date():
+    selected_date = request.args.get('date')
+    schedule_data = get_schedule_for_workers_on_day(selected_date)
+
+
+    # Вывод расписания в Jinja2
+    for worker, intervals in schedule_data.items():
+        print(f"Имя работника: {worker}")
+        print("Данные:")
+        for interval, task_data in intervals.items():
+            print(f" - Интервал времени: {interval}")
+            print(f"   - Название задачи: {task_data['task_title']}")
+            print(f"   - Приоритет: {task_data['task_priority']}")
+            print(f"   - Длительность выполнения: {task_data['task_lead_time']}")
+            print(f"   - Адрес: {task_data['point_address']}")
+        print("=" * 30)
+
+    # Форматирование данных для передачи в шаблон
+    schedule = [{'worker': worker, 'intervals': intervals} for worker, intervals in schedule_data.items()]
+    print (schedule)
+    return jsonify(schedule)
+
+    
+    print(a)
+    if selected_date in a:
+        return jsonify(a[selected_date])
+    else:
+        return jsonify({"error": "No data for the selected date"})
+    # Проверка наличия данных для выбранной даты
+
+
+
 
 def get_segment(request):
     try:
