@@ -555,6 +555,7 @@ def distribute_tasks():
         print('Создал день')
 
     delete_last_two_schedule()
+    return True
 def delete_last_two_schedule():
     all_rows = Schedule.query.all()
     all_rows = [(row, datetime.strptime(row.date, '%Y_%m_%d')) for row in all_rows]

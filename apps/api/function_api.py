@@ -1,6 +1,6 @@
 
 from apps import db
-from apps.api.models import Worker, Tasks, Schedule, Full_tasks
+from apps.api.models import Worker, Tasks, Schedule, Full_tasks, Points
 from datetime import datetime, timedelta, date
 from sqlalchemy import text, case, select, create_engine
 
@@ -38,7 +38,7 @@ def get_schedule_for_worker_on_day(date, worker_id):
                 task_title = task.task_title
                 task_priority = task.task_priority
                 point_id = task.point_id
-                point_address = task.point_address
+                point_address = (db.session.query(Points).filter_by(address=task.point_address).first()).address_text
                 status = task.status
             task_data['task_title'] = task_title
             task_data['task_priority'] = task_priority

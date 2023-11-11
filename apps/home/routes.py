@@ -14,7 +14,6 @@ from collections import defaultdict
 from sqlalchemy import func
 # line_tasks()                          # создание очереди
 # distribute_tasks()                    # распределение задач
-# delete_last_two_schedule()            # удаление лишних расписаний
 # TODO: для blueprint задач доавить всязь двух таблиц(установление юзера по задачам)
 #Получение имени пользователя и роли    
 def role():
@@ -390,3 +389,19 @@ def get_worker_locations():
     locations = [{'FIO': worker.FIO, 'location': [float(coord) for coord in worker.location.split(',')]} for worker in workers]
     print(locations)
     return jsonify(locations)
+
+@blueprint.route('/init_task', methods=['POST'])
+@login_required
+def init_task():
+    if line_tasks():
+        return jsonify({"success": True})
+    else:
+        return jsonify({"success": False})
+
+@blueprint.route('/distr_task', methods=['POST'])
+@login_required
+def distr_task():
+    if distribute_tasks():
+        return jsonify({"success": True})
+    else:
+        return jsonify({"success": False})

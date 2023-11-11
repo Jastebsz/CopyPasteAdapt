@@ -21,26 +21,28 @@
 {% block content %}
 
 <div style="text-align: right; margin-right: 10%;">
-    <button type="submit_check" class="btn btn-info mt-3" style="background-color: #133d7e; color: white">Проверить задачи для пунктов</button>
-    <button type="submit_add" class="btn btn-success mt-3" style="background-color: #217e1e; color: white">Распределить задачи</button>
+    <button type="button" class="btn btn-info mt-3" style="background-color: #133d7e; color: white" onclick="checkTasks()">Проверить задачи для пунктов</button>
+    <button type="button" class="btn btn-success mt-3" style="background-color: #217e1e; color: white" onclick="distributeTasks()">Распределить задачи</button>
 </div>
+
+
 
 
   <div class="col-md-6 col-6 mx-auto">
     <div class="card">
-                  <div class="card-header mx-4 p-3 text-center">
-                    <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
-                      <i class="material-icons opacity-10">+</i>
-                    </div>
-                  </div>
-                  <div class="card-body pt-0 p-3 text-center">
-                    <h6 class="text-center mb-0">ЗДЕСЬ КОНСТРУКТОР</h6>
-                    <span class="text-xs">ЗДЕСЬ КОНСТРУКТОР</span>
-                    <hr class="horizontal dark my-3">
-                    <h5 class="mb-0">ЗДЕСЬ КОНСТРУКТОР</h5>
-                  </div>
-                </div>
-              </div>
+        <div class="card-header mx-4 p-3 text-center">
+            <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
+                <i class="material-icons opacity-10">+</i>
+            </div>
+        </div>
+        <div class="card-body pt-0 p-3 text-center">
+            <h6 class="text-center mb-0">ЗДЕСЬ КОНСТРУКТОР</h6>
+            <span class="text-xs">ЗДЕСЬ КОНСТРУКТОР</span>
+            <hr class="horizontal dark my-3">
+            <h5 class="mb-0">ЗДЕСЬ КОНСТРУКТОР</h5>
+        </div>
+    </div>
+  </div>
 
 
   <div class="container-fluid py-4">
@@ -337,6 +339,53 @@ const bsToast = new bootstrap.Toast(toast);
     setTimeout(() => {
         bsToast.hide();
     }, 5000);
+
+async function checkTasks() {
+    try {
+        const response = await fetch('/init_task', {
+            method: 'POST',
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+
+            if (data.success) {
+                showToast('success', 'Задачи сформированы и готовы к распределению');
+            } else {
+                showToast('danger', 'Нет задач для агентских точек');
+            }
+        } else {
+            showToast('danger', 'Произошла ошибка при обращении к серверу');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showToast('danger', 'Произошла ошибка при обращении к серверу');
+    }
+}
+async function distributeTasks() {
+    try {
+        const response = await fetch('/distr_task', {
+            method: 'POST',
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+
+            if (data.success) {
+                showToast('success', 'Задачи распределены между сотрудниками');
+            } else {
+                showToast('danger', 'Нет задач для распределения');
+            }
+        } else {
+            showToast('danger', 'Произошла ошибка при обращении к серверу');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showToast('danger', 'Произошла ошибка при обращении к серверу');
+    }
+}
 </script>
+
+
 
 {% endblock javascripts %}
