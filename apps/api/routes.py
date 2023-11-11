@@ -83,10 +83,11 @@ def statistic():
 
 @blueprint.route('/task_сompleted', methods=['POST'])
 def task_сompleted():
-    data = request.get_json()   # data = {"task_idt": "305620464419692773492314257386895579457"}
+    data = request.get_json()   # data = {"task_idt": "305620464419692773492314257386895579457", "task_comm": "Привет, как дела?"}
     try:
         idt = data.get("task_idt")
-        if save_task_completed(idt):
+        comm = data.get("task_comm")
+        if save_task_completed(idt, comm):
             return jsonify({'message': 'Результат сохранен'})
         else:
             return jsonify({'error': 'Ошибка сохранения результата в БД'}), 404
@@ -95,10 +96,11 @@ def task_сompleted():
 
 @blueprint.route('/task_failed', methods=['POST'])
 def task_failed():
-    data = request.get_json()   # data = {"task_idt": "305620464419692773492314257386895579457"}
+    data = request.get_json()   # data = {"task_idt": "305620464419692773492314257386895579457", "task_comm": "Привет, как дела?"}
     try:
         idt = data.get("task_idt")
-        if save_task_completed(idt):
+        comm = data.get("task_comm")
+        if save_task_completed(idt, comm):
             return jsonify({'message': 'Результат сохранен'})
         else:
             return jsonify({'error': 'Ошибка сохранения результата в БД'}), 404

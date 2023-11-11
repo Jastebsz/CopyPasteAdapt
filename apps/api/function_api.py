@@ -95,19 +95,21 @@ def get_schedule_for_worker_on_interval(start_date, end_date, worker_id):
 
     return schedule_data
 
-def save_task_completed(idt):
+def save_task_completed(idt, comm):
     row_to_update = db.session.query(Full_tasks).filter(Full_tasks.idt == str(idt)).first()
     if row_to_update:
         row_to_update.status = 'finish'
+        row_to_update.comment = comm
         db.session.commit()
         return True
     else:
         return False
 
-def task_failed(idt):
+def task_failed(idt, comm):
     row_to_update = db.session.query(Full_tasks).filter(Full_tasks.idt == str(idt)).first()
     if row_to_update:
         row_to_update.status = 'problem'
+        row_to_update.comment = comm
         db.session.commit()
         return True
     else:
