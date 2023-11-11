@@ -97,6 +97,25 @@ def route_template(template):
                 }
                 data.append(task_data)
                 entered_values = []
+
+            import re
+            def process_expression(input_str):
+                regex = re.compile(r'\((.*?)\)')
+
+                def process_sub_expression(sub_expr):
+
+                    if "num_approved_app" in sub_expr or "num_card" in sub_expr:
+
+                        sub_expr = sub_expr.replace('(', '').replace(')', '')
+
+                        return f'CAST({sub_expr})'
+                    return sub_expr
+
+                result = regex.sub(lambda match: process_sub_expression(match.group(1)), input_str)
+
+                return result
+
+            
             def transform_str(resArr):
                 if '| )' in resArr:
                     resArr = resArr.replace(' | )', ') | ')
@@ -124,7 +143,7 @@ def route_template(template):
                     # print(res_string[:-2])
                 except Exception:
                     pass
-                return transform_str(res_string[:-2])
+                return process_expression(transform_str(res_string[:-2]))
 
             if request.method == 'POST':
                 priority = request.form.get('prioritySelect')
