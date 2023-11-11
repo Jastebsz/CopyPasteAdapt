@@ -1,51 +1,95 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <!-- Ваши метатеги и стили -->
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EasyScheduler Example</title>
-    <link rel="stylesheet" href="styles/style.css">
-    <!-- Ваши стили и скрипты -->
-</head>
-<body>
-    <h1>EasyScheduler</h1>
-    <script type="text/javascript" src="itembox.js"></script>
-    <div id="itembox" class="itembox"></div>
-    <br>
-    <div class="container">
-        <!-- Добавленные строки с именами людей и днями недели -->
-        <div id="peopleAndDays" class="people-and-days">
-            <div class="day"></div>
-            <div class="day">Monday</div>
-            <div class="day">Tuesday</div>
-            <div class="day">Wednesday</div>
-            <div class="day">Thursday</div>
-            <div class="day">Friday</div>
-            <div class="day">Saturday</div>
-            <div class="day">Sunday</div>
+{% extends "layouts/base.html" %}
 
-            <div class="person">Person 1</div>
-            <div class="hour"></div>
-            <div class="hour"></div>
-            <!-- Добавьте другие часы для каждого дня и человека -->
-            <!-- Например, <div class="hour"></div> для каждого часа -->
+{% block title %} Календарь {% endblock %} 
+
+{% block stylesheets %}
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="container-fluid py-4">
+    <div class="row min-vh-80 h-100">
+        <div class="col-12">
+            <label for="dateDropdown" class="form-label">Выберите дату:</label>
+            <select class="form-select" id="dateDropdown" name="selectedDate">
+                {% for date in schedule %}
+                    <option value="{{ date }}">{{ date }}</option>
+                {% endfor %}
+            </select>
         </div>
-        <!-- Конец добавленных строк -->
-
-        <!-- Остальные элементы вашего расписания -->
-        <div id="scheduler" class="Scheduler"></div>
     </div>
-    
-    <script type="text/javascript" src="./tools/jsontools.js"></script>
-    <script type="text/javascript" src="./tools/savetask.js"></script>
-    <script type="text/javascript" src="./tools/tabledesign.js"></script>
-    <script src="main.js"></script>
+</div>
 
-    <div class="tooltiptext">Example made by Matthew Bromley (milpan)</div>
-    <div id="edititem" class="edititem">
-        <!-- Остальные элементы формы редактирования задачи -->
-    </div>
-</body>
-</html>
+{% endblock content %}
+
+{% block javascripts %}
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Получаем ссылку на выпадающий список
+        var dateDropdown = document.getElementById('dateDropdown');
+
+        // Добавляем обработчик события изменения значения в выпадающем списке
+        dateDropdown.addEventListener('change', function () {
+            // Получаем выбранную дату
+            var selectedDate = dateDropdown.value;
+
+            // Выполняем запрос на сервер с выбранной датой
+            axios.get(`/your-endpoint?date=${selectedDate}`)
+                .then(function (response) {
+                    // Добавляем новые таблицы на страницу
+                    addTables(response.data);
+                })
+                .catch(function (error) {
+                    console.error('Error:', error);
+                });
+        });
+
+        function addTables(data) {
+            // Пример добавления новых таблиц на страницу на основе полученных данных
+            var contentContainer = document.querySelector('.container-fluid');
+            {% for worker in full_workers %}
+                // Создаем контейнер для новой таблицы
+                var workerContainer = document.createElement('div');
+                workerContainer.className = 'container-fluid py-4';
+                workerContainer.innerHTML = `
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card my-4">
+                                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                                    <div class="bg-gradient-primary shadow-success border-radius-lg pt-4 pb-3">
+                                        <h6 class="text-white text-capitalize ps-3">{{worker.FIO}}</h6>
+                                    </div>
+                                </div>
+                                <div class="card-body px-0 pb-2">
+                                    <div class="table-responsive p-0">
+                                        <table class="table align-items-center mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="text-align: left;">Интервал времени</th>
+                                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Информация по задаче</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                ${data.map(item => `
+                                                    <tr>
+                                                        <td style="text-align: left; padding-left: 23px;">${item.interval}</td>
+                                                        <td style="padding-right: 20px;">${item.info}</td>
+                                                    </tr>
+                                                `).join('')}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                // Добавляем новый контейнер на страницу
+                contentContainer.appendChild(workerContainer);
+            {% endfor %}
+        }
+    });
+</script>
+{% endblock javascripts %}

@@ -57,6 +57,11 @@ def route_template(template):
         if template == 'points.html':
             points=Points.query.all()
             return render_template("home/" + template, segment=segment, username=username, role=user_role, points=points)
+        if template == 'calendar.html':
+            schedules = Schedule.query.all()
+            dates = [schedule.date for schedule in schedules]
+            
+            return render_template("home/" + template, segment=segment, username=username, role=user_role, schedule=dates)
         if template == 'billing.html':
             data = []
             tasks=Tasks.query.all()

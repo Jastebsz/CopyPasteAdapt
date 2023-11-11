@@ -8,6 +8,12 @@
     top: 1rem;
     right: 1rem;
   }
+    .limited-text {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 5px; /* Измените это значение на ваше усмотрение */
+      cursor: pointer;}
   </style>
 {% endblock stylesheets %}
 
@@ -44,7 +50,7 @@
                 {% for point in points %}
                   <tr>
                     <td contenteditable="false" data-name="id" style="text-align: left; padding-left: 23px;">{{ point.id }}</td>
-                  <td contenteditable="false" data-name="address">{{ point.address_text }}</td>
+                  <td class="limited-text" contenteditable="false" data-name="address">{{ point.address_text }}</td>
                   <td contenteditable="false" data-name="connected">{{ point.connected }}</td>
                   <td contenteditable="false" data-name="delivered">{{ point.delivered_text }}</td>
                   <td contenteditable="false" data-name="days_last_card">{{ point.days_last_card }}</td>
@@ -267,7 +273,23 @@ document.addEventListener('DOMContentLoaded', function () {
       });
   });
 });
+document.addEventListener('DOMContentLoaded', function () {
+  // Обработчик события для отображения полного текста при наведении
+  document.querySelectorAll('.limited-text').forEach(function (cell) {
+    cell.addEventListener('mouseover', function () {
+      this.style.whiteSpace = 'normal';
+      this.style.overflow = 'visible';
+      this.style.maxWidth = 'none';
+    });
 
+    cell.addEventListener('mouseout', function () {
+      this.style.whiteSpace = 'nowrap';
+      this.style.overflow = 'hidden';
+      this.style.textOverflow = 'ellipsis';
+      this.style.maxWidth = '150px'; // Измените это значение на ваше усмотрение
+    });
+  });
+});
 function showToast(type, message) {
   const toast = document.getElementById('customToast');
   toast.querySelector('.toast-body').innerHTML = message;

@@ -4,7 +4,14 @@
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}
-
+<style>
+.limited-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 10px; /* Измените это значение на ваше усмотрение */
+  cursor: pointer;}
+</style>
 {% endblock stylesheets %}
 
 {% block content %}
@@ -75,7 +82,7 @@
                 {% for worker in workers %}
                   <tr>
                     <td style="text-align: left; padding-left: 23px;">{{ worker.FIO }}</td>
-                    <td style="padding-right: 20px;">{{ worker.location_text }}</td>
+                    <td  class="limited-text" style="padding-right: 20px;">{{ worker.location_text }}</td>
                     <td style="padding-right: 20px;">{{ worker.grade }}</td>
                   </tr>
                 {% endfor %}
@@ -118,7 +125,7 @@
               <tbody>
                 {% for point in points %}
                   <tr>
-                    <td style="text-align: left; padding-left: 23px;">{{ point.address_text }}</td>
+                    <td class="limited-text" style="text-align: left; padding-left: 23px;">{{ point.address_text }}</td>
                   <td style="padding-right: 20px;">{{ point.connected }}</td>
                   <td style="padding-right: 20px;">{{ point.delivered_text }}</td>
                    <td style="padding-right: 20px;">{{ point.days_last_card }}</td>
@@ -156,6 +163,25 @@
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Обработчик события для отображения полного текста при наведении
+    document.querySelectorAll('.limited-text').forEach(function (cell) {
+      cell.addEventListener('mouseover', function () {
+        this.style.whiteSpace = 'normal';
+        this.style.overflow = 'visible';
+        this.style.maxWidth = 'none';
+      });
+  
+      cell.addEventListener('mouseout', function () {
+        this.style.whiteSpace = 'nowrap';
+        this.style.overflow = 'hidden';
+        this.style.textOverflow = 'ellipsis';
+        this.style.maxWidth = '150px'; // Измените это значение на ваше усмотрение
+      });
+    });
+  });
+
+
   document.addEventListener('click', function (event) {
     if (event.target.id === 'add-button') {
       // Обработка нажатия на кнопку "Добавить"
@@ -240,6 +266,7 @@ setTimeout(() => {
 }, 3000);
   });
   
+
 </script>
 
 

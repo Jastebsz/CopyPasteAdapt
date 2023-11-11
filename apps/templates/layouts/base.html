@@ -20,7 +20,12 @@
   <!-- CSS Files -->
   <link id="pagestyle" href="/static/assets/css/material-dashboard.css?v=3.0.0" rel="stylesheet" />
 
-  
+  <style>
+    .sidenav {
+      max-height: 100vh; /* Максимальная высота, соответствующая высоте видимой области */
+      overflow-y: auto; /* Запретить прокрутку, если контент не помещается по высоте */
+    }
+  </style>
   {% block stylesheets %}{% endblock stylesheets %}
 
 </head> 

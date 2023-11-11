@@ -25,8 +25,8 @@
             <table class="table align-items-center mb-0">
               <thead>
                 <tr>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="text-align: left;">ФИО</th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Местоположение</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 " style="text-align: left;">ФИО</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 limited-text" style="text-align: left;">Местоположение</th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Уровень</th>
                     <th class="text-secondary opacity-7"></th>
                     <th class="text-secondary opacity-7"></th>
@@ -110,6 +110,23 @@ document.addEventListener('click', function (event) {
       console.error('Ошибка при обновлении данных:', error);
     });
   }
+});
+document.addEventListener('DOMContentLoaded', function () {
+  // Обработчик события для отображения полного текста при наведении
+  document.querySelectorAll('.limited-text').forEach(function (cell) {
+    cell.addEventListener('mouseover', function () {
+      this.style.whiteSpace = 'normal';
+      this.style.overflow = 'visible';
+      this.style.maxWidth = 'none';
+    });
+
+    cell.addEventListener('mouseout', function () {
+      this.style.whiteSpace = 'nowrap';
+      this.style.overflow = 'hidden';
+      this.style.textOverflow = 'ellipsis';
+      this.style.maxWidth = '150px'; // Измените это значение на ваше усмотрение
+    });
+  });
 });
 </script>
 
