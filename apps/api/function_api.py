@@ -68,11 +68,13 @@ def get_schedule_for_worker_on_interval(start_date, end_date, worker_id):
         Schedule.date >= start_date.strftime("%Y_%m_%d"),
         Schedule.date <= end_date.strftime("%Y_%m_%d")
     ).all()
-
+    # print(schedule_records)
     for schedule_record in schedule_records:
         json_data = json.loads(schedule_record.schedule)
-        if worker_id in json_data:
-            worker_schedule = json_data[worker_id]['schedule']
+        # print('JSON', json_data)
+        if str(worker_id) in json_data:
+            worker_schedule = json_data[str(worker_id)]['schedule']
+            # print('WORKER_SHED')
             for interval, idt in worker_schedule.items():
                 task = db.session.query(Full_tasks).filter_by(idt=idt).first()
                 if task:
