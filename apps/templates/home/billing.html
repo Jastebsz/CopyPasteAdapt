@@ -160,20 +160,34 @@
 .small.levels-container input[type="checkbox"].filled-in:checked+label:after {
     border-radius: 3px; /* Ensure rounded corners for checked state */
 }
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 3%;
+}
 
-  
+.button-container a {
+    order: -1;
+    margin-left: 3%;
+}
+
+.button-container button {
+    margin-left: 10%;
+}
+
     </style>
 
 {% endblock stylesheets %}
 
 {% block content %}
 
-<div style="text-align: right; margin-right: 23px">
+<div class="button-container">
+    <a href="#" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#addRowModal" style="background-color: #ff4b5f; color: white">
+        Добавить задачу
+    </a>
     <button type="submit_check" class="btn btn-info mt-3" style="background-color: #133d7e; color: white">Проверить задачи для пунктов</button>
     <button type="submit_add" class="btn btn-success mt-3" style="background-color: #217e1e; color: white">Распределить задачи</button>
-    <a href="#" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#addRowModal" style="background-color: #ff4b5f; color: white">
-      Добавить задачу
-    </a>
 </div>
     <div id="addRowModal" class="modal fade">
       <div class="modal-dialog">
