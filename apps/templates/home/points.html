@@ -44,9 +44,9 @@
                 {% for point in points %}
                   <tr>
                     <td contenteditable="false" data-name="id" style="text-align: left; padding-left: 23px;">{{ point.id }}</td>
-                  <td contenteditable="false" data-name="address">{{ point.address }}</td>
+                  <td contenteditable="false" data-name="address">{{ point.address_text }}</td>
                   <td contenteditable="false" data-name="connected">{{ point.connected }}</td>
-                  <td contenteditable="false" data-name="delivered">{{ point.delivered }}</td>
+                  <td contenteditable="false" data-name="delivered">{{ point.delivered_text }}</td>
                   <td contenteditable="false" data-name="days_last_card">{{ point.days_last_card }}</td>
                   <td contenteditable="false" data-name="num_approved_app">{{ point.num_approved_app }}</td>
                   <td contenteditable="false" data-name="num_card">{{ point.num_card }}</td>

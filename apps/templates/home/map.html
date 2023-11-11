@@ -9,7 +9,7 @@
 {% block content %}
     <body>
         <div id="map" class="map" style="width: 99%; height: 600px;"></div>
-        <script src="https://api-maps.yandex.ru/2.1/?apikey=KEYAPI&lang=ru_RU" type="text/javascript"></script>
+        <script src="https://api-maps.yandex.ru/2.1/?apikey=e3d4b36e-4a55-4e7f-89b3-47d2237ff587&lang=ru_RU" type="text/javascript"></script>
         <script>
             ymaps.ready(init);
 
@@ -24,8 +24,7 @@
                     .then(response => response.json())
                     .then(locations => {
                         locations.forEach(location => {
-                            var coordinates = location.location.map(parseFloat);
-                            console.log(locations);
+                            var coordinates = location.location;
                             var placemark = new ymaps.Placemark(coordinates, {
                                 hintContent: location.FIO,
                                 balloonContent: 'Это ' + location.FIO
