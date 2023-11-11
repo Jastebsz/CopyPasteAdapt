@@ -318,3 +318,11 @@ def update_task(type):
 #         return jsonify({'success': True, 'msg': 'Задача успешно добавлена'})
 #     except Exception as e:
 #         return jsonify({'error': 'Произошла ошибка при добавлении задачи'}), 500
+
+@blueprint.route('/get_worker_locations', methods=['POST'])
+@login_required
+def get_worker_locations():
+    workers = Worker.query.all()
+    locations = [{'FIO': worker.FIO, 'location': [float(coord) for coord in worker.location.split(',')]} for worker in workers]
+    print(locations)
+    return jsonify(locations)
