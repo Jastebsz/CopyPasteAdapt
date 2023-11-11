@@ -495,6 +495,9 @@ def distribute_tasks():
     # tasks = Undistr_tasks.query.order_by(order_conditions).all()
     record_count = db.session.query(Undistr_tasks).count()
 
+    if record_count <= 0:
+        return False
+
     today = date.today()
 
     end_day = today.strftime("%Y_%m_%d")
