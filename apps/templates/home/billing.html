@@ -186,8 +186,8 @@
     <a href="#" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#addRowModal" style="background-color: #ff4b5f; color: white">
         Добавить задачу
     </a>
-    <button type="submit_check" class="btn btn-info mt-3" style="background-color: #133d7e; color: white">Проверить задачи для пунктов</button>
-    <button type="submit_add" class="btn btn-success mt-3" style="background-color: #217e1e; color: white">Распределить задачи</button>
+        <button type="button" class="btn btn-info mt-3" style="background-color: #133d7e; color: white" onclick="checkTasks()">Проверить задачи для пунктов</button>
+    <button type="button" class="btn btn-success mt-3" style="background-color: #217e1e; color: white" onclick="distributeTasks()">Распределить задачи</button>
 </div>
     <div id="addRowModal" class="modal fade">
       <div class="modal-dialog">
@@ -241,10 +241,10 @@
                         <option value="высокий">Высокий</option>
                     </select>
                 </div>
-                <div class="small">
+                <!-- <div class="small">
                     <label for="dlit">Длительность:</label>
                     <input type="text" id="dlit" name="dlit">
-                </div>
+                </div> -->
                 <div class="small levels-container">
                     <label>Уровень:</label>
                     <div>
@@ -432,7 +432,7 @@
 
 
 {% block javascripts %}
-<script>
+    <script>
 
 document.addEventListener('DOMContentLoaded', function () {
     const addValueButton = document.getElementById('addValueButton');
@@ -658,7 +658,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
-*/
 
 async function checkTasks() {
     try {
@@ -736,6 +735,7 @@ const bsToast = new bootstrap.Toast(toast);
     setTimeout(() => {
         bsToast.hide();
     }, 5000);
+
 </script>
 
 {% endblock javascripts %}
