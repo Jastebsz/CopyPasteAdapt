@@ -96,6 +96,49 @@ def route_template(template):
                     'task_comment': full_task.comment,
                 }
                 data.append(task_data)
+                entered_values = []
+            def transform_str(resArr):
+                if '| )' in resArr:
+                    resArr = resArr.replace(' | )', ') | ')
+                if '& )' in resArr:
+                    resArr = resArr.replace(' & )', ') & ')
+                return resArr
+
+            def res_arr_form_maker(resArr):
+                # print(resArr)
+                res_string = ''
+                try:
+                    for i in resArr:
+                        if '|' in i:
+                            i = i.replace(' |','')
+                            res_string += f"({i}) | "
+                        elif '&' in i:
+                            i = i.replace(' &','')
+                            res_string += f"({i}) & "
+                        elif '(' in i:
+                            res_string+='('
+                        elif ')' in i:
+                            res_string+=')'
+                        else:
+                            print('ne I ne & ne srabotalo')
+                    # print(res_string[:-2])
+                except Exception:
+                    pass
+                return transform_str(res_string[:-2])
+
+            if request.method == 'POST':
+                priority = request.form.get('prioritySelect')
+                task_name = request.form.get('taskname')
+                # lvl_select = request.form.get('LvlSelect')
+                resArr = request.form.get('resArr')
+                selected_levels = request.form.getlist('levels')
+                
+                if resArr:
+                    resArr = json.loads(resArr)
+                else:
+                    resArr = []
+                entered_values.extend([task_name, priority, res_arr_form_maker(resArr),  selected_levels])
+                print(entered_values)
             # TODO Здесь необходимо связать таблицы Full_tasks и Worker и подать странице новую БД( строки в html, под них форматировать не обязательно: ID,ФИО,task_title,task_priority,point_address,date,status,comment)
 
             # idt
@@ -116,7 +159,7 @@ def route_template(template):
 
     except:
         return render_template('home/page-500.html'), 500
-from flask import render_template
+
 
 @blueprint.route('/endpoint', methods=['GET'])
 def get_data_by_date():
