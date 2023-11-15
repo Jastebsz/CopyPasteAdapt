@@ -250,7 +250,8 @@ def update_workers(id):
             print(worker.FIO)
             worker.location_text = data['location']
             worker.grade = data['grade']
-            worker.location = address_to_coordinates(data['location'])
+            mass_coord = address_to_coordinates(data['location'])
+            worker.location = f"{mass_coord[0]}, {mass_coord[1]}"
         else:
             new_worker = Worker(**data)
             db.session.add(new_worker)
@@ -267,7 +268,8 @@ def add():
     location = request.json.get('location')
     grade = request.json.get('grade')
     user = Worker.query.filter_by(FIO=fio).first()
-    loc = address_to_coordinates(location)
+    mass_coord = address_to_coordinates(location)
+    loc = f"{mass_coord[0]}, {mass_coord[1]}"
     if not loc:
         loc = "Сервер координат недоступен"
     if user:
@@ -327,7 +329,8 @@ def update_points(id):
         else:
             delivered_text = 'нет'
         if point:
-            loc = address_to_coordinates(data['address'])
+            mass_coord = address_to_coordinates(data['location'])
+            loc = f"{mass_coord[0]}, {mass_coord[1]}"
             if not loc:
                 loc = "Сервер координат недоступен"
             point.address = loc

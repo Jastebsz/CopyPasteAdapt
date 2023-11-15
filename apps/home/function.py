@@ -7,6 +7,7 @@ from sqlalchemy.orm import sessionmaker
 from geopy.distance import geodesic
 import json
 import uuid
+import requests
 import pandas as pd
 from geopy.geocoders import Nominatim
 from sqlalchemy.orm.session import make_transient
@@ -59,16 +60,15 @@ from sqlalchemy.orm.session import make_transient
 def excel_in_bd(excel_file):
     df = pd.read_excel(excel_file)
 
-    # Получаем индексы столбцов из первой строки таблицы Excel
     columns_indices = range(len(df.columns))
 
-    # Перебираем строки в DataFrame и сохраняем их в базу данных
     for index, row in df.iterrows():
         addr = row[columns_indices[1]]
+        coord = address_to_coordinates(addr)
         point = Points(
-            address=row[columns_indices[1]],
+            address=f"{coord[0]}, {coord[1]}",
             connected=row[columns_indices[2]],
-            delivered=row[columns_indices[3]] == 'да',  # Преобразуем текст 'да'/'нет' в булево значение
+            delivered=row[columns_indices[3]] == 'да',
             days_last_card=row[columns_indices[4]],
             num_approved_app=row[columns_indices[5]],
             num_card=row[columns_indices[6]],
@@ -77,19 +77,25 @@ def excel_in_bd(excel_file):
         )
         db.session.add(point)
 
-    # Сохраняем изменения в базе данных
     db.session.commit()
 
+# TODO: ВСТАВИТЬ API ЯНДЕКСА
 def address_to_coordinates(address):
-    geolocator = Nominatim(user_agent="my_geocoder")
-    location = geolocator.geocode(address)
+    api_key = ""
+    base_url = f"https://geocode-maps.yandex.ru/1.x/?apikey={api_key}&format=json&geocode={address}"
 
-    if location:
-        latitude = location.latitude
-        longitude = location.longitude
+    try:
+        response = requests.get(base_url)
+        response.raise_for_status()
+
+        data = response.json()
+        coordinates = data['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']['Point']['pos']
+        longitude, latitude = map(float, coordinates.split())
         return latitude, longitude
-    else:
-        return None
+    except requests.RequestException as e:
+        return f"Ошибка при получении координат: {e}"
+    except (KeyError, IndexError) as e:
+        return "Координаты не найдены для данного адреса или произошла ошибка обработки ответа"
 def get_schedule_for_worker_on_day(date, worker_id):
     schedule_record = db.session.query(Schedule).filter_by(date=date).first()
     if schedule_record:
