@@ -439,7 +439,7 @@ def calculate_travel_time(coord1, coord2):
 
     distance = geodesic((lat1, lon1), (lat2, lon2)).kilometers
 
-    average_speed = 40
+    average_speed = 25
 
     travel_time_hours = distance / average_speed
 
