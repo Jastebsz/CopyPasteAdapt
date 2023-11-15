@@ -7,6 +7,7 @@ from sqlalchemy.orm import sessionmaker
 from geopy.distance import geodesic
 import json
 import uuid
+import pandas as pd
 from geopy.geocoders import Nominatim
 from sqlalchemy.orm.session import make_transient
 
@@ -54,6 +55,30 @@ from sqlalchemy.orm.session import make_transient
 
 #     row_to_update.holiday = ','.join(holiday)
 #     db.session.commit()
+
+def excel_in_bd(excel_file):
+    df = pd.read_excel(excel_file)
+
+    # Получаем индексы столбцов из первой строки таблицы Excel
+    columns_indices = range(len(df.columns))
+
+    # Перебираем строки в DataFrame и сохраняем их в базу данных
+    for index, row in df.iterrows():
+        addr = row[columns_indices[1]]
+        point = Points(
+            address=row[columns_indices[1]],
+            connected=row[columns_indices[2]],
+            delivered=row[columns_indices[3]] == 'да',  # Преобразуем текст 'да'/'нет' в булево значение
+            days_last_card=row[columns_indices[4]],
+            num_approved_app=row[columns_indices[5]],
+            num_card=row[columns_indices[6]],
+            address_text=row[columns_indices[1]],
+            delivered_text=row[columns_indices[3]]
+        )
+        db.session.add(point)
+
+    # Сохраняем изменения в базе данных
+    db.session.commit()
 
 def address_to_coordinates(address):
     geolocator = Nominatim(user_agent="my_geocoder")

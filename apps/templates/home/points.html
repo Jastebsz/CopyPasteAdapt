@@ -14,10 +14,41 @@
       text-overflow: ellipsis;
       max-width: 5px; /* Измените это значение на ваше усмотрение */
       cursor: pointer;}
+    #excel_file {
+            display: none;
+        }
+    #fileName {
+            display: inline-block;
+            margin: 0 10px;
+        }
+    .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 98%;
+        }
+
+        .form-container {
+            text-align: center;
+        }
   </style>
 {% endblock stylesheets %}
 
 {% block content %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <div class="container">
+        <div class="form-container">
+        <form id="uploadForm" enctype="multipart/form-data">
+        <label for="excel_file" class="btn btn-primary mb-1" style="background-color: #133d7e; color: white">
+            Выбрать файл для пакетной загрузки
+        </label>
+            <p id="fileName"></p>
+        <input type="file" id="excel_file" name="excel_file" accept=".xlsx, .xls">
+        <input type="button" class="btn btn-primary mb-1" style="background-color: #217e1e; color: white" value="Загрузить" id="uploadBtn">
+    </form>
+     </div>
+    </div>
+
 <div class="container-fluid py-4">
   <div class="row">
     <div class="col-12">
@@ -145,7 +176,29 @@
 });
 
 
-
+        $(document).ready(function(){
+            $('#excel_file').change(function(){
+                var filename = $(this).val().split('\\').pop();
+                $('#fileName').text(filename);
+            });
+            $('#uploadBtn').click(function(){
+                var formData = new FormData($('#uploadForm')[0]);
+                console.log('1')
+                $.ajax({
+                    url: '/add_points_excel',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response){
+                        showToast('success', 'Точки успешно добавлены');
+                    },
+                    error: function(){
+                        showToast('danger', 'Произошла ошибка при добавлении');
+                    }
+                });
+            });
+        });
 
 
   document.addEventListener('click', function (event) {

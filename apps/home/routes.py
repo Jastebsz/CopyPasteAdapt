@@ -6,7 +6,8 @@ from jinja2 import TemplateNotFound
 from flask import session,Blueprint
 from apps import db
 from apps.home.models import Worker, Users, Full_tasks, Schedule, Points, Tasks
-from apps.home.function import line_tasks, distribute_tasks, get_schedule_for_workers_on_day, address_to_coordinates, add_task
+from apps.home.function import line_tasks, distribute_tasks, get_schedule_for_workers_on_day, address_to_coordinates, \
+    add_task, excel_in_bd
 from flask import request, jsonify
 import json
 from collections import defaultdict
@@ -371,7 +372,17 @@ def add_points():
 
     return jsonify({'success': True, 'msg': 'Точка успешно добавлена'})
 
-
+@blueprint.route('/add_points_excel', methods=['POST'])
+@login_required
+def add_points_excel():
+    file = request.files['excel_file']
+    if file.filename != '':
+        if excel_in_bd(file):
+            return jsonify({'success': True, 'msg': 'Точки успешно добавлены'})
+        else:
+            return jsonify({'error': 'Произошла ошибка при добавлении'})
+    else:
+        return jsonify({'error': 'Файл не выбран'})
 
 #задачи
 
