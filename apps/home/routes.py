@@ -126,6 +126,15 @@ def route_template(template):
                 except Exception:
                     pass
                 return process_expression(transform_str(res_string[:-2]))
+            
+            def check_bad_ending(expression):
+                expression = expression.rstrip()
+
+                if expression.endswith("&") or expression.endswith("|"):
+                    # Если да, удаляем последний символ
+                    expression = expression[:-1]
+
+                return expression
 
             if request.method == 'POST':
                 priority = request.form.get('prioritySelect')
@@ -138,9 +147,9 @@ def route_template(template):
                     resArr = json.loads(resArr)
                 else:
                     resArr = []
-                entered_values.extend([task_name, priority, dlit, res_arr_form_maker(resArr), selected_levels])
+                entered_values.extend([task_name, priority, dlit, check_bad_ending(res_arr_form_maker(resArr)), selected_levels])
                 print(entered_values)
-                add_task(task_name, priority, dlit, res_arr_form_maker(resArr), str(selected_levels).replace('[','').replace(']','').replace(',',' or'))
+                add_task(task_name, priority, dlit, check_bad_ending(res_arr_form_maker(resArr)), str(selected_levels).replace('[','').replace(']','').replace(',',' or'))
                 # def add_task(title, priority, lead_time, condition, level):
             return render_template("home/" + template, segment=segment, username=username, role=user_role)
         
