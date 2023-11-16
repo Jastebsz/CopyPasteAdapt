@@ -62,6 +62,83 @@ import os
 #     row_to_update.holiday = ','.join(holiday)
 #     db.session.commit()
 
+def create_report():
+    data_table_1 = [
+        ['Сотрудник', 'Процент невыполненных задач', 'Всего задач'],
+        ['Дерягин Никита Владимирович', '0%', '31'],
+        ['Петрошев Валерий Павлович', '2%', '65'],
+        ['Евдокимов Давид Тихонович', '3%', '29'],
+        ['Андреев Гордий Данилович', '0%', '73'],
+        ['Иванов Адам Федорович', '1%', '54'],
+        ['Бобылёв Ипполит Альбертович', '5%', '90'],
+        ['Беляева Евгения Антоновна', '2%', '66'],
+        ['Николаев Азарий Платонович', '3%', '74']
+    ]
+
+    data_table_2 = [
+        ['Грейд сотрудника', 'Среднее кол-во задач на день'],
+        ['синьор', '2'],
+        ['мидл', '4'],
+        ['джун', '6']
+    ]
+
+    task_types = ['Тип 1', 'Тип 2', 'Тип 3']
+    percentages = [7, 3, 12]  # Проценты для каждого типа задач
+
+    # Создаем данные для гистограммы на основе заданных процентов
+    total = sum(percentages)
+    histogram_data = [100 * percentage / total for percentage in percentages]
+
+    # Создаем новый документ Word
+    doc = Document()
+    for paragraph in doc.paragraphs:
+        paragraph.alignment = 1
+    # Создаем абзац с выравниванием по центру и добавляем заголовок "ОТЧЕТ"
+    title = doc.add_paragraph()
+    title.alignment = 1  # 0 - по левому краю, 1 - по центру, 2 - по правому краю
+    title.add_run('ОТЧЕТ').bold = True
+    title.add_run().add_break()
+
+    # Добавляем таблицу 1
+    table1 = doc.add_table(rows=1, cols=len(data_table_1[0]))
+    table1.style = 'Table Grid'  # Добавляем границы таблицы
+    table1.alignment = WD_TABLE_ALIGNMENT.CENTER
+    hdr_cells = table1.rows[0].cells
+    for i, header in enumerate(data_table_1[0]):
+        hdr_cells[i].text = header
+
+    for row in data_table_1[1:]:
+        row_cells = table1.add_row().cells
+        for i, val in enumerate(row):
+            row_cells[i].text = str(val)
+
+    plt.figure(figsize=(6, 4))
+    plt.bar(task_types, percentages, alpha=0.5, color='blue')
+    plt.title('Процент невыполнения задачи по типу')
+    plt.xlabel('Тип задачи')
+    plt.ylabel('Процент невыполнения')
+    plt.ylim(0, 100)
+    plt.savefig('histogram.png')
+
+    # Добавляем гистограмму в отчет
+    doc.add_picture('histogram.png')
+
+    # Добавляем таблицу 2
+    table2 = doc.add_table(rows=1, cols=len(data_table_2[0]))
+    table2.style = 'Table Grid'  # Добавляем границы таблицы
+    table2.alignment = WD_TABLE_ALIGNMENT.CENTER
+    hdr_cells = table2.rows[0].cells
+    for i, header in enumerate(data_table_2[0]):
+        hdr_cells[i].text = header
+
+    for row in data_table_2[1:]:
+        row_cells = table2.add_row().cells
+        for i, val in enumerate(row):
+            row_cells[i].text = str(val)
+
+    doc.save('report.docx')
+    os.system('start report.docx')
+
 def excel_in_bd(excel_file):
     df = pd.read_excel(excel_file)
 
