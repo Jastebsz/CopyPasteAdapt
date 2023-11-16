@@ -15,3 +15,5 @@ Flask-Minify==0.37
 geopy
 requests
 pandas
+docx
+python-docx

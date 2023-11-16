@@ -12,6 +12,11 @@ import pandas as pd
 from geopy.geocoders import Nominatim
 from sqlalchemy.orm.session import make_transient
 
+
+from docx import Document
+from docx.enum.table import WD_TABLE_ALIGNMENT
+import matplotlib.pyplot as plt
+import os
 # TODO: обновить home.models (не все модели там есть и убрать лишнее)
 
 

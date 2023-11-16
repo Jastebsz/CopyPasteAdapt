@@ -7,7 +7,7 @@ from flask import session,Blueprint
 from apps import db
 from apps.home.models import Worker, Users, Full_tasks, Schedule, Points, Tasks
 from apps.home.function import line_tasks, distribute_tasks, get_schedule_for_workers_on_day, address_to_coordinates, \
-    add_task, excel_in_bd
+    add_task, excel_in_bd,create_report
 from flask import request, jsonify
 import json
 from collections import defaultdict
@@ -565,3 +565,12 @@ def distr_task():
         return jsonify({"success": True})
     else:
         return jsonify({"success": False})
+    
+
+@blueprint.route('/report', methods=['POST'])
+@login_required
+def report():
+    if create_report():
+        return jsonify({'success': True, 'msg': 'Отчет создан'})
+    else:
+        return jsonify({'error': 'Произошла ошибка при создании отчета'})
