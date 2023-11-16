@@ -85,18 +85,18 @@
         <div class="card my-4">
             <div class="card-header p-3 pt-2 d-flex align-items-center justify-content-center">
                 <!-- Replace the icon with a Word icon -->
-                <a href="path/to/your/word/document.docx" download>
-                    <div class="icon icon-lg icon-shape bg-info shadow-primary text-center border-radius-xl">
-                        <!-- Change opacity to 1 for full opacity -->
-                        <i class="fa fa-file-word text-white"></i>
-                    </div>
-                </a>
+                <button id="downloadButton" class="icon icon-lg icon-shape bg-info shadow-primary text-center border-radius-xl">
+                    <!-- Change opacity to 1 for full opacity -->
+                    <i class="fa fa-file-word text-white"></i>
+                </button>
                 <div class="text-center pt-1 ps-2"> <!-- Added ps-2 for left padding -->
                     <p class="text-sm mb-0">Скачать отчет</p>
                 </div>
             </div>
             <hr class="dark horizontal my-0">
         </div>
+    </div>
+    
     </div>
     
     </div>
@@ -117,6 +117,9 @@
 {% endblock content %}
 
 {% block javascripts %}
+<!-- Add this to your HTML, make sure to adjust the path to the jQuery file if needed -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -169,6 +172,39 @@
             myChart.update();
         });
     });
+
+    $(document).ready(function () {
+      $('#downloadButton').on('click', function () {
+          $.ajax({
+              type: 'POST',
+              url: '/report',
+              success: function (response) {
+                  // Handle the success response
+                  console.log(response);
+                  // You can add further actions here based on the response
+              },
+              error: function (error) {
+                  // Handle the error response
+                  console.error(error);
+                  // You can add further actions here based on the error
+              }
+          });
+      });
+  });
+
+  saveButton.style.display = 'none';
+  editButton.style.display = 'inline';
+  
+  // Вставьте сообщение в элемент "message"
+  const messageElement = document.getElementById('message');
+  messageElement.innerHTML = 'Данные успешно обновлены';
+  
+  // Очистите сообщение через некоторое время, например, через 3 секунды
+  setTimeout(() => {
+    messageElement.innerHTML = '';
+  }, 3000);
+
+
 </script>
 {% endblock javascripts %}
 

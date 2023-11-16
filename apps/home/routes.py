@@ -570,6 +570,7 @@ def distr_task():
 @blueprint.route('/report', methods=['POST'])
 @login_required
 def report():
+    print('1')
     if create_report():
         return jsonify({'success': True, 'msg': 'Отчет создан'})
     else:
