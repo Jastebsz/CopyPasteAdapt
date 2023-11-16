@@ -182,18 +182,13 @@
 
 {% block content %}
 
-<div class="button-container">
+<!-- <div class="button-container">
     <a href="#" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#addRowModal" style="background-color: #ff4b5f; color: white">
         Добавить задачу
     </a>
         <button type="button" class="btn btn-info mt-3" style="background-color: #133d7e; color: white" onclick="checkTasks()">Проверить задачи для пунктов</button>
     <button type="button" class="btn btn-success mt-3" style="background-color: #217e1e; color: white" onclick="distributeTasks()">Распределить задачи</button>
-    <a href="{{ url_for('home_blueprint.route_template', template='mrazota.html') }}" class="btn btn-success"
-    style="background-color: #ff4b5f; color: white;margin-top:20px; margin-right: 20px; float: right;">
-    создать задачу
-    </a>
-</div>
-
+</div> -->
     <div id="addRowModal" class="modal fade">
       <div class="modal-dialog">
           <div class="modal-content">
@@ -211,7 +206,7 @@
     </div>
     
 
-<!-- 
+
   <div class="col-md-6 col-6 mx-auto" style="width: 96%;">
     <div class="card">
     <div class="card-header mx-4 p-3 text-center">
@@ -220,18 +215,18 @@
         <h6 class="text-white ps-3">Конструктор задач</h6>
       </div>
     </div>
-  </div> -->
+  </div>
 
   
   <div class="col-md-12">
     <div class="card my-4">
-      <!-- <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+      <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
     
       </div>
 
 
 
-        <form action="/billing.html" method="POST">
+        <form action="/mrazota.html" method="POST">
           <div class="container">
             <div class="row">
                 <div class="small">
@@ -239,29 +234,33 @@
                     <input type="text" id="taskname" name="taskname">
                 </div>
                 <div class="small">
-                    <label for="prioritySelect">Приоритет:</label>
-                    <select id="prioritySelect" name="prioritySelect">
-                        <option value="низкий">Низкий</option>
-                        <option value="средний">Средний</option>
-                        <option value="высокий">Высокий</option>
-                    </select>
-                </div>
-                <div class="small">
                     <label for="dlit">Длительность:</label>
                     <input type="text" id="dlit" name="dlit">
                 </div>
+                <div class="small">
+                    <label for="prioritySelect">Приоритет:</label>
+                    <select id="prioritySelect" name="prioritySelect">
+                        <option value="Низкий">Низкий</option>
+                        <option value="Средний">Средний</option>
+                        <option value="Высокий">Высокий</option>
+                    </select>
+                </div>
+                <!-- <div class="small">
+                    <label for="dlit">Длительность:</label>
+                    <input type="text" id="dlit" name="dlit">
+                </div> -->
                 <div class="small levels-container">
                     <label>Уровень:</label>
                     <div>
-                        <input type="checkbox" id="senior" name="levels" value="Сеньёр">
+                        <input type="checkbox" id="senior" name="levels" value="синьор">
                         <label for="senior">Синьор</label>
                     </div>
                     <div>
-                        <input type="checkbox" id="middle" name="levels" value="Мидл">
+                        <input type="checkbox" id="middle" name="levels" value="мидл">
                         <label for="middle">Мидл</label>
                     </div>
                     <div>
-                        <input type="checkbox" id="junior" name="levels" value="Джун">
+                        <input type="checkbox" id="junior" name="levels" value="джун">
                         <label for="junior">Джун</label>
                     </div>
                 </div>
@@ -310,126 +309,14 @@
             <input type="submit" value="Отправить" class="red-button">
             <div class="row">
                 <div class="output-container" id="outputValues" name="data">
-                    <!-- Здесь будут выводиться значения полей 
+                    <!-- Здесь будут выводиться значения полей -->
                 </div>
             </div>
         </div>
     </form>
-    {{entered_values}} 
-                </div>
-              </div> -->
 
-
-  <div class="container-fluid py-4">
-  <div class="row">
-    <div class="col-12">
-      <div class="card my-4">
-        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-          <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-            <h6 class="text-white ps-3">Справочник задач</h6>
-          </div>
-        </div>
-        <div class="card-body px-0 pb-2">
-          <div class="table-responsive p-0">
-            <table class="table align-items-center mb-0">
-              <thead>
-                <tr>
-                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="text-align: left;">Тип</th>
-                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Название</th>
-                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Приоритет</th>
-                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Время выполнения</th>
-                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Условия</th>
-                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Уровень сотрудника</th>
-                  <th class="text-secondary opacity-7"></th>
-                  <th class="text-secondary opacity-7"></th>
-                  <th class="text-secondary opacity-7"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for task in tasks %}
-                <tr>
-                  <td  contenteditable="false" data-name="type" style="text-align: left; padding-left: 23px;">{{ task.type }}</td>
-                  <td contenteditable="false" data-name="title">{{ task.title }}</td>
-                  <td contenteditable="false" data-name="priority">{{ task.priority }}</td>
-                  <td contenteditable="false" data-name="lead_time">{{ task.lead_time }}</td>
-                  <td class="limited-text" contenteditable="false" data-name="condition">{{ task.condition }}</td>
-                  <td class="limited-text" contenteditable="false" data-name="level">{{ task.level }}</td>
-                  <td class="align-middle">
-                    <a href="javascript:;" class="text-warning font-weight-bold text-xs bg-button edit-button" data-username="{{ task.type }}" data-toggle="tooltip" data-original-title="Изменить">
-                      Изменить
-                    </a>
-                    <a href="javascript:;" class="text-danger font-weight-bold text-xs bg-button delete-button" style="text-align: left; padding-left: 23px;" data-username="{{ task.type }}" data-toggle="tooltip" data-original-title="Удалить">
-                      Удалить
-                    </a>
-                    <a href="javascript:;" class="text-success font-weight-bold text-xs bg-button save-button ms-4" data-username="{{ task.type }}" data-toggle="tooltip" data-original-title="Сохранить">
-                      Сохранить
-                    </a>
-                  </td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
-  <div class="container-fluid py-4">
-    <div class="row">
-      <div class="col-12">
-        <div class="card my-4">
-          <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-            <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-              <h6 class="text-white ps-3">Все задачи</h6>
-            </div>
-          </div>
-          <div class="card-body px-0 pb-2">
-            <div class="table-responsive p-0">
-              <table class="table align-items-center mb-0">
-                <thead>
-                  <tr>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="text-align: left;">ФИО</th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Название задачи</th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Приоритет</th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Время выполнения</th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Адрес</th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Статус</th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="text-align: left;">Комментарии</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for full_task in full_tasks %}
-                  <tr>
-                    <td class="limited-text" contenteditable="false" data-name="fio" style="text-align: left; padding-left: 23px;">{{ full_task.fio }}</td>
-                    <td class="limited-text" contenteditable="false" data-name="task_title">{{ full_task.task_title }}</td>
-                    <td contenteditable="false" data-name="task_priority">{{ full_task.task_priority }}</td>
-                    <td contenteditable="false" data-name="task_lead_time">{{ full_task.task_lead_time }}</td>
-                    <td contenteditable="false" data-name="point_address">{{ full_task.point_address }}</td>
-                    <td contenteditable="false" data-name="task_status">{{ full_task.task_status }}</td>
-                    <td class="limited-text" contenteditable="false" data-name="task_comment">{{ full_task.task_comment }}</td>
-                    </td>
-                  </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
-  <div class="position-fixed bottom-1 end-1 z-index-2">
-    <div class="toast fade hide p-2 mt-2 bg-white" role="alert" aria-live="assertive" id="customToast" aria-atomic="true">
-        <div class="toast-header border-0">
-            <i class="material-icons text-danger me-2"></i>
-            <span class="me-auto text-gradient text-danger font-weight-bold">Уведомление</span>
-            <small class="text-body" id="toastTimestamp"></small>
-            <i class="fas fa-times text-md ms-3 cursor-pointer" data-bs-dismiss="toast" aria-label="Close"></i>
-        </div>
-        <hr class="horizontal dark m-0">
-        <div class="toast-body">
-        </div>
-    </div>
-</div>
 
 
 
