@@ -15,3 +15,4 @@ Flask-Minify==0.37
 func
 json
 geopy
+pandas
