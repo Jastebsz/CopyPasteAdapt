@@ -8,6 +8,13 @@
   body {
       overflow: hidden;
   }
+  
+
+  .icon-button {
+    background: none;
+    border: none;
+    padding: 0;
+}
 </style>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 {% endblock stylesheets %}
@@ -74,20 +81,38 @@
         </div>
       </div>
       
-      <div class="container-fluid py-4">
-        <div class="row min-vh-10 h-10">
-            <div class="col-12">
-              <div class="chart-container mx-auto" style="position: relative; height:500px; width:100%;">
-                    <h3>Количество задач на день</h3>
-                    <div class="chart-container">
-                        <canvas id="tasksChart"></canvas>
+      <div class="col-md-12">
+        <div class="card my-4">
+            <div class="card-header p-3 pt-2 d-flex align-items-center justify-content-center">
+                <!-- Replace the icon with a Word icon -->
+                <a href="path/to/your/word/document.docx" download>
+                    <div class="icon icon-lg icon-shape bg-info shadow-primary text-center border-radius-xl">
+                        <!-- Change opacity to 1 for full opacity -->
+                        <i class="fa fa-file-word text-white"></i>
                     </div>
+                </a>
+                <div class="text-center pt-1 ps-2"> <!-- Added ps-2 for left padding -->
+                    <p class="text-sm mb-0">Скачать отчет</p>
                 </div>
             </div>
+            <hr class="dark horizontal my-0">
         </div>
     </div>
     
-
+    </div>
+    
+    <div class="container-fluid py-4">
+      <div class="row min-vh-10 h-10">
+          <div class="col-12">
+            <div class="chart-container mx-auto" style="position: relative; height:500px; width:100%;">
+                  <h3>Количество задач на день</h3>
+                  <div class="chart-container">
+                      <canvas id="tasksChart"></canvas>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
     
 {% endblock content %}
 
