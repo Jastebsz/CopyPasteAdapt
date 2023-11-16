@@ -79,7 +79,7 @@ def route_template(template):
             schedules = Schedule.query.all()
             dates = [schedule.date for schedule in schedules]
             return render_template("home/" + template, segment=segment, username=username, role=user_role, schedule=dates)
-        if template == 'mrazota.html':
+        if template == 'constructor.html':
             data = []
             entered_values = []
             import re
