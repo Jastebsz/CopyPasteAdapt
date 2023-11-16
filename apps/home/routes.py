@@ -79,25 +79,9 @@ def route_template(template):
             schedules = Schedule.query.all()
             dates = [schedule.date for schedule in schedules]
             return render_template("home/" + template, segment=segment, username=username, role=user_role, schedule=dates)
-        if template == 'billing.html':
+        if template == 'mrazota.html':
             data = []
-            tasks=Tasks.query.all()
-            full_tasks = Full_tasks.query.all()
-            for full_task in full_tasks:
-                worker = db.session.query(Worker).filter(Worker.id == full_task.worker_id).first()
-                task_data = {
-                    'idt': full_task.idt,
-                    'fio': worker.FIO,
-                    'task_title': full_task.task_title,
-                    'task_priority': full_task.task_priority,
-                    'task_lead_time': full_task.task_lead_time,
-                    'point_address': full_task.point_address,
-                    'task_status': full_task.status,
-                    'task_comment': full_task.comment,
-                }
-                data.append(task_data)
-                entered_values = []
-
+            entered_values = []
             import re
             def process_expression(input_str):
                 regex = re.compile(r'\((.*?)\)')
@@ -115,7 +99,6 @@ def route_template(template):
 
                 return result
 
-            
             def transform_str(resArr):
                 if '| )' in resArr:
                     resArr = resArr.replace(' | )', ') | ')
@@ -124,7 +107,6 @@ def route_template(template):
                 return resArr
 
             def res_arr_form_maker(resArr):
-                # print(resArr)
                 res_string = ''
                 try:
                     for i in resArr:
@@ -144,11 +126,20 @@ def route_template(template):
                 except Exception:
                     pass
                 return process_expression(transform_str(res_string[:-2]))
+            
+            def check_bad_ending(expression):
+                expression = expression.rstrip()
+
+                if expression.endswith("&") or expression.endswith("|"):
+                    # Если да, удаляем последний символ
+                    expression = expression[:-1]
+
+                return expression
 
             if request.method == 'POST':
                 priority = request.form.get('prioritySelect')
                 task_name = request.form.get('taskname')
-                # dlit = request.form.get('dlit')
+                dlit = request.form.get('dlit')
                 resArr = request.form.get('resArr')
                 selected_levels = request.form.getlist('levels')
                 
@@ -156,9 +147,92 @@ def route_template(template):
                     resArr = json.loads(resArr)
                 else:
                     resArr = []
-                entered_values.extend([task_name, priority, res_arr_form_maker(resArr), selected_levels])
+                entered_values.extend([task_name, priority, dlit, check_bad_ending(res_arr_form_maker(resArr)), selected_levels])
                 print(entered_values)
-                add_task(task_name, priority, res_arr_form_maker(resArr), selected_levels)
+                add_task(task_name, priority, dlit, check_bad_ending(res_arr_form_maker(resArr)), str(selected_levels).replace('[','').replace(']','').replace(',',' or'))
+                # def add_task(title, priority, lead_time, condition, level):
+            return render_template("home/" + template, segment=segment, username=username, role=user_role)
+        
+        if template == 'billing.html':
+            data = []
+            tasks=Tasks.query.all()
+            full_tasks = Full_tasks.query.all()
+            for full_task in full_tasks:
+                worker = db.session.query(Worker).filter(Worker.id == full_task.worker_id).first()
+                task_data = {
+                    'idt': full_task.idt,
+                    'fio': worker.FIO,
+                    'task_title': full_task.task_title,
+                    'task_priority': full_task.task_priority,
+                    'task_lead_time': full_task.task_lead_time,
+                    'point_address': full_task.point_address,
+                    'task_status': full_task.status,
+                    'task_comment': full_task.comment,
+                }
+                data.append(task_data)
+                entered_values = []
+
+            # import re
+            # def process_expression(input_str):
+            #     regex = re.compile(r'\((.*?)\)')
+
+            #     def process_sub_expression(sub_expr):
+
+            #         if "num_approved_app" in sub_expr or "num_card" in sub_expr:
+
+            #             sub_expr = sub_expr.replace('(', '').replace(')', '')
+
+            #             return f'CAST({sub_expr})'
+            #         return sub_expr
+
+            #     result = regex.sub(lambda match: process_sub_expression(match.group(1)), input_str)
+
+            #     return result
+
+            
+            # def transform_str(resArr):
+            #     if '| )' in resArr:
+            #         resArr = resArr.replace(' | )', ') | ')
+            #     if '& )' in resArr:
+            #         resArr = resArr.replace(' & )', ') & ')
+            #     return resArr
+
+            # def res_arr_form_maker(resArr):
+            #     # print(resArr)
+            #     res_string = ''
+            #     try:
+            #         for i in resArr:
+            #             if '|' in i:
+            #                 i = i.replace(' |','')
+            #                 res_string += f"({i}) | "
+            #             elif '&' in i:
+            #                 i = i.replace(' &','')
+            #                 res_string += f"({i}) & "
+            #             elif '(' in i:
+            #                 res_string+='('
+            #             elif ')' in i:
+            #                 res_string+=')'
+            #             else:
+            #                 print('ne I ne & ne srabotalo')
+            #         # print(res_string[:-2])
+            #     except Exception:
+            #         pass
+            #     return process_expression(transform_str(res_string[:-2]))
+
+            # if request.method == 'POST':
+            #     priority = request.form.get('prioritySelect')
+            #     task_name = request.form.get('taskname')
+            #     # dlit = request.form.get('dlit')
+            #     resArr = request.form.get('resArr')
+            #     selected_levels = request.form.getlist('levels')
+                
+            #     if resArr:
+            #         resArr = json.loads(resArr)
+            #     else:
+            #         resArr = []
+            #     entered_values.extend([task_name, priority, res_arr_form_maker(resArr), selected_levels])
+            #     print(entered_values)
+            #     add_task(task_name, priority, res_arr_form_maker(resArr), selected_levels)
             # TODO Здесь необходимо связать таблицы Full_tasks и Worker и подать странице новую БД( строки в html, под них форматировать не обязательно: ID,ФИО,task_title,task_priority,point_address,date,status,comment)
 
             # idt
