@@ -79,7 +79,7 @@ def route_template(template):
             schedules = Schedule.query.all()
             dates = [schedule.date for schedule in schedules]
             return render_template("home/" + template, segment=segment, username=username, role=user_role, schedule=dates)
-        if template == 'mrazota.html':
+        if template == 'constructor.html':
             data = []
             entered_values = []
             import re
@@ -136,6 +136,21 @@ def route_template(template):
 
                 return expression
 
+            def replace_values(input_str):
+                cur_dict = {
+                "Points.id": "Номер",
+                "Points.address": "Адрес",
+                "Points.connected": "Когда подключена точка?",
+                "Points.delivered": "Карты и материалы доставлены?",
+                "Points.days_last_card": "Количество дней после выдачи последней карты",
+                "Points.num_approved_app AS FLOAT": "Количество одобренных заявок",
+                "Points.num_card AS FLOAT": "Количество выданных карт"
+            }
+                reversed_dict = {v: k for k, v in cur_dict.items()}
+                for key, value in reversed_dict.items():
+                    input_str = input_str.replace(key, value)
+                return input_str
+            
             if request.method == 'POST':
                 priority = request.form.get('prioritySelect')
                 task_name = request.form.get('taskname')
@@ -147,9 +162,9 @@ def route_template(template):
                     resArr = json.loads(resArr)
                 else:
                     resArr = []
-                entered_values.extend([task_name, priority, dlit, check_bad_ending(res_arr_form_maker(resArr)), selected_levels])
-                print(entered_values)
-                add_task(task_name, priority, dlit, check_bad_ending(res_arr_form_maker(resArr)), str(selected_levels).replace('[','').replace(']','').replace(',',' or'))
+                entered_values.extend([task_name, priority, dlit, replace_values(check_bad_ending(res_arr_form_maker(resArr))), selected_levels])
+
+                add_task(task_name, priority, dlit, replace_values(check_bad_ending(res_arr_form_maker(resArr))), str(selected_levels).replace('[','').replace(']','').replace(',',' or'))
                 # def add_task(title, priority, lead_time, condition, level):
             return render_template("home/" + template, segment=segment, username=username, role=user_role)
         

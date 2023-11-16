@@ -80,7 +80,7 @@
   .output-container {
       width: 100%;
       padding: 10px;
-      max-height: 100px;
+      max-height: 500px;
       overflow-y: auto;
   }
 
@@ -226,7 +226,7 @@
 
 
 
-        <form action="/mrazota.html" method="POST">
+        <form action="/constructor.html" method="POST">
           <div class="container">
             <div class="row">
                 <div class="small">
@@ -267,25 +267,16 @@
             </div>
             <div class="row">
                 <div class="large">
-                    <div class="left-small">
-                        <span class="add-button" id="addValueButton2">Объединение</span>
-                    </div>
-                    <div class="left-small">
-                        <span class="add-button" id="addValueButton">Логическое &</span>
-                    </div>
-                    <div class="left-small">
-                        <span class="add-button" id="addValueButton1">Логическое | </span>
-                    </div>
                     <div class="small">
                         <label for="InputedData">Вводимые данные:</label>
                         <select id="InputedData" name="InputedData">
-                            <option value="Points.id">Номер</option>
-                            <option value="Points.address">Адрес</option>
-                            <option value="Points.connected">Когда подключена точка?</option>
-                            <option value="Points.delivered">Карты и материалы доставлены?</option>
-                            <option value="Points.days_last_card">Количество дней после выдачи последней карты</option>
-                            <option value="Points.num_approved_app AS FLOAT">Количество одобренных заявок</option>
-                            <option value="Points.num_card AS FLOAT">Количество выданных карт</option>
+                            <option value="Номер">Номер</option>
+                            <option value="Адрес">Адрес</option>
+                            <option value="Когда подключена точка?">Когда подключена точка?</option>
+                            <option value="Карты и материалы доставлены?">Карты и материалы доставлены?</option>
+                            <option value="Количество дней после выдачи последней карты">Количество дней после выдачи последней карты</option>
+                            <option value="Количество одобренных заявок">Количество одобренных заявок</option>
+                            <option value="Количество выданных карт">Количество выданных карт</option>
                         </select>
                     </div>
                     <div class="small">
@@ -303,6 +294,15 @@
                         <label for="curvalue">Значение:</label>
                         <input type="text" id="curvalue" name="curvalue">
                     </div>
+                </div>
+                <div class="left-small">
+                    <span class="add-button" id="addValueButton2">Объединение</span>
+                </div>
+                <div class="left-small">
+                    <span class="add-button" id="addValueButton">Оператор И</span>
+                </div>
+                <div class="left-small">
+                    <span class="add-button" id="addValueButton1">Оператор ИЛИ </span>
                 </div>
             </div>        
             <input type="hidden" id="resArr" name="resArr" value=""> 
