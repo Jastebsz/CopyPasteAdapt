@@ -1,0 +1,3 @@
+ubral versii is requirements
+v build smenil python na python3
+
