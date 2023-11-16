@@ -184,14 +184,10 @@
 
 <div class="button-container">
     <a href="#" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#addRowModal" style="background-color: #ff4b5f; color: white">
-        Добавить задачу
+        Добавить задачу в расписание вручную
     </a>
         <button type="button" class="btn btn-info mt-3" style="background-color: #133d7e; color: white" onclick="checkTasks()">Проверить задачи для пунктов</button>
     <button type="button" class="btn btn-success mt-3" style="background-color: #217e1e; color: white" onclick="distributeTasks()">Распределить задачи</button>
-    <a href="{{ url_for('home_blueprint.route_template', template='constructor.html') }}" class="btn btn-success"
-    style="background-color: #ff4b5f; color: white;margin-top:20px; margin-right: 20px; float: right;">
-    создать задачу
-    </a>
 </div>
 
     <div id="addRowModal" class="modal fade">
@@ -209,7 +205,7 @@
           </div>
       </div>
     </div>
-    
+
 
 <!-- 
   <div class="col-md-6 col-6 mx-auto" style="width: 96%;">
@@ -374,6 +370,17 @@
       </div>
     </div>
   </div>
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-12 text-center">
+            <a href="{{ url_for('home_blueprint.route_template', template='constructor.html') }}" class="btn btn-success mt-3" style="background-color: #ff4b5f; color: white">
+                Создать задачу
+            </a>
+        </div>
+    </div>
+</div>
+
   <div class="container-fluid py-4">
     <div class="row">
       <div class="col-12">
