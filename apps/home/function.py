@@ -81,7 +81,7 @@ def excel_in_bd(excel_file):
 
 # TODO: ВСТАВИТЬ API ЯНДЕКСА
 def address_to_coordinates(address):
-    api_key = ""
+    api_key = "6d3739b6-c001-4232-b38b-87845877a14a"
     base_url = f"https://geocode-maps.yandex.ru/1.x/?apikey={api_key}&format=json&geocode={address}"
 
     try:
