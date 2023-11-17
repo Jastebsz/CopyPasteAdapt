@@ -12,6 +12,7 @@ from flask import request, jsonify
 import json
 from collections import defaultdict
 from sqlalchemy import func
+from flask import send_file
 # line_tasks()                          # создание очереди
 # distribute_tasks()                    # распределение задач
 # TODO: для blueprint задач доавить всязь двух таблиц(установление юзера по задачам)
@@ -567,11 +568,11 @@ def distr_task():
         return jsonify({"success": False})
     
 
+
 @blueprint.route('/report', methods=['POST'])
 @login_required
 def report():
-    print('1')
     if create_report():
-        return jsonify({'success': True, 'msg': 'Отчет создан'})
+        return send_file('report.docx', as_attachment=True)
     else:
         return jsonify({'error': 'Произошла ошибка при создании отчета'})

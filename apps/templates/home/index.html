@@ -181,29 +181,48 @@
               success: function (response) {
                   // Handle the success response
                   console.log(response);
-                  // You can add further actions here based on the response
+                  displayNotification('success', 'Отчет успешно создан и загружен.');
               },
               error: function (error) {
                   // Handle the error response
                   console.error(error);
-                  // You can add further actions here based on the error
+                  displayNotification('error', 'Произошла ошибка при создании отчета.');
               }
           });
       });
+  
+      // This assumes that you have elements with IDs 'saveButton' and 'editButton'
+      var saveButton = document.getElementById('saveButton');
+      var editButton = document.getElementById('editButton');
+  
+      if (saveButton && editButton) {
+          saveButton.style.display = 'none';
+          editButton.style.display = 'inline';
+      }
+  
+      // This assumes that you have an element with ID 'message'
+      var messageElement = document.getElementById('message');
+      messageElement.innerHTML = 'Данные успешно обновлены';
+  
+      // Очистите сообщение через некоторое время, например, через 3 секунды
+      setTimeout(() => {
+          messageElement.innerHTML = '';
+      }, 3000);
+  
+      function displayNotification(type, message) {
+          // You can customize this function to display notifications using your preferred library or method
+          // Here, I am using the built-in browser Notification API
+          if (Notification.permission === "granted") {
+              new Notification(message, { type });
+          } else if (Notification.permission !== "denied") {
+              Notification.requestPermission().then(function (permission) {
+                  if (permission === "granted") {
+                      new Notification(message, { type });
+                  }
+              });
+          }
+      }
   });
-
-  saveButton.style.display = 'none';
-  editButton.style.display = 'inline';
-  
-  // Вставьте сообщение в элемент "message"
-  const messageElement = document.getElementById('message');
-  messageElement.innerHTML = 'Данные успешно обновлены';
-  
-  // Очистите сообщение через некоторое время, например, через 3 секунды
-  setTimeout(() => {
-    messageElement.innerHTML = '';
-  }, 3000);
-
 
 </script>
 {% endblock javascripts %}
